@@ -1,0 +1,17 @@
+tool,job,cell,kind,writes
+draft_payment_reminders,collections,invoice-followup,reads,
+business_status,owner,small-business-core,reads,
+find_customers,office manager,small-business-core,reads,
+list_jobs,scheduler,small-business-core,reads,
+open_invoices,billing clerk,small-business-core,reads,
+history,bookkeeper,small-business-core,reads,
+add_customer,office manager,small-business-core,writes,customers.csv
+add_offer,owner,small-business-core,writes,offers.csv
+add_job,scheduler,small-business-core,writes,jobs.csv
+update_job,scheduler,small-business-core,writes,jobs.csv
+create_invoice,billing clerk,small-business-core,writes,invoices.csv
+record_payment,bookkeeper,small-business-core,writes,payments.csv
+undo_last_change,bookkeeper,small-business-core,writes,any
+what_can_you_do,commons,glean-mcp,reads,
+search_cells,commons,glean-mcp,reads,
+note_missing_capability,commons,glean-mcp,writes,wishlist.md

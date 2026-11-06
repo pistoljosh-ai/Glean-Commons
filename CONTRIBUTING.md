@@ -25,7 +25,7 @@ python3 ledger/add_entry.py \
 ```
 
 4. Keep `commons.json` and the project's `cell.json` in sync.
-5. Run `python3 ledger/verify.py`.
+5. Run `python3 ledger/verify.py`, `python3 scripts/build_catalog.py`, and `python3 scripts/build_dashboard.py` (CI checks the catalog and dashboard are up to date).
 6. Open a pull request. Apply the labels from `how_to_change`.
 7. Wait for a human maintainer.
 

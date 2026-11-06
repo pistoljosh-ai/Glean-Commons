@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2",
+  "tip_hash": "3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -273,6 +273,30 @@
       "notes": "Stdlib stdio MCP server. Discovers every cells/*/tools.json (contract v1) so each new cell is callable on merge with no server change. Adds what_can_you_do, search_cells (commons-catalog), note_missing_capability (wishlist = build queue). Writes only to the owner's local books via cell tools. Implements the open Model Context Protocol; no upstream code copied. Also adds cells/small-business-core/JOBS.md (job-function map). uses=0.",
       "prev_hash": "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379",
       "entry_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2"
+    },
+    {
+      "id": "commons-dashboard",
+      "title": "Glean Commons dashboard (built from the repo)",
+      "type": "other",
+      "creator": "Timmy Gack",
+      "ai_assist": "Claude (Anthropic, Opus 5.5): generator, page, CI wiring",
+      "parents": [
+        "glean-commons-repo",
+        "commons-catalog",
+        "glean-mcp"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+        "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
+        "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2"
+      ],
+      "created": "2026-11-06T22:34:19Z",
+      "version": "0.1.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "scripts/build_dashboard.py turns commons.json, the ledger, every cells/*/tools.json and JOBS.md into dashboard/data/*.csv, data.json and a self-contained dashboard/index.html (no dependencies; opens anywhere; GitHub Pages ready). Deterministic; CI rebuilds it and fails if stale, so the dashboard changes with every merge. Shows job coverage, contribution chain, tools, integrity, registry. uses=0.",
+      "prev_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2",
+      "entry_hash": "3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e"
     }
   ]
 }

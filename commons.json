@@ -662,6 +662,47 @@
       "canonical_version": "0.1.0",
       "variants": [],
       "experiments": []
+    },
+    {
+      "id": "commons-dashboard",
+      "name": "Glean Commons dashboard",
+      "type": "tool",
+      "path": "dashboard/",
+      "manifest": "dashboard/cell.json",
+      "status": "active",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "glean-commons-repo",
+        "commons-catalog",
+        "glean-mcp"
+      ],
+      "entry_hash": "3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e",
+      "tags": [
+        "dashboard",
+        "metrics",
+        "ledger",
+        "proof-of-use",
+        "jobs",
+        "registry"
+      ],
+      "when_to_use": "Use to see the state of the commons at a glance: job coverage, the contribution chain, callable tools, integrity checks, and the registry. Rebuild with python3 scripts/build_dashboard.py after any change.",
+      "how_to_change": {
+        "edit": [
+          "dashboard/template.html",
+          "scripts/build_dashboard.py",
+          "dashboard/cell.json"
+        ],
+        "note": "Edit template.html and the generator, never index.html or data/ by hand. Output must stay deterministic so CI can check it. No external scripts or network calls in the page.",
+        "labels": [
+          "project:commons-dashboard",
+          "type:tool"
+        ]
+      },
+      "canonical_version": "0.1.0",
+      "variants": [],
+      "experiments": []
     }
   ]
 }

@@ -1,8 +1,27 @@
 # Glean Commons catalog
 # schema_version=1
-# ledger_tip=404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2
-# commons_sha256=b675dc3176d4e26102eba028d413bc522b8d20a3e7670e37fefaf8a50135c516
+# ledger_tip=3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e
+# commons_sha256=262120cb1c1f2d06edbc7152bafd151f19b4192ec916a79cbf53dd4a46c5ea1c
 # order: measured_before_unmeasured, pou_score_desc, uses_desc, ancestry_depth_desc, id_asc
+
+id: commons-dashboard
+name: Glean Commons dashboard
+type: tool
+status: active
+summary: scripts/build_dashboard.py turns commons.json, the ledger, every cells/*/tools.json and JOBS.md into dashboard/data/*.csv, data.json and a self-contained dashboard/index.html (no dependencies; opens anywhere; GitHub Pages ready)....
+tags: dashboard, metrics, ledger, proof-of-use, jobs, registry
+path: dashboard/
+upstream: none
+parents: glean-commons-repo, commons-catalog, glean-mcp
+ancestry: glean-commons-repo, whitepaper-v1.0, commons-catalog, glean-mcp, small-business-core-v0.2
+children: none
+canonical_version: 0.1.0
+variants: []
+entry_hash: 3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e
+uses: 0
+pou: null — no usage data yet
+how_to_change: {"edit": ["dashboard/template.html", "scripts/build_dashboard.py", "dashboard/cell.json"], "labels": ["project:commons-dashboard", "type:tool"], "note": "Edit template.html and the generator, never index.html or data/ by hand. Output must stay deterministic so CI can check it. No external scripts or network calls in the page."}
+when_to_use: Use to see the state of the commons at a glance: job coverage, the contribution chain, callable tools, integrity checks, and the registry. Rebuild with python3 scripts/build_dashboard.py after any change.
 
 id: experiments
 name: Experiment declarations
@@ -33,7 +52,7 @@ path: mcp/
 upstream: none
 parents: glean-commons-repo, commons-catalog, small-business-core-v0.2
 ancestry: glean-commons-repo, whitepaper-v1.0, commons-catalog, small-business-core-v0.2
-children: none
+children: commons-dashboard
 canonical_version: 0.1.0
 variants: []
 entry_hash: 404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2
@@ -128,7 +147,7 @@ path: scripts/
 upstream: none
 parents: glean-commons-repo
 ancestry: glean-commons-repo, whitepaper-v1.0
-children: glean-mcp
+children: commons-dashboard, glean-mcp
 canonical_version: 0.1.0
 variants: []
 entry_hash: 7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199
@@ -242,7 +261,7 @@ path: .
 upstream: none
 parents: whitepaper-v1.0
 ancestry: whitepaper-v1.0
-children: cell-template, commons-analyst, commons-catalog, glean-mcp, glean-router, invoice-followup, ledger, small-business-core, upstream-567-labs-instructor, upstream-aurelio-labs-semantic-router, upstream-forward-future-loopy
+children: cell-template, commons-analyst, commons-catalog, commons-dashboard, glean-mcp, glean-router, invoice-followup, ledger, small-business-core, upstream-567-labs-instructor, upstream-aurelio-labs-semantic-router, upstream-forward-future-loopy
 canonical_version: 0.1.0
 variants: [{"id": "main", "parent": null, "path": ".", "status": "canonical"}]
 entry_hash: 6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c
