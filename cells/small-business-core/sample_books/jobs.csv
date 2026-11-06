@@ -1,0 +1,7 @@
+job_id,customer_id,offer_id,description,status,scheduled_date,done_date
+J1,C1,O1,Fall treatment x3,done,2026-10-01,2026-10-15
+J2,C2,O2,Quarterly service,done,2026-09-20,2026-09-25
+J3,C3,O3,Front beds,done,2026-08-10,2026-08-16
+J4,C4,O1,Spring plan,quoted,,
+J5,C1,O1,Winterize,scheduled,2026-11-12,
+J6,C2,O2,Extra visit,done,2026-11-02,2026-11-03

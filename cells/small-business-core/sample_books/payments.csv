@@ -1,0 +1,3 @@
+payment_id,invoice_id,amount,date,method
+P1,1002,200.00,2026-10-20,check
+P2,1001,255.00,2026-11-02,card

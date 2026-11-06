@@ -1,0 +1,5 @@
+customer_id,name,email,phone,address,notes
+C1,Acme Lawn,ap@acme.example,,,
+C2,Blue Ridge Pest,billing@blueridge.example,,,
+C3,Cedar Farms,office@cedar.example,,,
+C4,Dune Nursery,hello@dune.example,,,

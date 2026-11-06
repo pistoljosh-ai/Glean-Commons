@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "description": "The books: one set of plain CSV files every small-business cell reads and writes. Facts only; balances and status are derived.",
+  "files": {
+    "customers.csv": {
+      "key": "customer_id",
+      "columns": {
+        "customer_id": {"required": true},
+        "name": {"required": true},
+        "email": {"required": false},
+        "phone": {"required": false},
+        "address": {"required": false},
+        "notes": {"required": false}
+      }
+    },
+    "offers.csv": {
+      "key": "offer_id",
+      "columns": {
+        "offer_id": {"required": true},
+        "name": {"required": true},
+        "unit": {"required": false},
+        "price": {"required": true, "type": "money"}
+      }
+    },
+    "jobs.csv": {
+      "key": "job_id",
+      "columns": {
+        "job_id": {"required": true},
+        "customer_id": {"required": true, "ref": "customers.csv"},
+        "offer_id": {"required": false, "ref": "offers.csv"},
+        "description": {"required": false},
+        "status": {"required": true, "enum": ["quoted", "scheduled", "in_progress", "done", "cancelled"]},
+        "scheduled_date": {"required": false, "type": "date"},
+        "done_date": {"required": false, "type": "date"}
+      }
+    },
+    "invoices.csv": {
+      "key": "invoice_id",
+      "columns": {
+        "invoice_id": {"required": true},
+        "job_id": {"required": false, "ref": "jobs.csv"},
+        "customer_id": {"required": true, "ref": "customers.csv"},
+        "amount": {"required": true, "type": "money"},
+        "issued_date": {"required": true, "type": "date"},
+        "due_date": {"required": true, "type": "date"}
+      }
+    },
+    "payments.csv": {
+      "key": "payment_id",
+      "columns": {
+        "payment_id": {"required": true},
+        "invoice_id": {"required": true, "ref": "invoices.csv"},
+        "amount": {"required": true, "type": "money"},
+        "date": {"required": true, "type": "date"},
+        "method": {"required": false}
+      }
+    }
+  }
+}

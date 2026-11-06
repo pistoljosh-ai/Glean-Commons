@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
+  "tip_hash": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -185,6 +185,28 @@
       "notes": "Child of cells/_template (cell-template has no ledger row; its entry_hash is glean-commons-repo). Router returned BUILD for invoice follow-up; no existing cell fit. Drafts tiered past-due reminders from a CSV; never sends. No upstream code copied. uses=0: no real-world use yet.",
       "prev_hash": "eff033544c26ee6a0dc6377f0c98b0ce5be2b93b919f4c6c1d53e5e6cd2c8fe3",
       "entry_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a"
+    },
+    {
+      "id": "small-business-core",
+      "title": "Small Business Core (the books)",
+      "type": "cell",
+      "creator": "Timmy Gack",
+      "ai_assist": "Claude (Anthropic, Opus 5.5): first-principles map, shared CSV schema, books.py, tests",
+      "parents": [
+        "glean-commons-repo",
+        "invoice-followup"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+        "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a"
+      ],
+      "created": "2026-11-06T21:58:32Z",
+      "version": "0.1.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "Foundation for small-business cells: FIRST-PRINCIPLES.md maps the business loop (offer > customer > quote > schedule > work > invoice > paid > books > learn) as a build queue; schema.json defines one shared set of CSV books; books.py init/check/status/ar. ar export feeds invoice-followup (parent). Router returned BUILD. No upstream code copied. uses=0: no real-world use yet.",
+      "prev_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
+      "entry_hash": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500"
     }
   ]
 }
