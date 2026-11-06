@@ -1,7 +1,7 @@
 {
   "generated_from": {
-    "commons_sha256": "56322e3823f28157599634c37e3db6792a4fba669865f5d38289f40580909c5f",
-    "ledger_tip": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500"
+    "commons_sha256": "8c9be05c236763b49a8cde0bf52a5172877a2bf559231b9de6eb10d7e5a715d8",
+    "ledger_tip": "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379"
   },
   "order": [
     "measured_before_unmeasured",
@@ -119,9 +119,9 @@
         "whitepaper-v1.0",
         "invoice-followup"
       ],
-      "canonical_version": "0.1.0",
+      "canonical_version": "0.2.0",
       "children": [],
-      "entry_hash": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500",
+      "entry_hash": "963a10e76860b8d3445125c0239f452aaf107b16758a811a6b855269ac8593a5",
       "how_to_change": {
         "edit": [
           "cells/small-business-core/books.py",
@@ -130,7 +130,10 @@
           "cells/small-business-core/cell.md",
           "cells/small-business-core/test_books.py",
           "cells/small-business-core/sample_books/",
-          "cells/small-business-core/cell.json"
+          "cells/small-business-core/cell.json",
+          "cells/small-business-core/tools.py",
+          "cells/small-business-core/tools.json",
+          "cells/small-business-core/test_tools.py"
         ],
         "labels": [
           "project:small-business-core",
@@ -326,18 +329,20 @@
         "glean-commons-repo",
         "whitepaper-v1.0"
       ],
-      "canonical_version": "0.1.0",
+      "canonical_version": "0.2.0",
       "children": [
         "small-business-core"
       ],
-      "entry_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
+      "entry_hash": "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379",
       "how_to_change": {
         "edit": [
           "cells/invoice-followup/followup.py",
           "cells/invoice-followup/cell.md",
           "cells/invoice-followup/test_followup.py",
           "cells/invoice-followup/sample_invoices.csv",
-          "cells/invoice-followup/cell.json"
+          "cells/invoice-followup/cell.json",
+          "cells/invoice-followup/tools.py",
+          "cells/invoice-followup/tools.json"
         ],
         "labels": [
           "project:invoice-followup",

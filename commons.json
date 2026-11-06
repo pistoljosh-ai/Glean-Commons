@@ -538,7 +538,7 @@
       "parents": [
         "glean-commons-repo"
       ],
-      "entry_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
+      "entry_hash": "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379",
       "tags": [
         "invoice",
         "follow-up",
@@ -554,7 +554,9 @@
           "cells/invoice-followup/cell.md",
           "cells/invoice-followup/test_followup.py",
           "cells/invoice-followup/sample_invoices.csv",
-          "cells/invoice-followup/cell.json"
+          "cells/invoice-followup/cell.json",
+          "cells/invoice-followup/tools.py",
+          "cells/invoice-followup/tools.json"
         ],
         "note": "Stdlib only. Never auto-send. Tone changes are good A/B variants; register them under variants[].",
         "labels": [
@@ -562,7 +564,7 @@
           "type:cell"
         ]
       },
-      "canonical_version": "0.1.0",
+      "canonical_version": "0.2.0",
       "variants": [],
       "experiments": []
     },
@@ -580,7 +582,7 @@
         "glean-commons-repo",
         "invoice-followup"
       ],
-      "entry_hash": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500",
+      "entry_hash": "963a10e76860b8d3445125c0239f452aaf107b16758a811a6b855269ac8593a5",
       "tags": [
         "small-business",
         "books",
@@ -601,7 +603,10 @@
           "cells/small-business-core/cell.md",
           "cells/small-business-core/test_books.py",
           "cells/small-business-core/sample_books/",
-          "cells/small-business-core/cell.json"
+          "cells/small-business-core/cell.json",
+          "cells/small-business-core/tools.py",
+          "cells/small-business-core/tools.json",
+          "cells/small-business-core/test_tools.py"
         ],
         "note": "Stdlib only. Record facts, derive the rest. Schema changes need a reason in the PR. Add each new stage cell to the FIRST-PRINCIPLES.md table.",
         "labels": [
@@ -609,7 +614,7 @@
           "type:cell"
         ]
       },
-      "canonical_version": "0.1.0",
+      "canonical_version": "0.2.0",
       "variants": [],
       "experiments": []
     }

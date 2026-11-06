@@ -1,0 +1,121 @@
+{
+  "contract_version": 1,
+  "cell": "small-business-core",
+  "module": "tools.py",
+  "context": {
+    "books": "Path to the business's books folder. Passed as the first argument; the server fills it from GLEAN_BOOKS."
+  },
+  "tools": [
+    {
+      "name": "business_status",
+      "job": "owner",
+      "reads": ["customers.csv", "jobs.csv", "invoices.csv", "payments.csv"],
+      "writes": [],
+      "description": "One-screen summary of the business: customers, jobs by stage, money owed, money past due, cash collected this month, and finished jobs not yet invoiced. Use for 'how's business?' or 'what needs my attention?'.",
+      "inputSchema": {"type": "object", "properties": {"today": {"type": "string", "description": "YYYY-MM-DD; default today"}}}
+    },
+    {
+      "name": "find_customers",
+      "job": "office manager",
+      "reads": ["customers.csv"],
+      "writes": [],
+      "description": "List customers, optionally filtered by part of a name or email.",
+      "inputSchema": {"type": "object", "properties": {"query": {"type": "string"}}}
+    },
+    {
+      "name": "list_jobs",
+      "job": "scheduler",
+      "reads": ["jobs.csv", "customers.csv"],
+      "writes": [],
+      "description": "List jobs, optionally by status (quoted, scheduled, in_progress, done, cancelled) and/or customer.",
+      "inputSchema": {"type": "object", "properties": {
+        "status": {"type": "string", "enum": ["quoted", "scheduled", "in_progress", "done", "cancelled"]},
+        "customer": {"type": "string", "description": "Customer id or part of the name"}}}
+    },
+    {
+      "name": "open_invoices",
+      "job": "billing clerk",
+      "reads": ["invoices.csv", "payments.csv", "customers.csv"],
+      "writes": [],
+      "description": "Every invoice with money still owed, most overdue first, with days late. Balances are computed from payments.",
+      "inputSchema": {"type": "object", "properties": {"today": {"type": "string", "description": "YYYY-MM-DD; default today"}}}
+    },
+    {
+      "name": "history",
+      "job": "bookkeeper",
+      "reads": [],
+      "writes": [],
+      "description": "Recent changes to the books, each with a timestamp. Use for 'what changed?' or before undoing.",
+      "inputSchema": {"type": "object", "properties": {"limit": {"type": "integer", "default": 15}}}
+    },
+    {
+      "name": "add_customer",
+      "job": "office manager",
+      "reads": ["customers.csv"],
+      "writes": ["customers.csv"],
+      "description": "Add a new customer. Refuses duplicates by name.",
+      "inputSchema": {"type": "object", "required": ["name"], "properties": {
+        "name": {"type": "string"}, "email": {"type": "string"}, "phone": {"type": "string"},
+        "address": {"type": "string"}, "notes": {"type": "string"}}}
+    },
+    {
+      "name": "add_offer",
+      "job": "owner",
+      "reads": ["offers.csv"],
+      "writes": ["offers.csv"],
+      "description": "Add something the business sells, with its price (e.g. 'Lawn treatment, $85 per visit').",
+      "inputSchema": {"type": "object", "required": ["name", "price"], "properties": {
+        "name": {"type": "string"}, "price": {"type": "number"}, "unit": {"type": "string", "description": "e.g. visit, hour, project"}}}
+    },
+    {
+      "name": "add_job",
+      "job": "scheduler",
+      "reads": ["customers.csv", "offers.csv", "jobs.csv"],
+      "writes": ["jobs.csv"],
+      "description": "Record a job for a customer. Customer and offer can be ids or part of a name. Status defaults to quoted.",
+      "inputSchema": {"type": "object", "required": ["customer"], "properties": {
+        "customer": {"type": "string"}, "description": {"type": "string"}, "offer": {"type": "string"},
+        "status": {"type": "string", "enum": ["quoted", "scheduled", "in_progress", "done", "cancelled"]},
+        "scheduled_date": {"type": "string", "description": "YYYY-MM-DD"}}}
+    },
+    {
+      "name": "update_job",
+      "job": "scheduler",
+      "reads": ["jobs.csv", "customers.csv"],
+      "writes": ["jobs.csv"],
+      "description": "Change a job's status, dates, or description. Marking it done fills today's date if none given. Job can be an id or words from its description or customer.",
+      "inputSchema": {"type": "object", "required": ["job"], "properties": {
+        "job": {"type": "string"},
+        "status": {"type": "string", "enum": ["quoted", "scheduled", "in_progress", "done", "cancelled"]},
+        "scheduled_date": {"type": "string"}, "done_date": {"type": "string"}, "description": {"type": "string"}}}
+    },
+    {
+      "name": "create_invoice",
+      "job": "billing clerk",
+      "reads": ["jobs.csv", "offers.csv", "invoices.csv", "customers.csv"],
+      "writes": ["invoices.csv"],
+      "description": "Invoice a job. Amount defaults to the job's offer price; due date is issued date plus terms (default 30 days). Refuses to invoice a job twice.",
+      "inputSchema": {"type": "object", "required": ["job"], "properties": {
+        "job": {"type": "string"}, "amount": {"type": "number"},
+        "issued_date": {"type": "string"}, "terms_days": {"type": "integer", "default": 30}}}
+    },
+    {
+      "name": "record_payment",
+      "job": "bookkeeper",
+      "reads": ["invoices.csv", "payments.csv", "customers.csv"],
+      "writes": ["payments.csv"],
+      "description": "Record money received, by invoice number or customer. Amount defaults to the full balance. Refuses overpayment.",
+      "inputSchema": {"type": "object", "properties": {
+        "invoice": {"type": "string"}, "customer": {"type": "string"}, "amount": {"type": "number"},
+        "date_paid": {"type": "string"}, "method": {"type": "string", "description": "cash, check, card, ..."}}}
+    },
+    {
+      "name": "undo_last_change",
+      "job": "bookkeeper",
+      "reads": [],
+      "writes": ["any"],
+      "description": "Undo the most recent change to the books. The undo is recorded too, so history is never lost.",
+      "inputSchema": {"type": "object", "properties": {}}
+    }
+  ]
+}

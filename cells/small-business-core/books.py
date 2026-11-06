@@ -49,6 +49,70 @@ def load(folder) -> dict[str, list[dict]]:
     return {name: read_csv(folder / name) for name in FILES}
 
 
+# ---------- writing (validated, versioned) ----------
+
+ID_PREFIX = {"customers.csv": "C", "offers.csv": "O", "jobs.csv": "J",
+             "payments.csv": "P", "invoices.csv": ""}
+FIRST_INVOICE = 1001
+
+
+def next_id(books: dict, name: str) -> str:
+    key = FILES[name]["key"]
+    prefix = ID_PREFIX[name]
+    nums = []
+    for r in books[name]:
+        v = r.get(key, "")
+        tail = v[len(prefix):] if v.startswith(prefix) else ""
+        if tail.isdigit():
+            nums.append(int(tail))
+    if name == "invoices.csv":
+        return str(max(nums + [FIRST_INVOICE - 1]) + 1)
+    return f"{prefix}{max(nums + [0]) + 1}"
+
+
+def write_csv(path: Path, rows: list[dict], columns: list[str]) -> None:
+    extra = [c for r in rows for c in r if c not in columns]
+    cols = columns + sorted(set(extra), key=extra.index)
+    tmp = path.with_suffix(".csv.tmp")
+    with tmp.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
+        w.writeheader()
+        for r in rows:
+            w.writerow({c: r.get(c, "") for c in cols})
+    tmp.replace(path)
+
+
+def is_git(folder: Path) -> bool:
+    return (folder / ".git").exists()
+
+
+def git(folder: Path, *args: str) -> str:
+    import subprocess
+    r = subprocess.run(
+        ["git", "-C", str(folder), "-c", "user.name=Glean Books",
+         "-c", "user.email=books@glean.local", *args],
+        capture_output=True, text=True)
+    return r.stdout.strip()
+
+
+def save(folder, books: dict, changed: list[str], message: str) -> list[str]:
+    """Validate the whole set of books, then write the changed files.
+
+    Returns a list of problems; if any, nothing is written. When the books
+    folder is a git repo, every save is one timestamped commit (history + undo).
+    """
+    folder = Path(folder)
+    errors = check(books)
+    if errors:
+        return errors
+    for name in changed:
+        write_csv(folder / name, books[name], list(FILES[name]["columns"]))
+    if is_git(folder):
+        git(folder, "add", *changed)
+        git(folder, "commit", "-q", "-m", message)
+    return []
+
+
 # ---------- derived facts ----------
 
 def invoice_balances(books: dict, today: date | None = None) -> list[dict]:
@@ -89,7 +153,16 @@ def cmd_init(folder: Path) -> int:
         with path.open("w", newline="", encoding="utf-8") as f:
             csv.writer(f).writerow(spec["columns"].keys())
         made.append(name)
-    print(f"Books ready in {folder} ({len(made)} new file(s): {', '.join(made) or 'none'})")
+    note = ""
+    if not is_git(folder):
+        import shutil
+        if shutil.which("git"):
+            git(folder, "init", "-q")
+            note = "; version history on (git)"
+    if is_git(folder) and made:
+        git(folder, "add", *made)
+        git(folder, "commit", "-q", "-m", "Open the books")
+    print(f"Books ready in {folder} ({len(made)} new file(s): {', '.join(made) or 'none'}){note}")
     return 0
 
 

@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500",
+  "tip_hash": "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -207,6 +207,48 @@
       "notes": "Foundation for small-business cells: FIRST-PRINCIPLES.md maps the business loop (offer > customer > quote > schedule > work > invoice > paid > books > learn) as a build queue; schema.json defines one shared set of CSV books; books.py init/check/status/ar. ar export feeds invoice-followup (parent). Router returned BUILD. No upstream code copied. uses=0: no real-world use yet.",
       "prev_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
       "entry_hash": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500"
+    },
+    {
+      "id": "small-business-core-v0.2",
+      "title": "Small Business Core v0.2: callable tools",
+      "type": "cell",
+      "creator": "Timmy Gack",
+      "ai_assist": "Claude (Anthropic, Opus 5.5): tools.py, tools.json contract, validated writes, git versioning, tests",
+      "parents": [
+        "small-business-core"
+      ],
+      "parent_hashes": [
+        "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500"
+      ],
+      "created": "2026-11-06T22:05:17Z",
+      "version": "0.2.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "12 callable tools declared in tools.json (contract v1) so any AI can run the books by conversation: status, lookups, add customer/offer/job, update job, invoice, record payment, history, undo. Fuzzy references; asks when ambiguous. Every write validated against the full books before saving; each save is a git commit (timestamped history + non-destructive undo). uses=0.",
+      "prev_hash": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500",
+      "entry_hash": "963a10e76860b8d3445125c0239f452aaf107b16758a811a6b855269ac8593a5"
+    },
+    {
+      "id": "invoice-followup-v0.2",
+      "title": "Invoice follow-up v0.2: callable tool on the shared books",
+      "type": "cell",
+      "creator": "Timmy Gack",
+      "ai_assist": "Claude (Anthropic, Opus 5.5): tools.py, tools.json",
+      "parents": [
+        "invoice-followup",
+        "small-business-core-v0.2"
+      ],
+      "parent_hashes": [
+        "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
+        "963a10e76860b8d3445125c0239f452aaf107b16758a811a6b855269ac8593a5"
+      ],
+      "created": "2026-11-06T22:05:18Z",
+      "version": "0.2.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "Adds draft_payment_reminders, which reads the shared books directly. Drafts only. uses=0.",
+      "prev_hash": "963a10e76860b8d3445125c0239f452aaf107b16758a811a6b855269ac8593a5",
+      "entry_hash": "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379"
     }
   ]
 }

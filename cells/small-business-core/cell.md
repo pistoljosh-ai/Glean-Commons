@@ -20,10 +20,18 @@ python3 cells/invoice-followup/followup.py ar.csv --business "Your Business"
 
 `status` shows customers, jobs by stage, money owed, money past due, cash collected this month, and finished jobs that were never invoiced.
 
+### Callable tools (v0.2)
+
+[`tools.json`](tools.json) declares 12 tools any AI can call through the Glean tool server: `business_status`, `find_customers`, `list_jobs`, `open_invoices`, `history`, `add_customer`, `add_offer`, `add_job`, `update_job`, `create_invoice`, `record_payment`, `undo_last_change`.
+
+- **Talks like people do.** "Acme" or "the Cedar job" works. If a reference matches more than one thing, the tool asks instead of guessing.
+- **Every write is checked first.** If a change would break the books (an unknown customer, a bad date, an overpayment), nothing is saved.
+- **Every change is versioned.** `init` turns the books folder into a git repo, so each change is one timestamped commit. `history` shows them, and `undo_last_change` reverts the last one without erasing it.
+
 ### Reads / writes
 
 - **Reads:** all five books files.
-- **Writes:** only empty headers on `init`. It never edits your records.
+- **Writes:** `books.py` writes only empty headers on `init`. The tools in `tools.py` write the file each one declares in `tools.json`, after validating the whole set of books.
 - **Feeds:** `invoice-followup` (via `ar`).
 
 ## Link
