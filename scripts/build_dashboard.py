@@ -51,12 +51,15 @@ def build() -> dict:
         for t in spec["tools"]:
             tools.append({"tool": t["name"], "job": t.get("job", ""), "cell": spec.get("cell", tj.parent.name),
                           "kind": "writes" if t.get("writes") else "reads", "writes": " ".join(t.get("writes", []))})
-    server = ROOT / "mcp/server.py"
-    if server.exists():
-        for name in re.findall(r'"name": "([a-z_]+)", "job": "commons"', server.read_text(encoding="utf-8")):
-            tools.append({"tool": name, "job": "commons", "cell": "glean-mcp",
-                          "kind": "writes" if name.startswith("note_") else "reads",
-                          "writes": "wishlist.md" if name.startswith("note_") else ""})
+    if (ROOT / "mcp/server.py").exists():
+        sys.path.insert(0, str(ROOT / "mcp"))
+        import server as mcp_server  # ask the server itself which commons tools it offers
+        srv = mcp_server.Server(None)  # local mode lists every tool; books=None touches nothing
+        for name, (spec, _, cell) in sorted(srv.tools.items()):
+            if cell == "glean-mcp":
+                tools.append({"tool": name, "job": "commons", "cell": "glean-mcp",
+                              "kind": "writes" if name.startswith("note_") else "reads",
+                              "writes": "wishlist.md" if name.startswith("note_") else ""})
 
     per_cell: dict[str, int] = {}
     per_job: dict[str, int] = {}

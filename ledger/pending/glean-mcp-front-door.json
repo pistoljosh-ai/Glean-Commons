@@ -1,0 +1,13 @@
+{
+  "id": "glean-mcp-front-door",
+  "title": "Glean tool server v0.2: front door, public mode, hosted HTTP",
+  "type": "other",
+  "creator": "Timmy Gack",
+  "ai_assist": "Claude (Anthropic, Opus 5.5): do/call front door, public/local modes, Streamable HTTP transport, Dockerfile, tests",
+  "parents": ["glean-mcp", "commons-catalog"],
+  "created": "2026-11-06T23:30:00Z",
+  "version": "0.2.0",
+  "commit": "",
+  "uses": 0,
+  "notes": "Step toward one URL anyone adds to their AI. do(request) finds the right tool from plain words (everyday-word map, honest 'nothing does that yet'); call(name, arguments) runs any tool; --front-door lists only do/call/what_can_you_do so the commons can grow to thousands of cells. --public exposes only tools marked stateless (holds no one's data) and still points people to local-only tools. Stdlib Streamable HTTP (POST /mcp, origin checks, health) and a Dockerfile; refuses to expose private books on a network address. Fixes search_cells passing the wrong shape to search.py, and a lock deadlock found by the new tests. Not yet hosted anywhere. uses=0."
+}

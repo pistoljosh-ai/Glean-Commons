@@ -44,4 +44,6 @@ jobs:
       - name: Test cells
         run: for t in cells/*/test_*.py; do echo "== $t"; python3 "$t" || exit 1; done
       - name: Test MCP tool server end to end
-        run: python3 mcp/test_server.py
+        run: |
+          python3 mcp/test_server.py
+          python3 mcp/test_front_door.py

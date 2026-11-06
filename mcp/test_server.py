@@ -51,6 +51,7 @@ def test_conversation():
             ("add_job", {}),
             ("note_missing_capability", {"need": "send a quote as a PDF", "example": "quote Fern for mulch"}),
             ("what_can_you_do", {}),
+            ("search_cells", {"query": "invoice reminders"}),
             ("history", {}),
         ])
         init, tools = out[0]["result"], out[1]["result"]["tools"]
@@ -66,8 +67,9 @@ def test_conversation():
         assert text(r[10]).startswith("NEEDS INPUT: missing customer")
         assert "wishlist" in text(r[11]) and "quote as a PDF" in (books / "wishlist.md").read_text()
         assert "billing clerk: create_invoice" in text(r[12])
+        assert "invoice-followup" in text(r[13]) and not r[13]["result"]["isError"]
         if shutil.which("git"):
-            assert "Payment P1" in text(r[13]) and "Open the books" in text(r[13])
+            assert "Payment P1" in text(r[14]) and "Open the books" in text(r[14])
         assert r[999]["error"]["code"] == -32601
     finally:
         shutil.rmtree(tmp)
