@@ -50,6 +50,8 @@ After a human merges, one workflow folds pending entries one at a time onto the 
 - Always set `ai_assist` when an AI helped (name yourself).
 - The human `creator` is the person accountable for the contribution.
 - Do not erase or rewrite past ledger entries.
+- **Every contribution carries its credit.** A pull request that changes code, cells, tools, workflows or upstream pointers must add `ledger/pending/<id>.json`. CI (`scripts/check_credit.py`) fails it otherwise. Docs-only and generated-file changes are exempt; a maintainer can exempt a trivial fix with the `no-credit` label.
+- If you find work in the repo with no ledger entry, credit it in a new pending entry naming who actually did it. Never claim it for yourself.
 
 ## Hard rules
 

@@ -1,0 +1,27 @@
+{
+  "id": "upstream-opentimestamps-client",
+  "name": "Upstream: OpenTimestamps client",
+  "type": "upstream",
+  "path": "upstream/opentimestamps/opentimestamps-client/",
+  "manifest": null,
+  "status": "pointer",
+  "maintainers": ["Timmy Gack"],
+  "parents": ["glean-commons-repo"],
+  "entry_hash": null,
+  "tags": ["upstream", "timestamps", "bitcoin", "anchoring", "lgpl"],
+  "upstream": {
+    "url": "https://github.com/opentimestamps/opentimestamps-client",
+    "homepage": "https://opentimestamps.org",
+    "license_spdx": "LGPL-3.0-or-later",
+    "author_credit": "Peter Todd and the OpenTimestamps contributors",
+    "why_for_glean": "Free, trust-minimized timestamps: anchors each ledger tip in Bitcoin without a new chain or a token."
+  },
+  "how_to_change": {
+    "edit": ["upstream/opentimestamps/opentimestamps-client/README.md", "commons.json"],
+    "note": "Pointer entry. Used as an external CLI only. Keep LGPL-3.0 notices if any code is ever copied.",
+    "labels": ["project:upstream-opentimestamps", "type:upstream"]
+  },
+  "canonical_version": "upstream-pointer-0.1",
+  "variants": [],
+  "experiments": []
+}

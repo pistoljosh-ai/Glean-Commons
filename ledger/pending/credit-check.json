@@ -1,0 +1,13 @@
+{
+  "id": "credit-check",
+  "title": "Every contribution carries its credit (CI check)",
+  "type": "other",
+  "creator": "Timmy Gack",
+  "ai_assist": "Claude (Anthropic, Opus 5.5): check_credit.py, tests, CI step, AGENTS.md rule",
+  "parents": ["glean-commons-repo", "parallel-ledger-and-anchors"],
+  "created": "2026-11-06T22:50:00Z",
+  "version": "0.1.0",
+  "commit": "",
+  "uses": 0,
+  "notes": "Root-cause fix for uncredited work (PR #7 merged with no ledger entry). CI now fails a PR that changes contribution paths without adding ledger/pending/<id>.json; docs and generated files exempt; maintainer 'no-credit' label for trivial fixes. Implements whitepaper sec 4.3 and 3.4 as a gate, not a guideline."
+}
