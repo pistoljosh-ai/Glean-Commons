@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -17,6 +19,13 @@ jobs:
         run: python3 ledger/verify.py
       - name: Validate pending ledger entries
         run: python3 ledger/validate_pending.py
+      - name: Every contribution carries its credit
+        if: github.event_name == 'pull_request'
+        env:
+          NO_CREDIT: ${{ contains(github.event.pull_request.labels.*.name, 'no-credit') && '1' || '0' }}
+        run: python3 scripts/check_credit.py origin/${{ github.base_ref }}
+      - name: Test credit check
+        run: python3 tests/test_credit.py
       - name: On main, committed catalog and dashboard must match when nothing is pending
         if: github.event_name == 'push'
         run: |
