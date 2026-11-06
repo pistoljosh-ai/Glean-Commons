@@ -19,6 +19,10 @@ CSV columns: `invoice, customer, email, amount, due_date (YYYY-MM-DD)`, optional
 
 Tiers by days past due: **friendly** (1+), **firm** (15+), **final** (45+). Oldest and largest come first. Paid and not-yet-due rows are skipped.
 
+## Callable tool (v0.2)
+
+[`tools.json`](tools.json) declares `draft_payment_reminders`, which reads the shared books from [`small-business-core`](../small-business-core/) directly. No CSV export step needed.
+
 ## Link
 
 - Grok Bot template URL (when published): not published

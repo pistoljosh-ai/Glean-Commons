@@ -1,0 +1,20 @@
+{
+  "contract_version": 1,
+  "cell": "invoice-followup",
+  "module": "tools.py",
+  "context": {
+    "books": "Path to the business's books folder. Passed as the first argument; the server fills it from GLEAN_BOOKS."
+  },
+  "tools": [
+    {
+      "name": "draft_payment_reminders",
+      "job": "collections",
+      "reads": ["invoices.csv", "payments.csv", "customers.csv"],
+      "writes": [],
+      "description": "Draft polite, escalating reminder emails (friendly, firm, final) for every past-due balance in the books. Drafts only; the owner sends.",
+      "inputSchema": {"type": "object", "properties": {
+        "business_name": {"type": "string", "description": "Name to sign the emails with"},
+        "today": {"type": "string", "description": "YYYY-MM-DD; default today"}}}
+    }
+  ]
+}
