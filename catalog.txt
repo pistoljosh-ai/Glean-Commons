@@ -1,7 +1,7 @@
 # Glean Commons catalog
 # schema_version=1
-# ledger_tip=3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e
-# commons_sha256=262120cb1c1f2d06edbc7152bafd151f19b4192ec916a79cbf53dd4a46c5ea1c
+# ledger_tip=522b7b85d82e6dd9a24d70017e2d428161a88007c0e1fb341261864cedc1ae39
+# commons_sha256=42fbf7acabf5d61923cb15485786b713ce5f6f61e67e80432d8bf47a5b013145
 # order: measured_before_unmeasured, pou_score_desc, uses_desc, ancestry_depth_desc, id_asc
 
 id: commons-dashboard
@@ -251,6 +251,25 @@ pou: null — no usage data yet
 how_to_change: {"edit": ["upstream/forward-future/loopy/README.md", "commons.json"], "labels": ["project:upstream-loopy", "type:upstream"], "note": "Pointer entry. Any local adaptation becomes a new cell with this id as parent. Keep the MIT notice if code is ever copied."}
 when_to_use: Use when you need a credited pointer to Upstream: Forward-Future/loopy (Loop Library) before adapting it; do not copy the code, make a child cell.
 
+id: upstream-opentimestamps-client
+name: Upstream: OpenTimestamps client
+type: upstream
+status: pointer
+summary: Import pointer only. Upstream https://github.com/opentimestamps/opentimestamps-client, LGPL-3.0-or-later, original author Peter Todd. Installed in CI as the ots CLI to anchor ledger tips; never imported or vendored. Credited...
+tags: upstream, timestamps, bitcoin, anchoring, lgpl
+path: upstream/opentimestamps/opentimestamps-client/
+upstream: https://github.com/opentimestamps/opentimestamps-client | LGPL-3.0-or-later | Peter Todd and the OpenTimestamps contributors
+parents: glean-commons-repo
+ancestry: glean-commons-repo, whitepaper-v1.0
+children: none
+canonical_version: upstream-pointer-0.1
+variants: []
+entry_hash: d607a9749230cb4351831ddfe4178e4f35b855103708d0ddbb67c702fdca6fc6
+uses: 0
+pou: null — no usage data yet
+how_to_change: {"edit": ["upstream/opentimestamps/opentimestamps-client/README.md", "commons.json"], "labels": ["project:upstream-opentimestamps", "type:upstream"], "note": "Pointer entry. Used as an external CLI only. Keep LGPL-3.0 notices if any code is ever copied."}
+when_to_use: Use when you need a credited pointer to Upstream: OpenTimestamps client before adapting it; do not copy the code, make a child cell.
+
 id: glean-commons-repo
 name: Glean Commons repository
 type: doc
@@ -261,7 +280,7 @@ path: .
 upstream: none
 parents: whitepaper-v1.0
 ancestry: whitepaper-v1.0
-children: cell-template, commons-analyst, commons-catalog, commons-dashboard, glean-mcp, glean-router, invoice-followup, ledger, small-business-core, upstream-567-labs-instructor, upstream-aurelio-labs-semantic-router, upstream-forward-future-loopy
+children: cell-template, commons-analyst, commons-catalog, commons-dashboard, glean-mcp, glean-router, invoice-followup, ledger, small-business-core, upstream-567-labs-instructor, upstream-aurelio-labs-semantic-router, upstream-forward-future-loopy, upstream-opentimestamps-client
 canonical_version: 0.1.0
 variants: [{"id": "main", "parent": null, "path": ".", "status": "canonical"}]
 entry_hash: 6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c

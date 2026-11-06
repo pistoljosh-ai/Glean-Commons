@@ -94,12 +94,12 @@ const DATA = {
  "integrity": [
   {
    "check": "Ledger hash chain",
-   "detail": "14 entries; tip 3f490f327f60",
+   "detail": "17 entries; tip 522b7b85d82e",
    "result": "verified"
   },
   {
    "check": "Registry matches manifests",
-   "detail": "16 projects agree",
+   "detail": "17 projects agree",
    "result": "verified"
   }
  ],
@@ -373,6 +373,48 @@ const DATA = {
    "type": "other",
    "uses": 0,
    "version": "0.1.0"
+  },
+  {
+   "agent": "Claude",
+   "created": "2026-11-06T22:39:00Z",
+   "creator": "Peter Todd and the OpenTimestamps contributors",
+   "hash": "d607a9749230",
+   "id": "upstream-opentimestamps-client",
+   "parents": "glean-commons-repo",
+   "prev": "3f490f327f60",
+   "seq": 15,
+   "title": "Upstream: opentimestamps/opentimestamps-client",
+   "type": "other",
+   "uses": 0,
+   "version": "upstream-pointer-0.1"
+  },
+  {
+   "agent": "Cursor Agent",
+   "created": "2026-11-06T22:39:23Z",
+   "creator": "Timmy Gack",
+   "hash": "32a7d5232e43",
+   "id": "parallel-ledger-and-anchors",
+   "parents": "glean-commons-repo|commons-dashboard|upstream-opentimestamps-client",
+   "prev": "d607a9749230",
+   "seq": 16,
+   "title": "Parallel builds without ledger forks, plus OpenTimestamps anchors",
+   "type": "other",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "agent": "Claude",
+   "created": "2026-11-06T22:50:00Z",
+   "creator": "Timmy Gack",
+   "hash": "522b7b85d82e",
+   "id": "credit-check",
+   "parents": "glean-commons-repo|parallel-ledger-and-anchors",
+   "prev": "32a7d5232e43",
+   "seq": 17,
+   "title": "Every contribution carries its credit (CI check)",
+   "type": "other",
+   "uses": 0,
+   "version": "0.1.0"
   }
  ],
  "projects": [
@@ -551,15 +593,26 @@ const DATA = {
    "type": "tool",
    "uses": 0,
    "version": "0.1.0"
+  },
+  {
+   "id": "upstream-opentimestamps-client",
+   "name": "Upstream: OpenTimestamps client",
+   "parents": 1,
+   "path": "upstream/opentimestamps/opentimestamps-client/",
+   "status": "pointer",
+   "tools": 0,
+   "type": "upstream",
+   "uses": 0,
+   "version": "upstream-pointer-0.1"
   }
  ],
  "summary": [
   {
-   "entries": 14,
+   "entries": 17,
    "jobs_built": 6,
    "jobs_total": 12,
-   "ledger_tip": "3f490f327f60",
-   "projects": 16,
+   "ledger_tip": "522b7b85d82e",
+   "projects": 17,
    "tools": 16,
    "uses": 0
   }

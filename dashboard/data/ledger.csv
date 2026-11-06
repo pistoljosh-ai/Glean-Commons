@@ -13,3 +13,6 @@ seq,id,title,type,creator,agent,parents,created,version,uses,hash,prev
 12,invoice-followup-v0.2,Invoice follow-up v0.2: callable tool on the shared books,cell,Timmy Gack,Claude,invoice-followup|small-business-core-v0.2,2026-11-06T22:05:18Z,0.2.0,0,b502e9e311dc,963a10e76860
 13,glean-mcp,Glean tool server (MCP): run your business by talking to any AI,other,Timmy Gack,Claude,glean-commons-repo|commons-catalog|small-business-core-v0.2,2026-11-06T22:08:20Z,0.1.0,0,404259c47ec1,b502e9e311dc
 14,commons-dashboard,Glean Commons dashboard (built from the repo),other,Timmy Gack,Claude,glean-commons-repo|commons-catalog|glean-mcp,2026-11-06T22:34:19Z,0.1.0,0,3f490f327f60,404259c47ec1
+15,upstream-opentimestamps-client,Upstream: opentimestamps/opentimestamps-client,other,Peter Todd and the OpenTimestamps contributors,Claude,glean-commons-repo,2026-11-06T22:39:00Z,upstream-pointer-0.1,0,d607a9749230,3f490f327f60
+16,parallel-ledger-and-anchors,"Parallel builds without ledger forks, plus OpenTimestamps anchors",other,Timmy Gack,Cursor Agent,glean-commons-repo|commons-dashboard|upstream-opentimestamps-client,2026-11-06T22:39:23Z,0.1.0,0,32a7d5232e43,d607a9749230
+17,credit-check,Every contribution carries its credit (CI check),other,Timmy Gack,Claude,glean-commons-repo|parallel-ledger-and-anchors,2026-11-06T22:50:00Z,0.1.0,0,522b7b85d82e,32a7d5232e43

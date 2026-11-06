@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e",
+  "tip_hash": "522b7b85d82e6dd9a24d70017e2d428161a88007c0e1fb341261864cedc1ae39",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -297,6 +297,72 @@
       "notes": "scripts/build_dashboard.py turns commons.json, the ledger, every cells/*/tools.json and JOBS.md into dashboard/data/*.csv, data.json and a self-contained dashboard/index.html (no dependencies; opens anywhere; GitHub Pages ready). Deterministic; CI rebuilds it and fails if stale, so the dashboard changes with every merge. Shows job coverage, contribution chain, tools, integrity, registry. uses=0.",
       "prev_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2",
       "entry_hash": "3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e"
+    },
+    {
+      "id": "upstream-opentimestamps-client",
+      "title": "Upstream: opentimestamps/opentimestamps-client",
+      "type": "other",
+      "creator": "Peter Todd and the OpenTimestamps contributors",
+      "ai_assist": "Claude (Anthropic, Opus 5.5): intake pointer and license check; no code copied",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c"
+      ],
+      "created": "2026-11-06T22:39:00Z",
+      "version": "upstream-pointer-0.1",
+      "commit": "",
+      "uses": 0,
+      "notes": "Import pointer only. Upstream https://github.com/opentimestamps/opentimestamps-client, LGPL-3.0-or-later, original author Peter Todd. Installed in CI as the ots CLI to anchor ledger tips; never imported or vendored. Credited retroactively: it arrived in PR #7 without a ledger entry.",
+      "prev_hash": "3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e",
+      "entry_hash": "d607a9749230cb4351831ddfe4178e4f35b855103708d0ddbb67c702fdca6fc6"
+    },
+    {
+      "id": "parallel-ledger-and-anchors",
+      "title": "Parallel builds without ledger forks, plus OpenTimestamps anchors",
+      "type": "other",
+      "creator": "Timmy Gack",
+      "ai_assist": "Cursor Agent: pending-entry ledger, fold workflow, validate_pending, OpenTimestamps anchoring (PR #7)",
+      "parents": [
+        "glean-commons-repo",
+        "commons-dashboard",
+        "upstream-opentimestamps-client"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+        "3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e",
+        "d607a9749230cb4351831ddfe4178e4f35b855103708d0ddbb67c702fdca6fc6"
+      ],
+      "created": "2026-11-06T22:39:23Z",
+      "version": "0.1.0",
+      "commit": "c2fab63",
+      "uses": 0,
+      "notes": "PR #7. Contributions add ledger/pending/<id>.json instead of editing the chain; after merge, fold-ledger.yml appends them in order with add_entry.py and rebuilds catalog and dashboard, so many agents can build in parallel without forking the ledger. anchor-timestamps.yml stamps ledger tip + commit with OpenTimestamps (Bitcoin). Credited retroactively by Claude at the maintainer's request; the work and code are the Cursor Agent's.",
+      "prev_hash": "d607a9749230cb4351831ddfe4178e4f35b855103708d0ddbb67c702fdca6fc6",
+      "entry_hash": "32a7d5232e43ef0c8b897402e57f1951fac108a3d90412177a370d399f7289d8"
+    },
+    {
+      "id": "credit-check",
+      "title": "Every contribution carries its credit (CI check)",
+      "type": "other",
+      "creator": "Timmy Gack",
+      "ai_assist": "Claude (Anthropic, Opus 5.5): check_credit.py, tests, CI step, AGENTS.md rule",
+      "parents": [
+        "glean-commons-repo",
+        "parallel-ledger-and-anchors"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+        "32a7d5232e43ef0c8b897402e57f1951fac108a3d90412177a370d399f7289d8"
+      ],
+      "created": "2026-11-06T22:50:00Z",
+      "version": "0.1.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "Root-cause fix for uncredited work (PR #7 merged with no ledger entry). CI now fails a PR that changes contribution paths without adding ledger/pending/<id>.json; docs and generated files exempt; maintainer 'no-credit' label for trivial fixes. Implements whitepaper sec 4.3 and 3.4 as a gate, not a guideline.",
+      "prev_hash": "32a7d5232e43ef0c8b897402e57f1951fac108a3d90412177a370d399f7289d8",
+      "entry_hash": "522b7b85d82e6dd9a24d70017e2d428161a88007c0e1fb341261864cedc1ae39"
     }
   ]
 }
