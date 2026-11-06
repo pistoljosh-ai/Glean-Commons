@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
+  "tip_hash": "eff033544c26ee6a0dc6377f0c98b0ce5be2b93b919f4c6c1d53e5e6cd2c8fe3",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -101,6 +101,70 @@
       "notes": "Searchable catalog of every commons project so people and agents can find the best proven cell before building a new one.",
       "prev_hash": "2e60ab21283e9fb1b11da565a956f0dea4291e2499f7f466534f9857eb565a9e",
       "entry_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199"
+    },
+    {
+      "id": "upstream-aurelio-labs-semantic-router",
+      "title": "Upstream: Aurelio Labs semantic-router",
+      "type": "other",
+      "creator": "Aurelio Labs / Aurelio AI",
+      "ai_assist": "AI Co-Laborer (Grok Bot): intake research and pointer; no code copied",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c"
+      ],
+      "created": "2026-11-06T21:29:45Z",
+      "version": "upstream-pointer-0.1",
+      "commit": "",
+      "uses": 0,
+      "notes": "Import pointer only. Upstream https://github.com/aurelio-labs/semantic-router, MIT, Copyright (c) 2026 Aurelio AI. Primary parent of Glean Router. No code copied.",
+      "prev_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
+      "entry_hash": "c7f6933c39244e6eb132ac17c5502c5b8e693a1d9f3d12810502ee9ddba4013f"
+    },
+    {
+      "id": "upstream-567-labs-instructor",
+      "title": "Upstream: 567-labs/instructor (structured outputs)",
+      "type": "other",
+      "creator": "567 Labs / Jason Liu (and contributors)",
+      "ai_assist": "AI Co-Laborer (Grok Bot): intake research and pointer; no code copied",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c"
+      ],
+      "created": "2026-11-06T21:29:45Z",
+      "version": "upstream-pointer-0.1",
+      "commit": "",
+      "uses": 0,
+      "notes": "Import pointer only. Upstream https://github.com/567-labs/instructor, MIT, Copyright (c) 2023 Jason Liu. Secondary parent of Glean Router for typed schemas. No code copied.",
+      "prev_hash": "c7f6933c39244e6eb132ac17c5502c5b8e693a1d9f3d12810502ee9ddba4013f",
+      "entry_hash": "710283c3c66130a4dbc669cb2b3c06413df509fa379b8194d0f42552e98c92fc"
+    },
+    {
+      "id": "glean-router",
+      "title": "Glean Router v0 (typed decision tree)",
+      "type": "other",
+      "creator": "Timmy Gack (concept, inspired by TypeSafe Jev) + AI Co-Laborer",
+      "ai_assist": "AI Co-Laborer (Grok Bot): router design and stdlib prototype; no upstream code copied",
+      "parents": [
+        "glean-commons-repo",
+        "upstream-aurelio-labs-semantic-router",
+        "upstream-567-labs-instructor"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+        "c7f6933c39244e6eb132ac17c5502c5b8e693a1d9f3d12810502ee9ddba4013f",
+        "710283c3c66130a4dbc669cb2b3c06413df509fa379b8194d0f42552e98c92fc"
+      ],
+      "created": "2026-11-06T21:29:45Z",
+      "version": "0.1.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "Jev / TypeSafe is credited as inspiration and no code is used. Pointer parents are aurelio-labs/semantic-router and 567-labs/instructor, both MIT. Stdlib decision tree over catalog.json; no upstream code copied.",
+      "prev_hash": "710283c3c66130a4dbc669cb2b3c06413df509fa379b8194d0f42552e98c92fc",
+      "entry_hash": "eff033544c26ee6a0dc6377f0c98b0ce5be2b93b919f4c6c1d53e5e6cd2c8fe3"
     }
   ]
 }

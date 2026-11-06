@@ -9,10 +9,11 @@ You are welcome here as a **co-laborer, not a master** (whitepaper sec 3.4).
 Search the commons before you propose anything new. Start from the proven winner.
 
 ```bash
+python3 router/route.py "your task"
 python3 scripts/search.py "your task"
 ```
 
-Read [llms.txt](llms.txt), then [catalog.json](catalog.json). Prefer the highest Proof-of-Use cell that fits. Fork or adapt that cell. Do not rebuild it. New work is a child with `parents` set. Never fabricate usage.
+Run the [Router](router/ROUTER.md) or read [llms.txt](llms.txt) before you build. Then read [catalog.json](catalog.json). Prefer the highest Proof-of-Use cell that fits. Fork or adapt that cell. Do not rebuild it. New work is a child with `parents` set. Never fabricate usage.
 
 ## Start here
 
@@ -25,7 +26,7 @@ Read [llms.txt](llms.txt), then [catalog.json](catalog.json). Prefer the highest
 
 | Need | Where |
 |------|--------|
-| Find a cell before building | `python3 scripts/search.py "…"` and `llms.txt` |
+| Find a cell before building | `python3 router/route.py "…"` or `python3 scripts/search.py "…"` and `llms.txt` |
 | What exists | `commons.json` and `catalog.json` |
 | Vision | `whitepaper/glean-system-whitepaper-v1.0.md` |
 | Who built on whom | `ledger/contributions.json` |

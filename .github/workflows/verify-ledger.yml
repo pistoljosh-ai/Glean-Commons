@@ -21,3 +21,5 @@ jobs:
           git diff --exit-code -- catalog.json catalog.txt llms.txt
       - name: Test catalog search
         run: python3 tests/test_catalog.py
+      - name: Test Glean Router
+        run: python3 router/test_route.py

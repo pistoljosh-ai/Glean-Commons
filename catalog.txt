@@ -1,7 +1,7 @@
 # Glean Commons catalog
 # schema_version=1
-# ledger_tip=7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199
-# commons_sha256=305cfc4821048a5fb9b7f10c74a054d951d847b8ceeddb2a349a29ef403992c0
+# ledger_tip=eff033544c26ee6a0dc6377f0c98b0ce5be2b93b919f4c6c1d53e5e6cd2c8fe3
+# commons_sha256=0c0f4fbb595757d32b4d006d4a14ea1c4a899242cbe5483ffa56f0164d07bd36
 # order: measured_before_unmeasured, pou_score_desc, uses_desc, ancestry_depth_desc, id_asc
 
 id: experiments
@@ -22,6 +22,25 @@ uses: 0
 pou: null — no usage data yet
 how_to_change: {"edit": ["experiments/README.md", "experiments/_template/experiment.json", "experiments/cell.json"], "labels": ["project:experiments", "type:docs"], "note": "New tests get their own folder under experiments/ and a link from the parent project's experiments[]."}
 when_to_use: Use when you need Experiment declarations (doc, active) instead of building it again.
+
+id: glean-router
+name: Glean Router
+type: tool
+status: active
+summary: Jev / TypeSafe is credited as inspiration and no code is used. Pointer parents are aurelio-labs/semantic-router and 567-labs/instructor, both MIT. Stdlib decision tree over catalog.json; no upstream code copied.
+tags: router, routing, decision-tree, catalog
+path: router/
+upstream: none
+parents: glean-commons-repo, upstream-aurelio-labs-semantic-router, upstream-567-labs-instructor
+ancestry: glean-commons-repo, whitepaper-v1.0, upstream-aurelio-labs-semantic-router, upstream-567-labs-instructor
+children: none
+canonical_version: 0.1.0
+variants: []
+entry_hash: eff033544c26ee6a0dc6377f0c98b0ce5be2b93b919f4c6c1d53e5e6cd2c8fe3
+uses: 0
+pou: null — no usage data yet
+how_to_change: {"edit": ["router/route.py", "router/ROUTER.md", "router/test_route.py", "router/sample_catalog.json", "router/cell.json"], "labels": ["project:router", "type:tool"], "note": "Stdlib only. The sample catalog is the labeled demo fixture. Live routing reads catalog.json. Humans approve BUILD and ADAPT registration. No upstream code is copied."}
+when_to_use: Run this before building a new cell. It routes a request to an existing cell, a child adaptation, or a new build.
 
 id: cell-template
 name: Cell template
@@ -99,6 +118,44 @@ pou: null — no usage data yet
 how_to_change: {"edit": ["ledger/contributions.json", "ledger/verify.py", "ledger/add_entry.py", "LEDGER.md", "CHAIN.md"], "labels": ["project:ledger", "type:tool"], "note": "Append entries only via ledger/add_entry.py. Never hand-edit entry_hash, prev_hash, or parent_hashes. Run python3 ledger/verify.py before opening a PR."}
 when_to_use: Use when you need the Contribution-chain ledger tool instead of writing a new one.
 
+id: upstream-567-labs-instructor
+name: Upstream: 567-labs/instructor (structured outputs)
+type: upstream
+status: pointer
+summary: Import pointer only. Upstream https://github.com/567-labs/instructor, MIT, Copyright (c) 2023 Jason Liu. Secondary parent of Glean Router for typed schemas. No code copied.
+tags: upstream, structured-outputs, typing, mit, instructor
+path: upstream/567-labs/instructor/
+upstream: https://github.com/567-labs/instructor | MIT | 567 Labs / Jason Liu (and contributors); formerly jxnl/instructor
+parents: glean-commons-repo
+ancestry: glean-commons-repo, whitepaper-v1.0
+children: glean-router
+canonical_version: upstream-pointer-0.1
+variants: []
+entry_hash: 710283c3c66130a4dbc669cb2b3c06413df509fa379b8194d0f42552e98c92fc
+uses: 0
+pou: null — no usage data yet
+how_to_change: {"edit": ["upstream/567-labs/instructor/README.md", "commons.json"], "labels": ["project:upstream-instructor", "type:upstream"], "note": "Pointer entry. Optional dependency for v1 typed LLM parse. Keep the MIT notice if code is copied later."}
+when_to_use: Use when you need a credited pointer to Upstream: 567-labs/instructor (structured outputs) before adapting it; do not copy the code, make a child cell.
+
+id: upstream-aurelio-labs-semantic-router
+name: Upstream: Aurelio Labs semantic-router
+type: upstream
+status: pointer
+summary: Import pointer only. Upstream https://github.com/aurelio-labs/semantic-router, MIT, Copyright (c) 2026 Aurelio AI. Primary parent of Glean Router. No code copied.
+tags: upstream, routing, intent, mit, aurelio, decision-layer
+path: upstream/aurelio-labs/semantic-router/
+upstream: https://github.com/aurelio-labs/semantic-router | MIT | Aurelio Labs / Aurelio AI
+parents: glean-commons-repo
+ancestry: glean-commons-repo, whitepaper-v1.0
+children: glean-router
+canonical_version: upstream-pointer-0.1
+variants: []
+entry_hash: c7f6933c39244e6eb132ac17c5502c5b8e693a1d9f3d12810502ee9ddba4013f
+uses: 0
+pou: null — no usage data yet
+how_to_change: {"edit": ["upstream/aurelio-labs/semantic-router/README.md", "commons.json"], "labels": ["project:upstream-semantic-router", "type:upstream"], "note": "Pointer entry. Do not vendor code. Glean Router parents this id. Keep the MIT notice if code is copied later."}
+when_to_use: Use when you need a credited pointer to Upstream: Aurelio Labs semantic-router before adapting it; do not copy the code, make a child cell.
+
 id: upstream-forward-future-loopy
 name: Upstream: Forward-Future/loopy (Loop Library)
 type: upstream
@@ -128,7 +185,7 @@ path: .
 upstream: none
 parents: whitepaper-v1.0
 ancestry: whitepaper-v1.0
-children: cell-template, commons-analyst, commons-catalog, ledger, upstream-forward-future-loopy
+children: cell-template, commons-analyst, commons-catalog, glean-router, ledger, upstream-567-labs-instructor, upstream-aurelio-labs-semantic-router, upstream-forward-future-loopy
 canonical_version: 0.1.0
 variants: [{"id": "main", "parent": null, "path": ".", "status": "canonical"}]
 entry_hash: 6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c

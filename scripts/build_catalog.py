@@ -562,6 +562,7 @@ def _link_path(path: str | None) -> str:
 def render_llms(catalog: dict, root: Path) -> str:
     quote, abstract = vision_quotes(root)
     doc_links = [
+        ("router/ROUTER.md", "router/ROUTER.md", "Glean Router. Run `python3 router/route.py \"<request>\"` before building."),
         ("catalog.json", "catalog.json", "Machine-readable catalog. Search this first."),
         ("catalog.txt", "catalog.txt", "Plain-text catalog, one block per project."),
         ("README.md", "README.md", "What Glean Commons is."),
@@ -581,6 +582,7 @@ def render_llms(catalog: dict, root: Path) -> str:
         "",
         "## Instructions for AI agents",
         "",
+        "- Before building, run `python3 router/route.py \"<request>\"` or read router/ROUTER.md.",
         "- Search the catalog first.",
         "- Prefer the highest Proof-of-Use cell that fits.",
         "- Fork or adapt the winner instead of rebuilding.",

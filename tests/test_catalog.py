@@ -258,6 +258,8 @@ class BuildTests(unittest.TestCase):
             self.assertIn("> Usefulness becomes the new currency.", text)
             self.assertIn("## Instructions for AI agents", text)
             self.assertIn("Never fabricate usage.", text)
+            self.assertIn('python3 router/route.py "<request>"', text)
+            self.assertIn("router/ROUTER.md", text)
             self.assertIn("[catalog.json](catalog.json):", text)
             self.assertIn("[INTAKE.md](INTAKE.md):", text)
             self.assertIn("The Glean System is a decentralized, AI-augmented ecosystem", text)

@@ -1,0 +1,464 @@
+{
+  "schema_version": 1,
+  "name": "Glean Commons catalog (SAMPLE for router draft)",
+  "note": "Mix of real commons-draft projects and clearly-labeled EXAMPLE work cells. Not the live catalog.json.",
+  "updated": "2026-11-06",
+  "projects": [
+    {
+      "id": "whitepaper-v1.0",
+      "name": "The Glean System Whitepaper (Draft 1.0)",
+      "type": "whitepaper",
+      "status": "published",
+      "summary": "Vision whitepaper for the Glean System: Proof of Use, contribution chains, AI as co-laborer.",
+      "tags": [
+        "vision",
+        "proof-of-use",
+        "philosophy",
+        "usefulness",
+        "economy"
+      ],
+      "when_to_use": "Someone wants the vision, philosophy, or PoU definition.",
+      "parents": [],
+      "ancestry": [],
+      "children": [],
+      "canonical_version": "1.0",
+      "variants": [
+        {
+          "id": "v1.0",
+          "path": "whitepaper/",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "uses": 12,
+      "pou": {
+        "score": 0.4
+      },
+      "how_to_change": {
+        "edit": [
+          "whitepaper/glean-system-whitepaper-v1.0.md",
+          "whitepaper/glean-system-whitepaper.docx"
+        ],
+        "note": "Never overwrite Draft 1.0. New ideas go in a new version file (e.g. v1.1) plus a ledger entry that parents whitepaper-v1.0.",
+        "labels": [
+          "project:whitepaper",
+          "type:docs"
+        ]
+      },
+      "upstream": null
+    },
+    {
+      "id": "glean-commons-repo",
+      "name": "Glean Commons repository",
+      "type": "doc",
+      "status": "seed",
+      "summary": "Glean Commons repository",
+      "tags": [
+        "commons",
+        "meta",
+        "registry"
+      ],
+      "when_to_use": "Working on Glean Commons repository",
+      "parents": [
+        "whitepaper-v1.0"
+      ],
+      "ancestry": [
+        "whitepaper-v1.0"
+      ],
+      "children": [],
+      "canonical_version": "0.1.0",
+      "variants": [
+        {
+          "id": "main",
+          "path": ".",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "uses": 0,
+      "pou": null,
+      "how_to_change": {
+        "edit": [
+          "README.md",
+          "commons.json",
+          "CONTRIBUTING.md",
+          "AGENTS.md",
+          "MCP.md",
+          "LICENSE-OPTIONS.md"
+        ],
+        "note": "Root docs and registry. Keep commons.json in sync with folder manifests.",
+        "labels": [
+          "project:commons",
+          "type:docs"
+        ]
+      },
+      "upstream": null
+    },
+    {
+      "id": "ledger",
+      "name": "Contribution-chain ledger",
+      "type": "tool",
+      "status": "active",
+      "summary": "Hash-chained contribution ledger with ancestry and verify scripts.",
+      "tags": [
+        "ledger",
+        "hash-chain",
+        "ancestry"
+      ],
+      "when_to_use": "Record who built what, verify the chain, append a contribution.",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "ancestry": [
+        "glean-commons-repo"
+      ],
+      "children": [],
+      "canonical_version": "0.1.0",
+      "variants": [
+        {
+          "id": "v0",
+          "path": "ledger/",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "uses": 8,
+      "pou": {
+        "score": 0.55
+      },
+      "how_to_change": {
+        "edit": [
+          "ledger/contributions.json",
+          "ledger/verify.py",
+          "ledger/add_entry.py",
+          "LEDGER.md",
+          "CHAIN.md"
+        ],
+        "note": "Append entries only via ledger/add_entry.py. Never hand-edit entry_hash, prev_hash, or parent_hashes. Run python3 ledger/verify.py before opening a PR.",
+        "labels": [
+          "project:ledger",
+          "type:tool"
+        ]
+      },
+      "upstream": null
+    },
+    {
+      "id": "vision-explainer-video",
+      "name": "Glean System vision explainer video pipeline",
+      "type": "pipeline",
+      "status": "wip",
+      "summary": "Code-first Remotion pipeline for the Glean vision explainer video.",
+      "tags": [
+        "video",
+        "explainer",
+        "remotion"
+      ],
+      "when_to_use": "Make or fork the explainer video.",
+      "parents": [
+        "whitepaper-v1.0"
+      ],
+      "ancestry": [
+        "whitepaper-v1.0"
+      ],
+      "children": [],
+      "canonical_version": "0.1.0-wip",
+      "variants": [
+        {
+          "id": "pipeline-wip",
+          "path": "video/",
+          "parent": "whitepaper-v1.0",
+          "status": "testing"
+        }
+      ],
+      "uses": 1,
+      "pou": null,
+      "how_to_change": {
+        "edit": [
+          "video/README.md",
+          "video/cell.json"
+        ],
+        "note": "Pipeline code is still being built off-repo at /workspace/glean/video/. Do not copy unfinished sources here yet. When it lands, update this project and append a ledger version bump.",
+        "labels": [
+          "project:video",
+          "type:pipeline"
+        ]
+      },
+      "upstream": null
+    },
+    {
+      "id": "cell-template",
+      "name": "Cell template",
+      "type": "cell",
+      "status": "template",
+      "summary": "Blank template for a new Glean cell (bot, playbook, or tool).",
+      "tags": [
+        "template",
+        "cell",
+        "format"
+      ],
+      "when_to_use": "Starting a brand-new cell from scratch.",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "ancestry": [
+        "glean-commons-repo"
+      ],
+      "children": [],
+      "canonical_version": "0.1.0",
+      "variants": [
+        {
+          "id": "template",
+          "path": "cells/_template/",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "uses": 5,
+      "pou": {
+        "score": 0.2
+      },
+      "how_to_change": {
+        "edit": [
+          "cells/_template/cell.md",
+          "cells/_template/cell.json",
+          "cells/README.md"
+        ],
+        "note": "Format for every Glean cell (Grok Bot template or tool). New cells copy this folder, then get their own ledger entry.",
+        "labels": [
+          "project:cell-template",
+          "type:cell"
+        ]
+      },
+      "upstream": null
+    },
+    {
+      "id": "commons-analyst",
+      "name": "Commons Analyst",
+      "type": "tool",
+      "status": "active",
+      "summary": "Compares forks and A/B experiments; recommends promote/coexist/retire/keep testing.",
+      "tags": [
+        "analyst",
+        "ab-test",
+        "proof-of-use"
+      ],
+      "when_to_use": "Decide which variant of a cell should be canonical.",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "ancestry": [
+        "glean-commons-repo"
+      ],
+      "children": [],
+      "canonical_version": "0.1.0",
+      "variants": [
+        {
+          "id": "v0",
+          "path": "analyst/",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "uses": 3,
+      "pou": {
+        "score": 0.25
+      },
+      "how_to_change": {
+        "edit": [
+          "ANALYST.md",
+          "analyst/compare.py",
+          "analyst/sample_events.csv",
+          "analyst/cell.json"
+        ],
+        "note": "Analyst recommends only. Humans approve promotions. Keep compare.py stdlib-only.",
+        "labels": [
+          "project:analyst",
+          "type:tool"
+        ]
+      },
+      "upstream": null
+    },
+    {
+      "id": "experiments",
+      "name": "Experiment declarations",
+      "type": "doc",
+      "status": "active",
+      "summary": "Experiment declarations",
+      "tags": [
+        "experiments",
+        "ab-test"
+      ],
+      "when_to_use": "Working on Experiment declarations",
+      "parents": [
+        "commons-analyst"
+      ],
+      "ancestry": [
+        "commons-analyst"
+      ],
+      "children": [],
+      "canonical_version": "0.1.0",
+      "variants": [
+        {
+          "id": "template",
+          "path": "experiments/_template/",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "uses": 0,
+      "pou": null,
+      "how_to_change": {
+        "edit": [
+          "experiments/README.md",
+          "experiments/_template/experiment.json",
+          "experiments/cell.json"
+        ],
+        "note": "New tests get their own folder under experiments/ and a link from the parent project's experiments[].",
+        "labels": [
+          "project:experiments",
+          "type:docs"
+        ]
+      },
+      "upstream": null
+    },
+    {
+      "id": "example-invoice-followup",
+      "name": "EXAMPLE: Invoice follow-up cell",
+      "type": "cell",
+      "status": "example",
+      "summary": "EXAMPLE DATA. Follows up on unpaid invoices for small businesses with polite reminders.",
+      "tags": [
+        "invoice",
+        "follow-up",
+        "billing",
+        "small-business",
+        "email",
+        "accounts-receivable"
+      ],
+      "when_to_use": "User needs invoice reminders, unpaid bill chase, or AR follow-up.",
+      "parents": [
+        "cell-template"
+      ],
+      "ancestry": [
+        "cell-template",
+        "glean-commons-repo"
+      ],
+      "children": [],
+      "canonical_version": "0.1.0-example",
+      "variants": [
+        {
+          "id": "v0",
+          "status": "canonical"
+        }
+      ],
+      "uses": 47,
+      "pou": {
+        "score": 0.82
+      },
+      "how_to_change": {
+        "note": "EXAMPLE only \u2014 not in live repo."
+      },
+      "upstream": null
+    },
+    {
+      "id": "example-plumbing-scheduler",
+      "name": "EXAMPLE: Plumbing job scheduler",
+      "type": "cell",
+      "status": "example",
+      "summary": "EXAMPLE DATA. Schedules plumbing service calls and sends day-before confirmations.",
+      "tags": [
+        "plumbing",
+        "scheduling",
+        "appointments",
+        "small-business",
+        "trades"
+      ],
+      "when_to_use": "Plumbing shop needs job scheduling or appointment confirmations.",
+      "parents": [
+        "cell-template"
+      ],
+      "ancestry": [
+        "cell-template"
+      ],
+      "children": [],
+      "canonical_version": "0.1.0-example",
+      "variants": [],
+      "uses": 22,
+      "pou": {
+        "score": 0.61
+      },
+      "how_to_change": {
+        "note": "EXAMPLE only."
+      },
+      "upstream": null
+    },
+    {
+      "id": "example-email-drafter",
+      "name": "EXAMPLE: Polite business email drafter",
+      "type": "cell",
+      "status": "example",
+      "summary": "EXAMPLE DATA. Drafts short polite business emails from a few bullets.",
+      "tags": [
+        "email",
+        "writing",
+        "draft",
+        "small-business",
+        "communication"
+      ],
+      "when_to_use": "Need a polite email draft; not specialized to invoices.",
+      "parents": [
+        "cell-template"
+      ],
+      "ancestry": [
+        "cell-template"
+      ],
+      "children": [],
+      "canonical_version": "0.1.0-example",
+      "variants": [],
+      "uses": 31,
+      "pou": {
+        "score": 0.7
+      },
+      "how_to_change": {
+        "note": "EXAMPLE only."
+      },
+      "upstream": null
+    },
+    {
+      "id": "upstream-forward-future-loopy",
+      "name": "Upstream: Forward-Future/loopy (Loop Library)",
+      "type": "upstream",
+      "status": "active",
+      "summary": "Agent loops with bounded passes and receipts. Pointer to Forward Future / Matthew Berman.",
+      "tags": [
+        "upstream",
+        "loops",
+        "agent-skills",
+        "mit",
+        "proof-of-use"
+      ],
+      "when_to_use": "Need a reusable agent loop pattern, skill install, or bounded improvement cycle.",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "ancestry": [
+        "glean-commons-repo"
+      ],
+      "children": [],
+      "canonical_version": "upstream-pointer-0.1",
+      "variants": [],
+      "uses": 15,
+      "pou": {
+        "score": 0.5
+      },
+      "how_to_change": {
+        "note": "Pointer only; adaptations become child cells."
+      },
+      "upstream": {
+        "url": "https://github.com/Forward-Future/loopy",
+        "license_spdx": "MIT",
+        "author_credit": "Forward Future / Matthew Berman"
+      }
+    }
+  ]
+}
