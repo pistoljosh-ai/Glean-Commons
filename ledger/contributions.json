@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "eff033544c26ee6a0dc6377f0c98b0ce5be2b93b919f4c6c1d53e5e6cd2c8fe3",
+  "tip_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -165,6 +165,26 @@
       "notes": "Jev / TypeSafe is credited as inspiration and no code is used. Pointer parents are aurelio-labs/semantic-router and 567-labs/instructor, both MIT. Stdlib decision tree over catalog.json; no upstream code copied.",
       "prev_hash": "710283c3c66130a4dbc669cb2b3c06413df509fa379b8194d0f42552e98c92fc",
       "entry_hash": "eff033544c26ee6a0dc6377f0c98b0ce5be2b93b919f4c6c1d53e5e6cd2c8fe3"
+    },
+    {
+      "id": "invoice-followup",
+      "title": "Invoice follow-up drafter",
+      "type": "cell",
+      "creator": "Timmy Gack",
+      "ai_assist": "Claude (Anthropic, Opus 5.5): cell design, stdlib script, tests",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c"
+      ],
+      "created": "2026-11-06T21:31:24Z",
+      "version": "0.1.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "Child of cells/_template (cell-template has no ledger row; its entry_hash is glean-commons-repo). Router returned BUILD for invoice follow-up; no existing cell fit. Drafts tiered past-due reminders from a CSV; never sends. No upstream code copied. uses=0: no real-world use yet.",
+      "prev_hash": "eff033544c26ee6a0dc6377f0c98b0ce5be2b93b919f4c6c1d53e5e6cd2c8fe3",
+      "entry_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a"
     }
   ]
 }

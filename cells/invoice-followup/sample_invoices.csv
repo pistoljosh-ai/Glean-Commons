@@ -1,0 +1,6 @@
+invoice,customer,email,amount,due_date,paid
+1001,Acme Lawn,ap@acme.example,"1,250.00",2026-10-30,
+1002,Blue Ridge Pest,billing@blueridge.example,480,2026-10-10,
+1003,Cedar Farms,office@cedar.example,2200,2026-09-15,
+1004,Dune Nursery,hello@dune.example,95,2026-11-20,
+1005,Elm Street HOA,board@elm.example,600,2026-09-01,yes

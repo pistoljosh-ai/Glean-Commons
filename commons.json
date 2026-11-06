@@ -524,6 +524,47 @@
       "canonical_version": "0.1.0",
       "variants": [],
       "experiments": []
+    },
+    {
+      "id": "invoice-followup",
+      "name": "Invoice follow-up drafter",
+      "type": "cell",
+      "path": "cells/invoice-followup/",
+      "manifest": "cells/invoice-followup/cell.json",
+      "status": "draft",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "entry_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
+      "tags": [
+        "invoice",
+        "follow-up",
+        "reminders",
+        "accounts-receivable",
+        "small-business",
+        "email"
+      ],
+      "when_to_use": "Use when a small business needs polite, escalating reminder drafts for past-due invoices from a CSV export. Drafts only; a human sends.",
+      "how_to_change": {
+        "edit": [
+          "cells/invoice-followup/followup.py",
+          "cells/invoice-followup/cell.md",
+          "cells/invoice-followup/test_followup.py",
+          "cells/invoice-followup/sample_invoices.csv",
+          "cells/invoice-followup/cell.json"
+        ],
+        "note": "Stdlib only. Never auto-send. Tone changes are good A/B variants; register them under variants[].",
+        "labels": [
+          "project:invoice-followup",
+          "type:cell"
+        ]
+      },
+      "canonical_version": "0.1.0",
+      "variants": [],
+      "experiments": []
     }
   ]
 }

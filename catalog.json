@@ -1,7 +1,7 @@
 {
   "generated_from": {
-    "commons_sha256": "0c0f4fbb595757d32b4d006d4a14ea1c4a899242cbe5483ffa56f0164d07bd36",
-    "ledger_tip": "eff033544c26ee6a0dc6377f0c98b0ce5be2b93b919f4c6c1d53e5e6cd2c8fe3"
+    "commons_sha256": "e253ab2b7f9a70242d65e1c24185731fbc9f2395a844710463ae39ab7975802a",
+    "ledger_tip": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a"
   },
   "order": [
     "measured_before_unmeasured",
@@ -272,6 +272,55 @@
       ],
       "canonical_version": "0.1.0",
       "children": [],
+      "entry_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
+      "how_to_change": {
+        "edit": [
+          "cells/invoice-followup/followup.py",
+          "cells/invoice-followup/cell.md",
+          "cells/invoice-followup/test_followup.py",
+          "cells/invoice-followup/sample_invoices.csv",
+          "cells/invoice-followup/cell.json"
+        ],
+        "labels": [
+          "project:invoice-followup",
+          "type:cell"
+        ],
+        "note": "Stdlib only. Never auto-send. Tone changes are good A/B variants; register them under variants[]."
+      },
+      "id": "invoice-followup",
+      "name": "Invoice follow-up drafter",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "path": "cells/invoice-followup/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "draft",
+      "summary": "Child of cells/_template (cell-template has no ledger row; its entry_hash is glean-commons-repo). Router returned BUILD for invoice follow-up; no existing cell fit. Drafts tiered past-due reminders from a CSV; never sends. No upstream...",
+      "tags": [
+        "invoice",
+        "follow-up",
+        "reminders",
+        "accounts-receivable",
+        "small-business",
+        "email"
+      ],
+      "type": "cell",
+      "upstream": null,
+      "uses": 0,
+      "variants": [],
+      "when_to_use": "Use when a small business needs polite, escalating reminder drafts for past-due invoices from a CSV export. Drafts only; a human sends."
+    },
+    {
+      "ancestry": [
+        "glean-commons-repo",
+        "whitepaper-v1.0"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [],
       "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
       "how_to_change": {
         "edit": [
@@ -480,6 +529,7 @@
         "commons-analyst",
         "commons-catalog",
         "glean-router",
+        "invoice-followup",
         "ledger",
         "upstream-567-labs-instructor",
         "upstream-aurelio-labs-semantic-router",
