@@ -54,5 +54,5 @@ Exact columns live in [`schema.json`](schema.json). Rules:
 1. Read the books with `books.py` (or the same CSVs).
 2. Write only the files your stage owns. A quote cell writes quotes; it doesn't edit payments.
 3. If you need a new column or file, change `schema.json` in a PR and say why.
-4. Ship a **`tools.json`** that declares each callable tool: name, the job it does, what it reads and writes, a plain description, and an input schema. The Glean tool server picks it up automatically, so the moment your cell merges, anyone can use it by talking to their AI. See this cell's [`tools.json`](tools.json).
+4. Ship a **`tools.json`** that declares each callable tool: name, the job it does, what it reads and writes, a plain description, and an input schema. The Glean tool server picks it up automatically, so the moment your cell merges, anyone can use it by talking to their AI. See this cell's [`tools.json`](tools.json). Add `"stateless": true` to a tool only if it keeps no records and writes nothing; those tools can also run on the public hosted endpoint.
 5. Add your cell to the table above.

@@ -19,6 +19,37 @@ It discovers every `cells/*/tools.json` in the commons, so **each new cell is ca
 
 Your books are plain CSV files in a folder you choose (default `~/glean-books`). The folder is created on first use, with version history turned on (git, if installed). Every change is one timestamped commit, so nothing is ever lost.
 
+## The front door
+
+However many cells the commons grows, the AI starts from one place:
+
+- **`do`**: describe what you want in plain words ("chase the late payers"). It returns the best tool, its arguments, and a couple of alternatives. If nothing fits, it says so honestly and points to the build queue.
+- **`call`**: run any tool by name.
+
+Add `--front-door` and the AI sees only `do`, `call`, and `what_can_you_do`. Every other tool stays callable, but it no longer crowds the AI's context. That's how this scales to thousands of cells.
+
+## Two modes
+
+| | Local (default) | Public (`--public`) |
+|---|---|---|
+| Who runs it | the owner, on their own machine | anyone, as a hosted endpoint |
+| Tools | everything, including the books | only tools marked `"stateless": true` |
+| Private data | the owner's books folder | none, ever |
+
+A cell marks a tool safe to host by adding `"stateless": true` to it in `tools.json`: it keeps no records and writes nothing (a recipe, a calculator, a lookup). The server refuses to expose private books on a network address.
+
+## Host the public front door
+
+One URL anyone can add to their AI:
+
+```bash
+python3 mcp/server.py --public --front-door --http 8000 --host 0.0.0.0
+# or
+docker build -f mcp/Dockerfile -t glean-commons . && docker run -p 8000:8000 glean-commons
+```
+
+The endpoint is `https://<your-host>/mcp` (Streamable HTTP, JSON responses), with a health check at `/health`. Browser origins are refused unless allowed with `--allow-origin https://example.com`. Any host that runs a Docker image works (Fly.io, Render, Railway, Cloud Run). Then add the URL as a custom connector in Claude or any other AI app that supports remote MCP servers.
+
 ## Connect it
 
 **Claude Desktop:** add this to `claude_desktop_config.json`, then restart:
@@ -60,7 +91,7 @@ python3 mcp/server.py --list
 | Billing clerk | `create_invoice`, `open_invoices` |
 | Collections | `draft_payment_reminders` |
 | Bookkeeper | `record_payment`, `history`, `undo_last_change` |
-| Commons | `what_can_you_do`, `search_cells`, `note_missing_capability` |
+| Commons | `do`, `call`, `what_can_you_do`, `search_cells`, `note_missing_capability` (local only) |
 
 The full map of job functions, including the ones not built yet, is in [`cells/small-business-core/JOBS.md`](../cells/small-business-core/JOBS.md).
 
