@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "522b7b85d82e6dd9a24d70017e2d428161a88007c0e1fb341261864cedc1ae39",
+  "tip_hash": "1e65c16eaf9ea504b7b366a500393416ab90661c78355ea658015adce45cdeeb",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -363,6 +363,28 @@
       "notes": "Root-cause fix for uncredited work (PR #7 merged with no ledger entry). CI now fails a PR that changes contribution paths without adding ledger/pending/<id>.json; docs and generated files exempt; maintainer 'no-credit' label for trivial fixes. Implements whitepaper sec 4.3 and 3.4 as a gate, not a guideline.",
       "prev_hash": "32a7d5232e43ef0c8b897402e57f1951fac108a3d90412177a370d399f7289d8",
       "entry_hash": "522b7b85d82e6dd9a24d70017e2d428161a88007c0e1fb341261864cedc1ae39"
+    },
+    {
+      "id": "glean-mcp-front-door",
+      "title": "Glean tool server v0.2: front door, public mode, hosted HTTP",
+      "type": "other",
+      "creator": "Timmy Gack",
+      "ai_assist": "Claude (Anthropic, Opus 5.5): do/call front door, public/local modes, Streamable HTTP transport, Dockerfile, tests",
+      "parents": [
+        "glean-mcp",
+        "commons-catalog"
+      ],
+      "parent_hashes": [
+        "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2",
+        "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199"
+      ],
+      "created": "2026-11-06T23:30:00Z",
+      "version": "0.2.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "Step toward one URL anyone adds to their AI. do(request) finds the right tool from plain words (everyday-word map, honest 'nothing does that yet'); call(name, arguments) runs any tool; --front-door lists only do/call/what_can_you_do so the commons can grow to thousands of cells. --public exposes only tools marked stateless (holds no one's data) and still points people to local-only tools. Stdlib Streamable HTTP (POST /mcp, origin checks, health) and a Dockerfile; refuses to expose private books on a network address. Fixes search_cells passing the wrong shape to search.py, and a lock deadlock found by the new tests. Not yet hosted anywhere. uses=0.",
+      "prev_hash": "522b7b85d82e6dd9a24d70017e2d428161a88007c0e1fb341261864cedc1ae39",
+      "entry_hash": "1e65c16eaf9ea504b7b366a500393416ab90661c78355ea658015adce45cdeeb"
     }
   ]
 }

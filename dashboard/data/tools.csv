@@ -12,6 +12,8 @@ update_job,scheduler,small-business-core,writes,jobs.csv
 create_invoice,billing clerk,small-business-core,writes,invoices.csv
 record_payment,bookkeeper,small-business-core,writes,payments.csv
 undo_last_change,bookkeeper,small-business-core,writes,any
-what_can_you_do,commons,glean-mcp,reads,
-search_cells,commons,glean-mcp,reads,
+call,commons,glean-mcp,reads,
+do,commons,glean-mcp,reads,
 note_missing_capability,commons,glean-mcp,writes,wishlist.md
+search_cells,commons,glean-mcp,reads,
+what_can_you_do,commons,glean-mcp,reads,

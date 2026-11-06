@@ -13,6 +13,7 @@ upstream-567-labs-instructor,Upstream: 567-labs/instructor (structured outputs),
 glean-router,Glean Router,tool,active,router/,0.1.0,3,0,0
 invoice-followup,Invoice follow-up drafter,cell,draft,cells/invoice-followup/,0.2.0,1,1,0
 small-business-core,Small Business Core (the books),cell,draft,cells/small-business-core/,0.2.0,2,12,0
-glean-mcp,Glean tool server (MCP),tool,active,mcp/,0.1.0,3,3,0
+glean-mcp,Glean tool server (MCP),tool,active,mcp/,0.1.0,3,5,0
 commons-dashboard,Glean Commons dashboard,tool,active,dashboard/,0.1.0,3,0,0
 upstream-opentimestamps-client,Upstream: OpenTimestamps client,upstream,pointer,upstream/opentimestamps/opentimestamps-client/,upstream-pointer-0.1,1,0,0
+glean-mcp-front-door,Glean tool server v0.2 (front door + hosting),tool,active,mcp/,0.2.0,2,0,0

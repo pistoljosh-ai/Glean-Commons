@@ -1,7 +1,7 @@
 {
   "generated_from": {
-    "commons_sha256": "42fbf7acabf5d61923cb15485786b713ce5f6f61e67e80432d8bf47a5b013145",
-    "ledger_tip": "522b7b85d82e6dd9a24d70017e2d428161a88007c0e1fb341261864cedc1ae39"
+    "commons_sha256": "6f846df60d14a0cd7efb22bf75f49e710ac48650aaa24917832bda864037a67a",
+    "ledger_tip": "1e65c16eaf9ea504b7b366a500393416ab90661c78355ea658015adce45cdeeb"
   },
   "order": [
     "measured_before_unmeasured",
@@ -65,6 +65,60 @@
     },
     {
       "ancestry": [
+        "glean-mcp",
+        "glean-commons-repo",
+        "whitepaper-v1.0",
+        "commons-catalog",
+        "small-business-core-v0.2"
+      ],
+      "canonical_version": "0.2.0",
+      "children": [],
+      "entry_hash": "1e65c16eaf9ea504b7b366a500393416ab90661c78355ea658015adce45cdeeb",
+      "how_to_change": {
+        "edit": [
+          "mcp/server.py",
+          "mcp/test_front_door.py",
+          "mcp/test_server.py",
+          "mcp/Dockerfile",
+          "mcp/README.md"
+        ],
+        "labels": [
+          "project:glean-mcp",
+          "type:tool"
+        ],
+        "note": "Stdlib only. Public mode must never load or write anyone's data. New capabilities belong in cells with a tools.json, not in the server."
+      },
+      "id": "glean-mcp-front-door",
+      "name": "Glean tool server v0.2 (front door + hosting)",
+      "parents": [
+        "glean-mcp",
+        "commons-catalog"
+      ],
+      "path": "mcp/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "active",
+      "summary": "Step toward one URL anyone adds to their AI. do(request) finds the right tool from plain words (everyday-word map, honest 'nothing does that yet'); call(name, arguments) runs any tool; --front-door lists only do/call/what_can_you_do so...",
+      "tags": [
+        "mcp",
+        "front-door",
+        "router",
+        "hosting",
+        "http",
+        "any-ai",
+        "natural-language"
+      ],
+      "type": "tool",
+      "upstream": null,
+      "uses": 0,
+      "variants": [],
+      "when_to_use": "Use when an AI should find and run Glean tools from plain words through one endpoint: do() to find, call() to run. Host it with --public for a shared URL that holds no data."
+    },
+    {
+      "ancestry": [
         "commons-analyst",
         "glean-commons-repo",
         "whitepaper-v1.0"
@@ -123,7 +177,8 @@
       ],
       "canonical_version": "0.1.0",
       "children": [
-        "commons-dashboard"
+        "commons-dashboard",
+        "glean-mcp-front-door"
       ],
       "entry_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2",
       "how_to_change": {
@@ -394,7 +449,8 @@
       "canonical_version": "0.1.0",
       "children": [
         "commons-dashboard",
-        "glean-mcp"
+        "glean-mcp",
+        "glean-mcp-front-door"
       ],
       "entry_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
       "how_to_change": {
