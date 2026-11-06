@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379",
+  "tip_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -249,6 +249,30 @@
       "notes": "Adds draft_payment_reminders, which reads the shared books directly. Drafts only. uses=0.",
       "prev_hash": "963a10e76860b8d3445125c0239f452aaf107b16758a811a6b855269ac8593a5",
       "entry_hash": "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379"
+    },
+    {
+      "id": "glean-mcp",
+      "title": "Glean tool server (MCP): run your business by talking to any AI",
+      "type": "other",
+      "creator": "Timmy Gack",
+      "ai_assist": "Claude (Anthropic, Opus 5.5): server design, stdlib implementation, end-to-end test, docs",
+      "parents": [
+        "glean-commons-repo",
+        "commons-catalog",
+        "small-business-core-v0.2"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+        "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
+        "963a10e76860b8d3445125c0239f452aaf107b16758a811a6b855269ac8593a5"
+      ],
+      "created": "2026-11-06T22:08:20Z",
+      "version": "0.1.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "Stdlib stdio MCP server. Discovers every cells/*/tools.json (contract v1) so each new cell is callable on merge with no server change. Adds what_can_you_do, search_cells (commons-catalog), note_missing_capability (wishlist = build queue). Writes only to the owner's local books via cell tools. Implements the open Model Context Protocol; no upstream code copied. Also adds cells/small-business-core/JOBS.md (job-function map). uses=0.",
+      "prev_hash": "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379",
+      "entry_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2"
     }
   ]
 }

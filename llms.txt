@@ -31,6 +31,7 @@ The Glean System is a decentralized, AI-augmented ecosystem built to rebalance h
 ## Projects
 
 - [Experiment declarations](experiments/): A/B (and A/B/n) tests for Glean cells and pipelines. Free, file-based, honest.
+- [Glean tool server (MCP)](mcp/): Stdlib stdio MCP server. Discovers every cells/*/tools.json (contract v1) so each new cell is callable on merge with no server change. Adds what_can_you_do, search_cells (commons-catalog), note_missing_capability (wishlist = build...
 - [Glean Router](router/): Jev / TypeSafe is credited as inspiration and no code is used. Pointer parents are aurelio-labs/semantic-router and 567-labs/instructor, both MIT. Stdlib decision tree over catalog.json; no upstream code copied.
 - [Small Business Core (the books)](cells/small-business-core/): Foundation for small-business cells: FIRST-PRINCIPLES.md maps the business loop (offer > customer > quote > schedule > work > invoice > paid > books > learn) as a build queue; schema.json defines one shared set of CSV books; books.py...
 - [Cell template](cells/_template/): A cell is a reusable Glean tool — usually a public Grok Bot template — that helps real people and records its ancestry in the ledger.

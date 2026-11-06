@@ -1,7 +1,7 @@
 # Glean Commons catalog
 # schema_version=1
-# ledger_tip=b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379
-# commons_sha256=8c9be05c236763b49a8cde0bf52a5172877a2bf559231b9de6eb10d7e5a715d8
+# ledger_tip=404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2
+# commons_sha256=b675dc3176d4e26102eba028d413bc522b8d20a3e7670e37fefaf8a50135c516
 # order: measured_before_unmeasured, pou_score_desc, uses_desc, ancestry_depth_desc, id_asc
 
 id: experiments
@@ -22,6 +22,25 @@ uses: 0
 pou: null — no usage data yet
 how_to_change: {"edit": ["experiments/README.md", "experiments/_template/experiment.json", "experiments/cell.json"], "labels": ["project:experiments", "type:docs"], "note": "New tests get their own folder under experiments/ and a link from the parent project's experiments[]."}
 when_to_use: Use when you need Experiment declarations (doc, active) instead of building it again.
+
+id: glean-mcp
+name: Glean tool server (MCP)
+type: tool
+status: active
+summary: Stdlib stdio MCP server. Discovers every cells/*/tools.json (contract v1) so each new cell is callable on merge with no server change. Adds what_can_you_do, search_cells (commons-catalog), note_missing_capability (wishlist = build...
+tags: mcp, tool-server, voice, conversation, small-business, speak-to-run, any-ai
+path: mcp/
+upstream: none
+parents: glean-commons-repo, commons-catalog, small-business-core-v0.2
+ancestry: glean-commons-repo, whitepaper-v1.0, commons-catalog, small-business-core-v0.2
+children: none
+canonical_version: 0.1.0
+variants: []
+entry_hash: 404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2
+uses: 0
+pou: null — no usage data yet
+how_to_change: {"edit": ["mcp/server.py", "mcp/test_server.py", "mcp/README.md", "mcp/cell.json", "MCP.md"], "labels": ["project:glean-mcp", "type:tool"], "note": "Stdlib only. Never add network listeners or sending. New capabilities belong in cells with a tools.json, not in the server."}
+when_to_use: Use to let Claude or any MCP-capable AI run a small business by conversation. It exposes every cell's tools.json automatically; add a cell, not a server change.
 
 id: glean-router
 name: Glean Router
@@ -58,7 +77,7 @@ variants: []
 entry_hash: 963a10e76860b8d3445125c0239f452aaf107b16758a811a6b855269ac8593a5
 uses: 0
 pou: null — no usage data yet
-how_to_change: {"edit": ["cells/small-business-core/books.py", "cells/small-business-core/schema.json", "cells/small-business-core/FIRST-PRINCIPLES.md", "cells/small-business-core/cell.md", "cells/small-business-core/test_books.py", "cells/small-business-core/sample_books/", "cells/small-business-core/cell.json", "cells/small-business-core/tools.py", "cells/small-business-core/tools.json", "cells/small-business-core/test_tools.py"], "labels": ["project:small-business-core", "type:cell"], "note": "Stdlib only. Record facts, derive the rest. Schema changes need a reason in the PR. Add each new stage cell to the FIRST-PRINCIPLES.md table."}
+how_to_change: {"edit": ["cells/small-business-core/books.py", "cells/small-business-core/schema.json", "cells/small-business-core/FIRST-PRINCIPLES.md", "cells/small-business-core/cell.md", "cells/small-business-core/test_books.py", "cells/small-business-core/sample_books/", "cells/small-business-core/cell.json", "cells/small-business-core/tools.py", "cells/small-business-core/tools.json", "cells/small-business-core/test_tools.py", "cells/small-business-core/JOBS.md"], "labels": ["project:small-business-core", "type:cell"], "note": "Stdlib only. Record facts, derive the rest. Schema changes need a reason in the PR. Add each new stage cell to the FIRST-PRINCIPLES.md table."}
 when_to_use: Use first for any small-business cell: shared CSV books (customers, offers, jobs, invoices, payments), a checker, and a status summary. New stage cells read these books instead of inventing their own data.
 
 id: cell-template
@@ -109,7 +128,7 @@ path: scripts/
 upstream: none
 parents: glean-commons-repo
 ancestry: glean-commons-repo, whitepaper-v1.0
-children: none
+children: glean-mcp
 canonical_version: 0.1.0
 variants: []
 entry_hash: 7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199
@@ -223,7 +242,7 @@ path: .
 upstream: none
 parents: whitepaper-v1.0
 ancestry: whitepaper-v1.0
-children: cell-template, commons-analyst, commons-catalog, glean-router, invoice-followup, ledger, small-business-core, upstream-567-labs-instructor, upstream-aurelio-labs-semantic-router, upstream-forward-future-loopy
+children: cell-template, commons-analyst, commons-catalog, glean-mcp, glean-router, invoice-followup, ledger, small-business-core, upstream-567-labs-instructor, upstream-aurelio-labs-semantic-router, upstream-forward-future-loopy
 canonical_version: 0.1.0
 variants: [{"id": "main", "parent": null, "path": ".", "status": "canonical"}]
 entry_hash: 6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c

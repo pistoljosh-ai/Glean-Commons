@@ -1,0 +1,25 @@
+{
+  "id": "glean-mcp",
+  "name": "Glean tool server (MCP)",
+  "type": "tool",
+  "path": "mcp/",
+  "status": "active",
+  "maintainers": [
+    "Timmy Gack"
+  ],
+  "parents": [
+    "glean-commons-repo",
+    "commons-catalog",
+    "small-business-core-v0.2"
+  ],
+  "entry_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2",
+  "tags": [
+    "mcp",
+    "tool-server",
+    "voice",
+    "conversation",
+    "small-business",
+    "speak-to-run",
+    "any-ai"
+  ]
+}

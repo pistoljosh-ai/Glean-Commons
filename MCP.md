@@ -2,7 +2,10 @@
 
 A short design for an optional, **read-mostly** [Model Context Protocol](https://modelcontextprotocol.io/) server so agents can navigate Glean Commons the way they navigate other tool catalogs.
 
-**Status:** design only. Do not implement until Timmy asks.
+**Status:** two servers, one built.
+
+- **Built (v0.1): the business tool server** in [`mcp/`](mcp/). Timmy asked for it on 2026-11-06. It discovers every `cells/*/tools.json` and lets any MCP-capable AI run a small business's books by conversation. It writes only to the owner's **local books folder** (validated and versioned), never to this repo. Setup: [`mcp/README.md`](mcp/README.md).
+- **Still design only: the commons navigation tools** below (`list_projects`, `get_project`, `propose_change`). `search` exists today as `search_cells` in the business server. The read-mostly, proposals-only rules below still apply to anything that touches this repo.
 
 ## Goals
 
