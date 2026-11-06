@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "6b5504ba594be6d205380d75d55c7084fcd9bae7ee23793dae6762d3a199a799",
+  "tip_hash": "2e60ab21283e9fb1b11da565a956f0dea4291e2499f7f466534f9857eb565a9e",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -61,6 +61,26 @@
       "notes": "Code-based Remotion pipeline for a vision explainer. Built from the whitepaper; lands in video/ when finished. Free/open-source tools preferred.",
       "prev_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
       "entry_hash": "6b5504ba594be6d205380d75d55c7084fcd9bae7ee23793dae6762d3a199a799"
+    },
+    {
+      "id": "upstream-forward-future-loopy",
+      "title": "Upstream: Forward-Future/loopy (Loop Library + Loopy skill)",
+      "type": "other",
+      "creator": "Forward Future (Matthew Berman / @mberman84 et al.)",
+      "ai_assist": "AI Co-Laborer (Grok Bot): intake research and pointer; no code copied",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c"
+      ],
+      "created": "2026-11-06T21:06:59Z",
+      "version": "upstream-pointer-0.1",
+      "commit": "",
+      "uses": 0,
+      "notes": "Import pointer only. Upstream https://github.com/Forward-Future/loopy, MIT, Copyright (c) 2026 Forward Future. First Glean Commons import-with-ancestry test.",
+      "prev_hash": "6b5504ba594be6d205380d75d55c7084fcd9bae7ee23793dae6762d3a199a799",
+      "entry_hash": "2e60ab21283e9fb1b11da565a956f0dea4291e2499f7f466534f9857eb565a9e"
     }
   ]
 }

@@ -56,7 +56,7 @@ We are early. No token. No marketplace yet. Three layers that already work:
 | [experiments/](experiments/) | A/B experiment declarations |
 | [cells/](cells/) | Cell format and template |
 | [video/](video/) | Placeholder for the vision explainer pipeline |
-| [LICENSE-OPTIONS.md](LICENSE-OPTIONS.md) | Recommended licenses (none chosen yet) |
+| [LICENSE-OPTIONS.md](LICENSE-OPTIONS.md) | Apache-2.0 (code) + CC BY-SA 4.0 (docs/media) |
 
 ## Use or fork a cell
 

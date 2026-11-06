@@ -298,6 +298,53 @@
           "type:docs"
         ]
       }
+    },
+    {
+      "id": "upstream-forward-future-loopy",
+      "name": "Upstream: Forward-Future/loopy (Loop Library)",
+      "type": "upstream",
+      "path": "upstream/forward-future/loopy/",
+      "manifest": null,
+      "status": "pointer",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "entry_hash": "2e60ab21283e9fb1b11da565a956f0dea4291e2499f7f466534f9857eb565a9e",
+      "tags": [
+        "upstream",
+        "agent-skills",
+        "loops",
+        "mit",
+        "forward-future"
+      ],
+      "upstream": {
+        "url": "https://github.com/Forward-Future/loopy",
+        "homepage": "https://signals.forwardfuture.com/loop-library/",
+        "license_spdx": "MIT",
+        "license_url": "https://github.com/Forward-Future/loopy/blob/main/LICENSE",
+        "copyright": "Copyright (c) 2026 Forward Future",
+        "author_credit": "Forward Future / Matthew Berman (primary commits @mberman84); community PR contributors",
+        "stars_verified": 3227,
+        "stars_as_of": "2026-11-06",
+        "default_branch": "main"
+      },
+      "how_to_change": {
+        "edit": [
+          "upstream/forward-future/loopy/README.md",
+          "commons.json"
+        ],
+        "note": "Pointer entry. Any local adaptation becomes a new cell with this id as parent. Keep the MIT notice if code is ever copied.",
+        "labels": [
+          "project:upstream-loopy",
+          "type:upstream"
+        ]
+      },
+      "canonical_version": "upstream-pointer-0.1",
+      "variants": [],
+      "experiments": []
     }
   ]
 }
