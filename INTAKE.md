@@ -12,7 +12,7 @@ Read the upstream license before registering the project. Record the SPDX id, li
 
 ## Credit upstream in the ledger
 
-Append one entry with `python3 ledger/add_entry.py` against the live tip. The creator is the upstream author, not the person who filed the pointer. Set `parents` to `glean-commons-repo`, or to the cell this import extends. Put the upstream URL, license, and copyright in `notes`.
+Add `ledger/pending/<id>.json`. Do not append `ledger/contributions.json` yourself. The creator is the upstream author, not the person who filed the pointer. Set `parents` to `glean-commons-repo`, or to the cell this import extends. Put the upstream URL, license, and copyright in `notes`. Add `registry/pending/<id>.json` for the registry object, with `entry_hash` left null. The fold on `main` runs `ledger/add_entry.py` and writes the hash.
 
 ## Adaptations are child cells
 

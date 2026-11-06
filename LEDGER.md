@@ -36,25 +36,16 @@ The file also has `tip_hash` (hash of the latest entry) and `schema_version`.
 ## How a fork adds a child
 
 1. Improve a cell or doc.
-2. Append with the helper (do not hand-edit hashes):
-
-```bash
-python3 ledger/add_entry.py \
-  --title "My improved invoice follow-up cell" \
-  --type cell \
-  --creator "Your Name" \
-  --parents vision-explainer-video \
-  --ai-assist "AI Co-Laborer (Grok Bot)" \
-  --notes "Fork: clearer captions; credit flows to parent."
-```
-
-3. Put the new `id` in `commons.json` and the cell's `cell.json`.
-4. Run `python3 ledger/verify.py`.
-5. Open a PR. A human merges.
+2. Add `ledger/pending/<id>.json` with the same fields `add_entry.py` accepts (`id`, `title`, `type`, `creator`, `parents`, `created`, `version`, `uses`, `notes`, `ai_assist`). Do not include `entry_hash`, `prev_hash`, or `parent_hashes`.
+3. If the registry changes, add `registry/pending/<id>.json` and leave `entry_hash` null. Do not edit `commons.json` or `contributions.json` in the PR.
+4. Run `python3 ledger/validate_pending.py` and `python3 ledger/verify.py`.
+5. Open a PR. A human merges. The fold on `main` calls `add_entry.py` once per pending file, onto the tip at that moment, then rebuilds the catalog and the dashboard. Do not commit those generated files in the PR.
 
 Value is meant to flow “up the tree” to early contributors (whitepaper sec 4.3). The proposed credit split lives in [PROOF-OF-USE.md](PROOF-OF-USE.md) and is open to revision.
 
 ## Scripts
 
 - `ledger/verify.py` — recomputes hashes, checks links, checks commons/manifest sync; exits nonzero on tampering.
-- `ledger/add_entry.py` — appends a correctly hashed entry.
+- `ledger/add_entry.py` — appends one correctly hashed entry onto the current tip. The fold workflow is the caller on `main`. Do not commit its output from a pull request.
+- `ledger/validate_pending.py` — checks `ledger/pending` and `registry/pending` without writing the chain.
+- `ledger/fold_pending.py` — appends pending entries in `created` then `id` order and removes the files.
