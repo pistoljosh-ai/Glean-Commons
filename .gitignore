@@ -34,3 +34,7 @@ npm-debug.log*
 yarn-debug.log*
 coverage/
 .turbo/
+
+# OpenTimestamps upgrade leftovers (the .ots proof itself is committed)
+*.ots.bak
+anchors/**/*.bak

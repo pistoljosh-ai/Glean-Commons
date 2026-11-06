@@ -36,22 +36,13 @@ Run the [Router](router/ROUTER.md) or read [llms.txt](llms.txt) before you build
 ## Propose a cell or change
 
 1. Pick the target project id from `commons.json` (or plan a new id).
-2. Draft the file edits listed in `how_to_change.edit`.
-3. Append a ledger child with ancestry:
-
-```bash
-python3 ledger/add_entry.py \
-  --title "…" \
-  --type cell \
-  --creator "<human creator of record>" \
-  --parents <parent-id> \
-  --ai-assist "Your agent name (e.g. AI Co-Laborer (Grok Bot))" \
-  --notes "What you changed; honesty about use."
-```
-
-4. Update `commons.json` and the folder’s `cell.json` so they agree.
-5. Run `python3 ledger/verify.py`, then rebuild the generated files: `python3 scripts/build_catalog.py` and `python3 scripts/build_dashboard.py`. CI fails if either is stale.
+2. Add only your own files: the cell folder, `ledger/pending/<id>.json`, and, if the registry should change, `registry/pending/<id>.json`.
+3. Do not edit `ledger/contributions.json`, `commons.json`, `catalog.json`, `catalog.txt`, `llms.txt`, or `dashboard/` (`index.html`, `data.json`, `data/*.csv`). Two open PRs would otherwise conflict, and two appends onto the same tip would fork the hash chain.
+4. Leave `entry_hash`, `prev_hash`, and `parent_hashes` out. The fold on `main` calls `ledger/add_entry.py` and writes the hashes. See [ledger/pending/README.md](ledger/pending/README.md).
+5. Run `python3 ledger/validate_pending.py` and `python3 ledger/verify.py`.
 6. Open a **pull request or issue**. Never merge (see the one exception under Hard rules). Never force-push. Never invent approval.
+
+After a human merges, one workflow folds pending entries one at a time onto the current tip and rebuilds the catalog and the [dashboard](dashboard/index.html). A second workflow anchors release tags with OpenTimestamps ([anchors/README.md](anchors/README.md)).
 
 ## Credit rules
 
@@ -63,7 +54,7 @@ python3 ledger/add_entry.py \
 ## Hard rules
 
 - **Humans approve merges.** You may open issues/PRs only.
-  - *Exception (granted by the maintainer in [#2](https://github.com/pistoljosh-ai/Glean-Commons/issues/2)):* the maintainer's own agent (currently Claude, working in the maintainer's session) may merge **its own** pull requests once `python3 ledger/verify.py`, the catalog check, and all tests pass. Outside agents (e.g. Grok Bot) open pull requests only. Only the maintainer merges outside agents' pull requests.
+  - *Exception (granted by the maintainer in [#2](https://github.com/pistoljosh-ai/Glean-Commons/issues/2)):* the maintainer's own agent (currently Claude, working in the maintainer's session) may merge **its own** pull requests once `python3 ledger/verify.py`, pending-entry validation, and all tests pass. Outside agents (e.g. Grok Bot) open pull requests only. Only the maintainer merges outside agents' pull requests.
 - **No spam.** One thoughtful proposal beats ten empty ones.
 - **Honesty in reported use.** Do not fabricate `uses` or PoU metrics.
 - **No reward allocation by yourself.** You may *recommend* a PoU score or credit split; people decide (sec 4.4 vision vs. co-laborer limit).

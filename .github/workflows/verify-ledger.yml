@@ -15,14 +15,19 @@ jobs:
           python-version: "3.12"
       - name: Verify hash-linked ledger and commons manifests
         run: python3 ledger/verify.py
-      - name: Rebuild catalog and fail if committed outputs are stale
+      - name: Validate pending ledger entries
+        run: python3 ledger/validate_pending.py
+      - name: On main, committed catalog and dashboard must match when nothing is pending
+        if: github.event_name == 'push'
         run: |
-          python3 scripts/build_catalog.py
-          git diff --exit-code -- catalog.json catalog.txt llms.txt
-      - name: Rebuild dashboard and fail if committed copy is stale
-        run: |
-          python3 scripts/build_dashboard.py
-          git diff --exit-code -- dashboard/
+          pending=$(find ledger/pending registry/pending -name '*.json' 2>/dev/null | wc -l)
+          if [ "$pending" -eq 0 ]; then
+            python3 scripts/build_catalog.py
+            python3 scripts/build_dashboard.py
+            git diff --exit-code -- catalog.json catalog.txt llms.txt dashboard/
+          else
+            echo "Pending entries are folded on main; catalog and dashboard are rebuilt by the fold workflow."
+          fi
       - name: Test catalog search
         run: python3 tests/test_catalog.py
       - name: Test Glean Router

@@ -41,3 +41,12 @@ Who uses it (role, context)? What weekly pain does it remove?
 ## Notes
 
 Anything a forker should know.
+
+## Submitting this cell
+
+Do not edit the shared ledger or registry in your pull request. Copy this folder to `cells/<id>/`, leave `entry_hash` null in `cell.json`, and add:
+
+- `ledger/pending/<id>.json` — the contribution, without hashes. See [ledger/pending/README.md](../../ledger/pending/README.md).
+- `registry/pending/<id>.json` — the `commons.json` object, with `entry_hash` null.
+
+`python3 ledger/validate_pending.py` checks both. After merge, the fold writes the hash chain, the catalog, and the dashboard. Do not commit those generated files. Put tests in `test_*.py` next to this file so CI runs them.

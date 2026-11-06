@@ -264,17 +264,14 @@ class BuildTests(unittest.TestCase):
             self.assertIn("[INTAKE.md](INTAKE.md):", text)
             self.assertIn("The Glean System is a decentralized, AI-augmented ecosystem", text)
 
-    def test_live_repo_catalog_matches_builder(self) -> None:
-        catalog_path = ROOT / "catalog.json"
-        if not catalog_path.is_file():
-            self.skipTest("catalog not generated yet")
-        built = build_catalog.build(ROOT)
-        on_disk = json.loads(catalog_path.read_text(encoding="utf-8"))
-        self.assertEqual(built, on_disk)
-        self.assertEqual(build_catalog.render_txt(built), (ROOT / "catalog.txt").read_text(encoding="utf-8"))
-        self.assertEqual(build_catalog.render_llms(built, ROOT), (ROOT / "llms.txt").read_text(encoding="utf-8"))
+    def test_builder_is_deterministic_and_tracks_the_tip(self) -> None:
+        # PRs do not have to commit a rebuilt catalog. The post-merge fold
+        # writes catalog.json. This test only checks the builder itself.
+        first = build_catalog.build(ROOT)
+        second = build_catalog.build(ROOT)
+        self.assertEqual(build_catalog.render_json(first), build_catalog.render_json(second))
         ledger = json.loads((ROOT / "ledger" / "contributions.json").read_text(encoding="utf-8"))
-        self.assertEqual(built["generated_from"]["ledger_tip"], ledger["tip_hash"])
+        self.assertEqual(first["generated_from"]["ledger_tip"], ledger["tip_hash"])
 
 
 if __name__ == "__main__":
