@@ -1,0 +1,45 @@
+name: Propose a change to a project
+description: Pick a project from commons.json and propose an improvement.
+title: "change: "
+labels: ["proposal"]
+body:
+  - type: dropdown
+    id: project_id
+    attributes:
+      label: Project id (from commons.json)
+      description: Which project should change?
+      options:
+        - whitepaper-v1.0
+        - glean-commons-repo
+        - ledger
+        - vision-explainer-video
+        - cell-template
+        - commons-analyst
+        - experiments
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What should change?
+      description: Point at files listed in that project’s how_to_change.edit when you can.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why (usefulness)
+      description: Who does this help? How does Proof of Use get better?
+    validations:
+      required: true
+  - type: input
+    id: parents
+    attributes:
+      label: Ledger parent id(s)
+      description: Ancestry to credit.
+  - type: input
+    id: ai_assist
+    attributes:
+      label: AI assistance
+      description: Name the agent that helped, or "none".
+      placeholder: AI Co-Laborer (Grok Bot)

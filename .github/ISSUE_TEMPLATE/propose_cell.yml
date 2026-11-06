@@ -1,0 +1,53 @@
+name: Propose a new cell
+description: Suggest a new Grok Bot template / tool cell for the commons.
+title: "cell: "
+labels: ["new-cell", "proposal"]
+body:
+  - type: input
+    id: cell_id
+    attributes:
+      label: Proposed cell id
+      description: Lowercase kebab-case, unique in commons.json.
+      placeholder: invoice-followup
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose
+      description: What problem does it solve?
+    validations:
+      required: true
+  - type: textarea
+    id: who
+    attributes:
+      label: Who it helps
+    validations:
+      required: true
+  - type: input
+    id: parents
+    attributes:
+      label: Parent ledger id(s)
+      description: What existing contribution does this build on?
+      placeholder: whitepaper-v1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: related_project
+    attributes:
+      label: Closest existing project (from commons.json)
+      options:
+        - cell-template
+        - vision-explainer-video
+        - whitepaper-v1.0
+        - glean-commons-repo
+        - ledger
+        - commons-analyst
+        - experiments
+    validations:
+      required: true
+  - type: input
+    id: ai_assist
+    attributes:
+      label: AI assistance
+      placeholder: AI Co-Laborer (Grok Bot)

@@ -1,0 +1,18 @@
+{
+  "id": "experiments",
+  "name": "Experiment declarations",
+  "type": "doc",
+  "path": "experiments/",
+  "status": "active",
+  "maintainers": [
+    "Timmy Gack"
+  ],
+  "parents": [
+    "commons-analyst"
+  ],
+  "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+  "tags": [
+    "experiments",
+    "ab-test"
+  ]
+}

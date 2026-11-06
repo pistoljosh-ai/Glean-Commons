@@ -1,0 +1,11 @@
+{
+  "id": "ledger",
+  "name": "Contribution-chain ledger",
+  "type": "tool",
+  "path": "ledger/",
+  "status": "active",
+  "maintainers": ["Timmy Gack"],
+  "parents": ["glean-commons-repo"],
+  "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+  "tags": ["ledger", "hash-chain", "ancestry"]
+}

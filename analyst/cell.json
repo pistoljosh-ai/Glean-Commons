@@ -1,0 +1,19 @@
+{
+  "id": "commons-analyst",
+  "name": "Commons Analyst",
+  "type": "tool",
+  "path": "analyst/",
+  "status": "active",
+  "maintainers": [
+    "Timmy Gack"
+  ],
+  "parents": [
+    "glean-commons-repo"
+  ],
+  "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+  "tags": [
+    "analyst",
+    "ab-test",
+    "proof-of-use"
+  ]
+}

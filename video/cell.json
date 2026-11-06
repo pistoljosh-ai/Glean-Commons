@@ -1,0 +1,11 @@
+{
+  "id": "vision-explainer-video",
+  "name": "Glean System vision explainer video pipeline",
+  "type": "pipeline",
+  "path": "video/",
+  "status": "wip",
+  "maintainers": ["Timmy Gack"],
+  "parents": ["whitepaper-v1.0"],
+  "entry_hash": "6b5504ba594be6d205380d75d55c7084fcd9bae7ee23793dae6762d3a199a799",
+  "tags": ["video", "explainer", "remotion"]
+}

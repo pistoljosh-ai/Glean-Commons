@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "name": "Glean Commons",
+  "description": "Registry of every project and cell in this repo. Start here to see what exists, where a change goes, and how to propose it.",
+  "updated": "2026-11-06",
+  "projects": [
+    {
+      "id": "whitepaper-v1.0",
+      "name": "The Glean System Whitepaper (Draft 1.0)",
+      "type": "whitepaper",
+      "path": "whitepaper/",
+      "manifest": "whitepaper/cell.json",
+      "status": "published",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [],
+      "entry_hash": "b437b40f9254bed6920a2535febac5eff11738ec61833507f03e3db9d096b58c",
+      "tags": [
+        "vision",
+        "proof-of-use",
+        "philosophy"
+      ],
+      "how_to_change": {
+        "edit": [
+          "whitepaper/glean-system-whitepaper-v1.0.md",
+          "whitepaper/glean-system-whitepaper.docx"
+        ],
+        "note": "Never overwrite Draft 1.0. New ideas go in a new version file (e.g. v1.1) plus a ledger entry that parents whitepaper-v1.0.",
+        "labels": [
+          "project:whitepaper",
+          "type:docs"
+        ]
+      },
+      "canonical_version": "1.0",
+      "variants": [
+        {
+          "id": "v1.0",
+          "path": "whitepaper/",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "experiments": []
+    },
+    {
+      "id": "glean-commons-repo",
+      "name": "Glean Commons repository",
+      "type": "doc",
+      "path": ".",
+      "manifest": null,
+      "status": "seed",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "whitepaper-v1.0"
+      ],
+      "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+      "tags": [
+        "commons",
+        "meta",
+        "registry"
+      ],
+      "how_to_change": {
+        "edit": [
+          "README.md",
+          "commons.json",
+          "CONTRIBUTING.md",
+          "AGENTS.md",
+          "MCP.md",
+          "LICENSE-OPTIONS.md"
+        ],
+        "note": "Root docs and registry. Keep commons.json in sync with folder manifests.",
+        "labels": [
+          "project:commons",
+          "type:docs"
+        ]
+      },
+      "canonical_version": "0.1.0",
+      "variants": [
+        {
+          "id": "main",
+          "path": ".",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "experiments": []
+    },
+    {
+      "id": "ledger",
+      "name": "Contribution-chain ledger",
+      "type": "tool",
+      "path": "ledger/",
+      "manifest": "ledger/cell.json",
+      "status": "active",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+      "tags": [
+        "ledger",
+        "hash-chain",
+        "ancestry"
+      ],
+      "how_to_change": {
+        "edit": [
+          "ledger/contributions.json",
+          "ledger/verify.py",
+          "ledger/add_entry.py",
+          "LEDGER.md",
+          "CHAIN.md"
+        ],
+        "note": "Append entries only via ledger/add_entry.py. Never hand-edit entry_hash, prev_hash, or parent_hashes. Run python3 ledger/verify.py before opening a PR.",
+        "labels": [
+          "project:ledger",
+          "type:tool"
+        ]
+      },
+      "canonical_version": "0.1.0",
+      "variants": [
+        {
+          "id": "v0",
+          "path": "ledger/",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "experiments": []
+    },
+    {
+      "id": "vision-explainer-video",
+      "name": "Glean System vision explainer video pipeline",
+      "type": "pipeline",
+      "path": "video/",
+      "manifest": "video/cell.json",
+      "status": "wip",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "whitepaper-v1.0"
+      ],
+      "entry_hash": "6b5504ba594be6d205380d75d55c7084fcd9bae7ee23793dae6762d3a199a799",
+      "tags": [
+        "video",
+        "explainer",
+        "remotion"
+      ],
+      "how_to_change": {
+        "edit": [
+          "video/README.md",
+          "video/cell.json"
+        ],
+        "note": "Pipeline code is still being built off-repo at /workspace/glean/video/. Do not copy unfinished sources here yet. When it lands, update this project and append a ledger version bump.",
+        "labels": [
+          "project:video",
+          "type:pipeline"
+        ]
+      },
+      "canonical_version": "0.1.0-wip",
+      "variants": [
+        {
+          "id": "pipeline-wip",
+          "path": "video/",
+          "parent": "whitepaper-v1.0",
+          "status": "testing"
+        }
+      ],
+      "experiments": []
+    },
+    {
+      "id": "cell-template",
+      "name": "Cell template",
+      "type": "cell",
+      "path": "cells/_template/",
+      "manifest": "cells/_template/cell.json",
+      "status": "template",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+      "tags": [
+        "template",
+        "cell",
+        "format"
+      ],
+      "how_to_change": {
+        "edit": [
+          "cells/_template/cell.md",
+          "cells/_template/cell.json",
+          "cells/README.md"
+        ],
+        "note": "Format for every Glean cell (Grok Bot template or tool). New cells copy this folder, then get their own ledger entry.",
+        "labels": [
+          "project:cell-template",
+          "type:cell"
+        ]
+      },
+      "canonical_version": "0.1.0",
+      "variants": [
+        {
+          "id": "template",
+          "path": "cells/_template/",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "experiments": []
+    },
+    {
+      "id": "commons-analyst",
+      "name": "Commons Analyst",
+      "type": "tool",
+      "path": "analyst/",
+      "manifest": "analyst/cell.json",
+      "status": "active",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+      "tags": [
+        "analyst",
+        "ab-test",
+        "proof-of-use"
+      ],
+      "canonical_version": "0.1.0",
+      "variants": [
+        {
+          "id": "v0",
+          "path": "analyst/",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "experiments": [],
+      "how_to_change": {
+        "edit": [
+          "ANALYST.md",
+          "analyst/compare.py",
+          "analyst/sample_events.csv",
+          "analyst/cell.json"
+        ],
+        "note": "Analyst recommends only. Humans approve promotions. Keep compare.py stdlib-only.",
+        "labels": [
+          "project:analyst",
+          "type:tool"
+        ]
+      }
+    },
+    {
+      "id": "experiments",
+      "name": "Experiment declarations",
+      "type": "doc",
+      "path": "experiments/",
+      "manifest": "experiments/cell.json",
+      "status": "active",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "commons-analyst"
+      ],
+      "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+      "tags": [
+        "experiments",
+        "ab-test"
+      ],
+      "canonical_version": "0.1.0",
+      "variants": [
+        {
+          "id": "template",
+          "path": "experiments/_template/",
+          "parent": null,
+          "status": "canonical"
+        }
+      ],
+      "experiments": [],
+      "how_to_change": {
+        "edit": [
+          "experiments/README.md",
+          "experiments/_template/experiment.json",
+          "experiments/cell.json"
+        ],
+        "note": "New tests get their own folder under experiments/ and a link from the parent project's experiments[].",
+        "labels": [
+          "project:experiments",
+          "type:docs"
+        ]
+      }
+    }
+  ]
+}

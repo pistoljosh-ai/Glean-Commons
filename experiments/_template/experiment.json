@@ -1,0 +1,18 @@
+{
+  "id": "exp-example",
+  "title": "Short example A/B",
+  "project_id": "cell-template",
+  "variants": [
+    { "id": "control", "path": "cells/_template/", "role": "control" },
+    { "id": "treatment", "path": "cells/example-b/", "role": "treatment" }
+  ],
+  "metric": "benefit_hours",
+  "metric_note": "Primary PoU signal for this test. Choose before launch.",
+  "secondary_metrics": ["depth_runs", "durability_4w"],
+  "start": "2026-11-06",
+  "end": null,
+  "status": "planned",
+  "result": null,
+  "min_users_per_variant": 30,
+  "notes": "Replace this template. Do not run on the template itself."
+}

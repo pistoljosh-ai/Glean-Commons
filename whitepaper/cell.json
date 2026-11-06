@@ -1,0 +1,11 @@
+{
+  "id": "whitepaper-v1.0",
+  "name": "The Glean System Whitepaper (Draft 1.0)",
+  "type": "whitepaper",
+  "path": "whitepaper/",
+  "status": "published",
+  "maintainers": ["Timmy Gack"],
+  "parents": [],
+  "entry_hash": "b437b40f9254bed6920a2535febac5eff11738ec61833507f03e3db9d096b58c",
+  "tags": ["vision", "proof-of-use", "philosophy"]
+}
