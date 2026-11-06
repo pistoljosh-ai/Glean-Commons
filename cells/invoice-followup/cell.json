@@ -1,0 +1,22 @@
+{
+  "id": "invoice-followup",
+  "name": "Invoice follow-up drafter",
+  "type": "cell",
+  "path": "cells/invoice-followup/",
+  "status": "draft",
+  "maintainers": [
+    "Timmy Gack"
+  ],
+  "parents": [
+    "glean-commons-repo"
+  ],
+  "entry_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
+  "tags": [
+    "invoice",
+    "follow-up",
+    "reminders",
+    "accounts-receivable",
+    "small-business",
+    "email"
+  ]
+}

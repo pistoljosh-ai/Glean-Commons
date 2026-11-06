@@ -35,6 +35,7 @@ The Glean System is a decentralized, AI-augmented ecosystem built to rebalance h
 - [Cell template](cells/_template/): A cell is a reusable Glean tool — usually a public Grok Bot template — that helps real people and records its ancestry in the ledger.
 - [Commons Analyst](analyst/): Spec for the AI that watches the scaffolding — forks, variants, and experiments — and recommends what should become canonical.
 - [Searchable catalog + llms.txt](scripts/): Searchable catalog of every commons project so people and agents can find the best proven cell before building a new one.
+- [Invoice follow-up drafter](cells/invoice-followup/): Child of cells/_template (cell-template has no ledger row; its entry_hash is glean-commons-repo). Router returned BUILD for invoice follow-up; no existing cell fit. Drafts tiered past-due reminders from a CSV; never sends. No upstream...
 - [Contribution-chain ledger](ledger/): Every idea has an ancestry. — The Glean System, Draft 1.0, sec 4.3
 - [Upstream: 567-labs/instructor (structured outputs)](upstream/567-labs/instructor/): Import pointer only. Upstream https://github.com/567-labs/instructor, MIT, Copyright (c) 2023 Jason Liu. Secondary parent of Glean Router for typed schemas. No code copied.
 - [Upstream: Aurelio Labs semantic-router](upstream/aurelio-labs/semantic-router/): Import pointer only. Upstream https://github.com/aurelio-labs/semantic-router, MIT, Copyright (c) 2026 Aurelio AI. Primary parent of Glean Router. No code copied.
