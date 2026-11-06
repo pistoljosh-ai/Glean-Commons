@@ -606,7 +606,8 @@
           "cells/small-business-core/cell.json",
           "cells/small-business-core/tools.py",
           "cells/small-business-core/tools.json",
-          "cells/small-business-core/test_tools.py"
+          "cells/small-business-core/test_tools.py",
+          "cells/small-business-core/JOBS.md"
         ],
         "note": "Stdlib only. Record facts, derive the rest. Schema changes need a reason in the PR. Add each new stage cell to the FIRST-PRINCIPLES.md table.",
         "labels": [
@@ -615,6 +616,50 @@
         ]
       },
       "canonical_version": "0.2.0",
+      "variants": [],
+      "experiments": []
+    },
+    {
+      "id": "glean-mcp",
+      "name": "Glean tool server (MCP)",
+      "type": "tool",
+      "path": "mcp/",
+      "manifest": "mcp/cell.json",
+      "status": "active",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "glean-commons-repo",
+        "commons-catalog",
+        "small-business-core-v0.2"
+      ],
+      "entry_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2",
+      "tags": [
+        "mcp",
+        "tool-server",
+        "voice",
+        "conversation",
+        "small-business",
+        "speak-to-run",
+        "any-ai"
+      ],
+      "when_to_use": "Use to let Claude or any MCP-capable AI run a small business by conversation. It exposes every cell's tools.json automatically; add a cell, not a server change.",
+      "how_to_change": {
+        "edit": [
+          "mcp/server.py",
+          "mcp/test_server.py",
+          "mcp/README.md",
+          "mcp/cell.json",
+          "MCP.md"
+        ],
+        "note": "Stdlib only. Never add network listeners or sending. New capabilities belong in cells with a tools.json, not in the server.",
+        "labels": [
+          "project:glean-mcp",
+          "type:tool"
+        ]
+      },
+      "canonical_version": "0.1.0",
       "variants": [],
       "experiments": []
     }

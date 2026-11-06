@@ -1,7 +1,7 @@
 {
   "generated_from": {
-    "commons_sha256": "8c9be05c236763b49a8cde0bf52a5172877a2bf559231b9de6eb10d7e5a715d8",
-    "ledger_tip": "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379"
+    "commons_sha256": "b675dc3176d4e26102eba028d413bc522b8d20a3e7670e37fefaf8a50135c516",
+    "ledger_tip": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2"
   },
   "order": [
     "measured_before_unmeasured",
@@ -61,6 +61,60 @@
         }
       ],
       "when_to_use": "Use when you need Experiment declarations (doc, active) instead of building it again."
+    },
+    {
+      "ancestry": [
+        "glean-commons-repo",
+        "whitepaper-v1.0",
+        "commons-catalog",
+        "small-business-core-v0.2"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [],
+      "entry_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2",
+      "how_to_change": {
+        "edit": [
+          "mcp/server.py",
+          "mcp/test_server.py",
+          "mcp/README.md",
+          "mcp/cell.json",
+          "MCP.md"
+        ],
+        "labels": [
+          "project:glean-mcp",
+          "type:tool"
+        ],
+        "note": "Stdlib only. Never add network listeners or sending. New capabilities belong in cells with a tools.json, not in the server."
+      },
+      "id": "glean-mcp",
+      "name": "Glean tool server (MCP)",
+      "parents": [
+        "glean-commons-repo",
+        "commons-catalog",
+        "small-business-core-v0.2"
+      ],
+      "path": "mcp/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "active",
+      "summary": "Stdlib stdio MCP server. Discovers every cells/*/tools.json (contract v1) so each new cell is callable on merge with no server change. Adds what_can_you_do, search_cells (commons-catalog), note_missing_capability (wishlist = build...",
+      "tags": [
+        "mcp",
+        "tool-server",
+        "voice",
+        "conversation",
+        "small-business",
+        "speak-to-run",
+        "any-ai"
+      ],
+      "type": "tool",
+      "upstream": null,
+      "uses": 0,
+      "variants": [],
+      "when_to_use": "Use to let Claude or any MCP-capable AI run a small business by conversation. It exposes every cell's tools.json automatically; add a cell, not a server change."
     },
     {
       "ancestry": [
@@ -133,7 +187,8 @@
           "cells/small-business-core/cell.json",
           "cells/small-business-core/tools.py",
           "cells/small-business-core/tools.json",
-          "cells/small-business-core/test_tools.py"
+          "cells/small-business-core/test_tools.py",
+          "cells/small-business-core/JOBS.md"
         ],
         "labels": [
           "project:small-business-core",
@@ -283,7 +338,9 @@
         "whitepaper-v1.0"
       ],
       "canonical_version": "0.1.0",
-      "children": [],
+      "children": [
+        "glean-mcp"
+      ],
       "entry_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
       "how_to_change": {
         "edit": [
@@ -591,6 +648,7 @@
         "cell-template",
         "commons-analyst",
         "commons-catalog",
+        "glean-mcp",
         "glean-router",
         "invoice-followup",
         "ledger",

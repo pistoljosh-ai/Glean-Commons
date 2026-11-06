@@ -25,3 +25,5 @@ jobs:
         run: python3 router/test_route.py
       - name: Test cells
         run: for t in cells/*/test_*.py; do echo "== $t"; python3 "$t" || exit 1; done
+      - name: Test MCP tool server end to end
+        run: python3 mcp/test_server.py
