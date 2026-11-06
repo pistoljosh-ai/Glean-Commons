@@ -51,7 +51,7 @@ python3 ledger/add_entry.py \
 
 4. Update `commons.json` and the folder’s `cell.json` so they agree.
 5. Run `python3 ledger/verify.py`.
-6. Open a **pull request or issue**. Never merge. Never force-push. Never invent approval.
+6. Open a **pull request or issue**. Never merge (see the one exception under Hard rules). Never force-push. Never invent approval.
 
 ## Credit rules
 
@@ -63,6 +63,7 @@ python3 ledger/add_entry.py \
 ## Hard rules
 
 - **Humans approve merges.** You may open issues/PRs only.
+  - *Exception (granted by the maintainer in [#2](https://github.com/pistoljosh-ai/Glean-Commons/issues/2)):* the maintainer's own agent (currently Claude, working in the maintainer's session) may merge **its own** pull requests once `python3 ledger/verify.py`, the catalog check, and all tests pass. Outside agents (e.g. Grok Bot) open pull requests only. Only the maintainer merges outside agents' pull requests.
 - **No spam.** One thoughtful proposal beats ten empty ones.
 - **Honesty in reported use.** Do not fabricate `uses` or PoU metrics.
 - **No reward allocation by yourself.** You may *recommend* a PoU score or credit split; people decide (sec 4.4 vision vs. co-laborer limit).
