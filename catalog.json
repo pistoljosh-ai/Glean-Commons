@@ -1,7 +1,7 @@
 {
   "generated_from": {
-    "commons_sha256": "e253ab2b7f9a70242d65e1c24185731fbc9f2395a844710463ae39ab7975802a",
-    "ledger_tip": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a"
+    "commons_sha256": "56322e3823f28157599634c37e3db6792a4fba669865f5d38289f40580909c5f",
+    "ledger_tip": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500"
   },
   "order": [
     "measured_before_unmeasured",
@@ -112,6 +112,62 @@
       "uses": 0,
       "variants": [],
       "when_to_use": "Run this before building a new cell. It routes a request to an existing cell, a child adaptation, or a new build."
+    },
+    {
+      "ancestry": [
+        "glean-commons-repo",
+        "whitepaper-v1.0",
+        "invoice-followup"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [],
+      "entry_hash": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500",
+      "how_to_change": {
+        "edit": [
+          "cells/small-business-core/books.py",
+          "cells/small-business-core/schema.json",
+          "cells/small-business-core/FIRST-PRINCIPLES.md",
+          "cells/small-business-core/cell.md",
+          "cells/small-business-core/test_books.py",
+          "cells/small-business-core/sample_books/",
+          "cells/small-business-core/cell.json"
+        ],
+        "labels": [
+          "project:small-business-core",
+          "type:cell"
+        ],
+        "note": "Stdlib only. Record facts, derive the rest. Schema changes need a reason in the PR. Add each new stage cell to the FIRST-PRINCIPLES.md table."
+      },
+      "id": "small-business-core",
+      "name": "Small Business Core (the books)",
+      "parents": [
+        "glean-commons-repo",
+        "invoice-followup"
+      ],
+      "path": "cells/small-business-core/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "draft",
+      "summary": "Foundation for small-business cells: FIRST-PRINCIPLES.md maps the business loop (offer > customer > quote > schedule > work > invoice > paid > books > learn) as a build queue; schema.json defines one shared set of CSV books; books.py...",
+      "tags": [
+        "small-business",
+        "books",
+        "bookkeeping",
+        "customers",
+        "jobs",
+        "invoices",
+        "payments",
+        "csv",
+        "foundation"
+      ],
+      "type": "cell",
+      "upstream": null,
+      "uses": 0,
+      "variants": [],
+      "when_to_use": "Use first for any small-business cell: shared CSV books (customers, offers, jobs, invoices, payments), a checker, and a status summary. New stage cells read these books instead of inventing their own data."
     },
     {
       "ancestry": [
@@ -271,7 +327,9 @@
         "whitepaper-v1.0"
       ],
       "canonical_version": "0.1.0",
-      "children": [],
+      "children": [
+        "small-business-core"
+      ],
       "entry_hash": "b51858de6a14a5737a5504ee657222e48fa7e16e8ee00eee2b53e85398e2274a",
       "how_to_change": {
         "edit": [
@@ -531,6 +589,7 @@
         "glean-router",
         "invoice-followup",
         "ledger",
+        "small-business-core",
         "upstream-567-labs-instructor",
         "upstream-aurelio-labs-semantic-router",
         "upstream-forward-future-loopy"

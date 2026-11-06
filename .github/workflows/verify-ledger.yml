@@ -23,3 +23,5 @@ jobs:
         run: python3 tests/test_catalog.py
       - name: Test Glean Router
         run: python3 router/test_route.py
+      - name: Test cells
+        run: for t in cells/*/test_*.py; do echo "== $t"; python3 "$t" || exit 1; done

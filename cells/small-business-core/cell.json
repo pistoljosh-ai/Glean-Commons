@@ -1,0 +1,26 @@
+{
+  "id": "small-business-core",
+  "name": "Small Business Core (the books)",
+  "type": "cell",
+  "path": "cells/small-business-core/",
+  "status": "draft",
+  "maintainers": [
+    "Timmy Gack"
+  ],
+  "parents": [
+    "glean-commons-repo",
+    "invoice-followup"
+  ],
+  "entry_hash": "db67a08f8f893b50ac28dbf4c616df3709c3aae7633d52cd6b89d838e2620500",
+  "tags": [
+    "small-business",
+    "books",
+    "bookkeeping",
+    "customers",
+    "jobs",
+    "invoices",
+    "payments",
+    "csv",
+    "foundation"
+  ]
+}
