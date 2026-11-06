@@ -1,0 +1,15 @@
+seq,id,title,type,creator,agent,parents,created,version,uses,hash,prev
+1,whitepaper-v1.0,The Glean System Whitepaper (Draft 1.0),whitepaper,Timmy Gack,Human,,2025-01-01T00:00:00Z,1.0,0,b437b40f9254,000000000000
+2,glean-commons-repo,Glean Commons repository,repo,Timmy Gack,Grok Bot,whitepaper-v1.0,2026-11-06T00:00:00Z,0.1.0,0,6ebad274ab4c,b437b40f9254
+3,vision-explainer-video,Glean System vision explainer video pipeline,video,Timmy Gack,Grok Bot,whitepaper-v1.0,2026-11-06T00:00:00Z,0.1.0-wip,0,6b5504ba594b,6ebad274ab4c
+4,upstream-forward-future-loopy,Upstream: Forward-Future/loopy (Loop Library + Loopy skill),other,Forward Future (Matthew Berman / @mberman84 et al.),Grok Bot,glean-commons-repo,2026-11-06T21:06:59Z,upstream-pointer-0.1,0,2e60ab21283e,6b5504ba594b
+5,commons-catalog,Searchable catalog + llms.txt (find before you build),other,Timmy Gack (vision) + AI Co-Laborer,Grok Bot,glean-commons-repo,2026-11-06T21:19:18Z,0.1.0,0,7318c26003f8,2e60ab21283e
+6,upstream-aurelio-labs-semantic-router,Upstream: Aurelio Labs semantic-router,other,Aurelio Labs / Aurelio AI,Grok Bot,glean-commons-repo,2026-11-06T21:29:45Z,upstream-pointer-0.1,0,c7f6933c3924,7318c26003f8
+7,upstream-567-labs-instructor,Upstream: 567-labs/instructor (structured outputs),other,567 Labs / Jason Liu (and contributors),Grok Bot,glean-commons-repo,2026-11-06T21:29:45Z,upstream-pointer-0.1,0,710283c3c661,c7f6933c3924
+8,glean-router,Glean Router v0 (typed decision tree),other,"Timmy Gack (concept, inspired by TypeSafe Jev) + AI Co-Laborer",Grok Bot,glean-commons-repo|upstream-aurelio-labs-semantic-router|upstream-567-labs-instructor,2026-11-06T21:29:45Z,0.1.0,0,eff033544c26,710283c3c661
+9,invoice-followup,Invoice follow-up drafter,cell,Timmy Gack,Claude,glean-commons-repo,2026-11-06T21:31:24Z,0.1.0,0,b51858de6a14,eff033544c26
+10,small-business-core,Small Business Core (the books),cell,Timmy Gack,Claude,glean-commons-repo|invoice-followup,2026-11-06T21:58:32Z,0.1.0,0,db67a08f8f89,b51858de6a14
+11,small-business-core-v0.2,Small Business Core v0.2: callable tools,cell,Timmy Gack,Claude,small-business-core,2026-11-06T22:05:17Z,0.2.0,0,963a10e76860,db67a08f8f89
+12,invoice-followup-v0.2,Invoice follow-up v0.2: callable tool on the shared books,cell,Timmy Gack,Claude,invoice-followup|small-business-core-v0.2,2026-11-06T22:05:18Z,0.2.0,0,b502e9e311dc,963a10e76860
+13,glean-mcp,Glean tool server (MCP): run your business by talking to any AI,other,Timmy Gack,Claude,glean-commons-repo|commons-catalog|small-business-core-v0.2,2026-11-06T22:08:20Z,0.1.0,0,404259c47ec1,b502e9e311dc
+14,commons-dashboard,Glean Commons dashboard (built from the repo),other,Timmy Gack,Claude,glean-commons-repo|commons-catalog|glean-mcp,2026-11-06T22:34:19Z,0.1.0,0,3f490f327f60,404259c47ec1

@@ -1,0 +1,589 @@
+{
+ "integrity": [
+  {
+   "check": "Ledger hash chain",
+   "detail": "14 entries; tip 3f490f327f60",
+   "result": "verified"
+  },
+  {
+   "check": "Registry matches manifests",
+   "detail": "16 projects agree",
+   "result": "verified"
+  }
+ ],
+ "jobs": [
+  {
+   "job": "Owner",
+   "order": 1,
+   "status": "built",
+   "tools": 2
+  },
+  {
+   "job": "Office manager",
+   "order": 2,
+   "status": "built",
+   "tools": 2
+  },
+  {
+   "job": "Scheduler",
+   "order": 3,
+   "status": "built",
+   "tools": 3
+  },
+  {
+   "job": "Billing clerk",
+   "order": 4,
+   "status": "built",
+   "tools": 2
+  },
+  {
+   "job": "Collections",
+   "order": 5,
+   "status": "built",
+   "tools": 1
+  },
+  {
+   "job": "Bookkeeper",
+   "order": 6,
+   "status": "built",
+   "tools": 3
+  },
+  {
+   "job": "Estimator",
+   "order": 7,
+   "status": "next",
+   "tools": 0
+  },
+  {
+   "job": "Purchasing / expenses",
+   "order": 8,
+   "status": "next",
+   "tools": 0
+  },
+  {
+   "job": "Receptionist",
+   "order": 9,
+   "status": "planned",
+   "tools": 0
+  },
+  {
+   "job": "Dispatcher",
+   "order": 10,
+   "status": "planned",
+   "tools": 0
+  },
+  {
+   "job": "Marketer",
+   "order": 11,
+   "status": "planned",
+   "tools": 0
+  },
+  {
+   "job": "Analyst",
+   "order": 12,
+   "status": "planned",
+   "tools": 0
+  }
+ ],
+ "ledger": [
+  {
+   "agent": "Human",
+   "created": "2025-01-01T00:00:00Z",
+   "creator": "Timmy Gack",
+   "hash": "b437b40f9254",
+   "id": "whitepaper-v1.0",
+   "parents": "",
+   "prev": "000000000000",
+   "seq": 1,
+   "title": "The Glean System Whitepaper (Draft 1.0)",
+   "type": "whitepaper",
+   "uses": 0,
+   "version": "1.0"
+  },
+  {
+   "agent": "Grok Bot",
+   "created": "2026-11-06T00:00:00Z",
+   "creator": "Timmy Gack",
+   "hash": "6ebad274ab4c",
+   "id": "glean-commons-repo",
+   "parents": "whitepaper-v1.0",
+   "prev": "b437b40f9254",
+   "seq": 2,
+   "title": "Glean Commons repository",
+   "type": "repo",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "agent": "Grok Bot",
+   "created": "2026-11-06T00:00:00Z",
+   "creator": "Timmy Gack",
+   "hash": "6b5504ba594b",
+   "id": "vision-explainer-video",
+   "parents": "whitepaper-v1.0",
+   "prev": "6ebad274ab4c",
+   "seq": 3,
+   "title": "Glean System vision explainer video pipeline",
+   "type": "video",
+   "uses": 0,
+   "version": "0.1.0-wip"
+  },
+  {
+   "agent": "Grok Bot",
+   "created": "2026-11-06T21:06:59Z",
+   "creator": "Forward Future (Matthew Berman / @mberman84 et al.)",
+   "hash": "2e60ab21283e",
+   "id": "upstream-forward-future-loopy",
+   "parents": "glean-commons-repo",
+   "prev": "6b5504ba594b",
+   "seq": 4,
+   "title": "Upstream: Forward-Future/loopy (Loop Library + Loopy skill)",
+   "type": "other",
+   "uses": 0,
+   "version": "upstream-pointer-0.1"
+  },
+  {
+   "agent": "Grok Bot",
+   "created": "2026-11-06T21:19:18Z",
+   "creator": "Timmy Gack (vision) + AI Co-Laborer",
+   "hash": "7318c26003f8",
+   "id": "commons-catalog",
+   "parents": "glean-commons-repo",
+   "prev": "2e60ab21283e",
+   "seq": 5,
+   "title": "Searchable catalog + llms.txt (find before you build)",
+   "type": "other",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "agent": "Grok Bot",
+   "created": "2026-11-06T21:29:45Z",
+   "creator": "Aurelio Labs / Aurelio AI",
+   "hash": "c7f6933c3924",
+   "id": "upstream-aurelio-labs-semantic-router",
+   "parents": "glean-commons-repo",
+   "prev": "7318c26003f8",
+   "seq": 6,
+   "title": "Upstream: Aurelio Labs semantic-router",
+   "type": "other",
+   "uses": 0,
+   "version": "upstream-pointer-0.1"
+  },
+  {
+   "agent": "Grok Bot",
+   "created": "2026-11-06T21:29:45Z",
+   "creator": "567 Labs / Jason Liu (and contributors)",
+   "hash": "710283c3c661",
+   "id": "upstream-567-labs-instructor",
+   "parents": "glean-commons-repo",
+   "prev": "c7f6933c3924",
+   "seq": 7,
+   "title": "Upstream: 567-labs/instructor (structured outputs)",
+   "type": "other",
+   "uses": 0,
+   "version": "upstream-pointer-0.1"
+  },
+  {
+   "agent": "Grok Bot",
+   "created": "2026-11-06T21:29:45Z",
+   "creator": "Timmy Gack (concept, inspired by TypeSafe Jev) + AI Co-Laborer",
+   "hash": "eff033544c26",
+   "id": "glean-router",
+   "parents": "glean-commons-repo|upstream-aurelio-labs-semantic-router|upstream-567-labs-instructor",
+   "prev": "710283c3c661",
+   "seq": 8,
+   "title": "Glean Router v0 (typed decision tree)",
+   "type": "other",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "agent": "Claude",
+   "created": "2026-11-06T21:31:24Z",
+   "creator": "Timmy Gack",
+   "hash": "b51858de6a14",
+   "id": "invoice-followup",
+   "parents": "glean-commons-repo",
+   "prev": "eff033544c26",
+   "seq": 9,
+   "title": "Invoice follow-up drafter",
+   "type": "cell",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "agent": "Claude",
+   "created": "2026-11-06T21:58:32Z",
+   "creator": "Timmy Gack",
+   "hash": "db67a08f8f89",
+   "id": "small-business-core",
+   "parents": "glean-commons-repo|invoice-followup",
+   "prev": "b51858de6a14",
+   "seq": 10,
+   "title": "Small Business Core (the books)",
+   "type": "cell",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "agent": "Claude",
+   "created": "2026-11-06T22:05:17Z",
+   "creator": "Timmy Gack",
+   "hash": "963a10e76860",
+   "id": "small-business-core-v0.2",
+   "parents": "small-business-core",
+   "prev": "db67a08f8f89",
+   "seq": 11,
+   "title": "Small Business Core v0.2: callable tools",
+   "type": "cell",
+   "uses": 0,
+   "version": "0.2.0"
+  },
+  {
+   "agent": "Claude",
+   "created": "2026-11-06T22:05:18Z",
+   "creator": "Timmy Gack",
+   "hash": "b502e9e311dc",
+   "id": "invoice-followup-v0.2",
+   "parents": "invoice-followup|small-business-core-v0.2",
+   "prev": "963a10e76860",
+   "seq": 12,
+   "title": "Invoice follow-up v0.2: callable tool on the shared books",
+   "type": "cell",
+   "uses": 0,
+   "version": "0.2.0"
+  },
+  {
+   "agent": "Claude",
+   "created": "2026-11-06T22:08:20Z",
+   "creator": "Timmy Gack",
+   "hash": "404259c47ec1",
+   "id": "glean-mcp",
+   "parents": "glean-commons-repo|commons-catalog|small-business-core-v0.2",
+   "prev": "b502e9e311dc",
+   "seq": 13,
+   "title": "Glean tool server (MCP): run your business by talking to any AI",
+   "type": "other",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "agent": "Claude",
+   "created": "2026-11-06T22:34:19Z",
+   "creator": "Timmy Gack",
+   "hash": "3f490f327f60",
+   "id": "commons-dashboard",
+   "parents": "glean-commons-repo|commons-catalog|glean-mcp",
+   "prev": "404259c47ec1",
+   "seq": 14,
+   "title": "Glean Commons dashboard (built from the repo)",
+   "type": "other",
+   "uses": 0,
+   "version": "0.1.0"
+  }
+ ],
+ "projects": [
+  {
+   "id": "whitepaper-v1.0",
+   "name": "The Glean System Whitepaper (Draft 1.0)",
+   "parents": 0,
+   "path": "whitepaper/",
+   "status": "published",
+   "tools": 0,
+   "type": "whitepaper",
+   "uses": 0,
+   "version": "1.0"
+  },
+  {
+   "id": "glean-commons-repo",
+   "name": "Glean Commons repository",
+   "parents": 1,
+   "path": ".",
+   "status": "seed",
+   "tools": 0,
+   "type": "doc",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "id": "ledger",
+   "name": "Contribution-chain ledger",
+   "parents": 1,
+   "path": "ledger/",
+   "status": "active",
+   "tools": 0,
+   "type": "tool",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "id": "vision-explainer-video",
+   "name": "Glean System vision explainer video pipeline",
+   "parents": 1,
+   "path": "video/",
+   "status": "wip",
+   "tools": 0,
+   "type": "pipeline",
+   "uses": 0,
+   "version": "0.1.0-wip"
+  },
+  {
+   "id": "cell-template",
+   "name": "Cell template",
+   "parents": 1,
+   "path": "cells/_template/",
+   "status": "template",
+   "tools": 0,
+   "type": "cell",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "id": "commons-analyst",
+   "name": "Commons Analyst",
+   "parents": 1,
+   "path": "analyst/",
+   "status": "active",
+   "tools": 0,
+   "type": "tool",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "id": "experiments",
+   "name": "Experiment declarations",
+   "parents": 1,
+   "path": "experiments/",
+   "status": "active",
+   "tools": 0,
+   "type": "doc",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "id": "upstream-forward-future-loopy",
+   "name": "Upstream: Forward-Future/loopy (Loop Library)",
+   "parents": 1,
+   "path": "upstream/forward-future/loopy/",
+   "status": "pointer",
+   "tools": 0,
+   "type": "upstream",
+   "uses": 0,
+   "version": "upstream-pointer-0.1"
+  },
+  {
+   "id": "commons-catalog",
+   "name": "Searchable catalog + llms.txt",
+   "parents": 1,
+   "path": "scripts/",
+   "status": "active",
+   "tools": 0,
+   "type": "tool",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "id": "upstream-aurelio-labs-semantic-router",
+   "name": "Upstream: Aurelio Labs semantic-router",
+   "parents": 1,
+   "path": "upstream/aurelio-labs/semantic-router/",
+   "status": "pointer",
+   "tools": 0,
+   "type": "upstream",
+   "uses": 0,
+   "version": "upstream-pointer-0.1"
+  },
+  {
+   "id": "upstream-567-labs-instructor",
+   "name": "Upstream: 567-labs/instructor (structured outputs)",
+   "parents": 1,
+   "path": "upstream/567-labs/instructor/",
+   "status": "pointer",
+   "tools": 0,
+   "type": "upstream",
+   "uses": 0,
+   "version": "upstream-pointer-0.1"
+  },
+  {
+   "id": "glean-router",
+   "name": "Glean Router",
+   "parents": 3,
+   "path": "router/",
+   "status": "active",
+   "tools": 0,
+   "type": "tool",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "id": "invoice-followup",
+   "name": "Invoice follow-up drafter",
+   "parents": 1,
+   "path": "cells/invoice-followup/",
+   "status": "draft",
+   "tools": 1,
+   "type": "cell",
+   "uses": 0,
+   "version": "0.2.0"
+  },
+  {
+   "id": "small-business-core",
+   "name": "Small Business Core (the books)",
+   "parents": 2,
+   "path": "cells/small-business-core/",
+   "status": "draft",
+   "tools": 12,
+   "type": "cell",
+   "uses": 0,
+   "version": "0.2.0"
+  },
+  {
+   "id": "glean-mcp",
+   "name": "Glean tool server (MCP)",
+   "parents": 3,
+   "path": "mcp/",
+   "status": "active",
+   "tools": 3,
+   "type": "tool",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "id": "commons-dashboard",
+   "name": "Glean Commons dashboard",
+   "parents": 3,
+   "path": "dashboard/",
+   "status": "active",
+   "tools": 0,
+   "type": "tool",
+   "uses": 0,
+   "version": "0.1.0"
+  }
+ ],
+ "summary": [
+  {
+   "entries": 14,
+   "jobs_built": 6,
+   "jobs_total": 12,
+   "ledger_tip": "3f490f327f60",
+   "projects": 16,
+   "tools": 16,
+   "uses": 0
+  }
+ ],
+ "tools": [
+  {
+   "cell": "invoice-followup",
+   "job": "collections",
+   "kind": "reads",
+   "tool": "draft_payment_reminders",
+   "writes": ""
+  },
+  {
+   "cell": "small-business-core",
+   "job": "owner",
+   "kind": "reads",
+   "tool": "business_status",
+   "writes": ""
+  },
+  {
+   "cell": "small-business-core",
+   "job": "office manager",
+   "kind": "reads",
+   "tool": "find_customers",
+   "writes": ""
+  },
+  {
+   "cell": "small-business-core",
+   "job": "scheduler",
+   "kind": "reads",
+   "tool": "list_jobs",
+   "writes": ""
+  },
+  {
+   "cell": "small-business-core",
+   "job": "billing clerk",
+   "kind": "reads",
+   "tool": "open_invoices",
+   "writes": ""
+  },
+  {
+   "cell": "small-business-core",
+   "job": "bookkeeper",
+   "kind": "reads",
+   "tool": "history",
+   "writes": ""
+  },
+  {
+   "cell": "small-business-core",
+   "job": "office manager",
+   "kind": "writes",
+   "tool": "add_customer",
+   "writes": "customers.csv"
+  },
+  {
+   "cell": "small-business-core",
+   "job": "owner",
+   "kind": "writes",
+   "tool": "add_offer",
+   "writes": "offers.csv"
+  },
+  {
+   "cell": "small-business-core",
+   "job": "scheduler",
+   "kind": "writes",
+   "tool": "add_job",
+   "writes": "jobs.csv"
+  },
+  {
+   "cell": "small-business-core",
+   "job": "scheduler",
+   "kind": "writes",
+   "tool": "update_job",
+   "writes": "jobs.csv"
+  },
+  {
+   "cell": "small-business-core",
+   "job": "billing clerk",
+   "kind": "writes",
+   "tool": "create_invoice",
+   "writes": "invoices.csv"
+  },
+  {
+   "cell": "small-business-core",
+   "job": "bookkeeper",
+   "kind": "writes",
+   "tool": "record_payment",
+   "writes": "payments.csv"
+  },
+  {
+   "cell": "small-business-core",
+   "job": "bookkeeper",
+   "kind": "writes",
+   "tool": "undo_last_change",
+   "writes": "any"
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
+   "tool": "what_can_you_do",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
+   "tool": "search_cells",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "writes",
+   "tool": "note_missing_capability",
+   "writes": "wishlist.md"
+  }
+ ]
+}

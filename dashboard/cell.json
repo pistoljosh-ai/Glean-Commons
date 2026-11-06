@@ -1,0 +1,24 @@
+{
+  "id": "commons-dashboard",
+  "name": "Glean Commons dashboard",
+  "type": "tool",
+  "path": "dashboard/",
+  "status": "active",
+  "maintainers": [
+    "Timmy Gack"
+  ],
+  "parents": [
+    "glean-commons-repo",
+    "commons-catalog",
+    "glean-mcp"
+  ],
+  "entry_hash": "3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e",
+  "tags": [
+    "dashboard",
+    "metrics",
+    "ledger",
+    "proof-of-use",
+    "jobs",
+    "registry"
+  ]
+}

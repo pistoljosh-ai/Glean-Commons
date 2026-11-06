@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glean Commons Dashboard</title>
+<!-- Built by scripts/build_dashboard.py from template.html. Edit the template, not index.html. -->
+<style>
+:root { --bg:#faf9f5; --panel:#fff; --fg:#1f1e1d; --muted:#6b6a66; --line:#e6e4dd; --ok:#2f7d4a; --warn:#a86a12; --bad:#b3261e;
+  --c1:#c96442; --c2:#3b6fb6; --c3:#7a5bb5; --c4:#9a9893; --serif: Georgia, "Times New Roman", serif; --sans: system-ui, -apple-system, "Segoe UI", sans-serif; }
+@media (prefers-color-scheme: dark) { :root { --bg:#1d1c1a; --panel:#262522; --fg:#eceae4; --muted:#a3a19b; --line:#3a3935; --ok:#6cc08a; --warn:#e0a54b; --bad:#f08a80; --c4:#6e6c67; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--sans); }
+main { max-width: 72rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; display: flex; flex-direction: column; gap: 1.5rem; }
+h1 { font: 400 2rem/1.15 var(--serif); margin: 0; }
+h2 { font-size: 1.05rem; font-weight: 600; margin: 0 0 .25rem; }
+.lede { color: var(--muted); max-width: 52rem; margin: .4rem 0 0; }
+.lede b { color: var(--fg); font-weight: 600; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .75rem; }
+.tile, .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+.tile { padding: .9rem 1rem; }
+.tile .v { font: 400 1.9rem/1.1 var(--serif); font-variant-numeric: tabular-nums; }
+.tile .l { color: var(--muted); font-size: .8rem; }
+.card { padding: 1.1rem 1.2rem; min-width: 0; }
+.note { color: var(--muted); font-size: .82rem; margin: 0 0 .75rem; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: .75rem; }
+.jobs { display: grid; grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr)); gap: .5rem; }
+.job { border: 1px solid var(--line); border-radius: 8px; padding: .5rem .7rem; }
+.job .s { font-size: .78rem; color: var(--muted); }
+.job.built { border-color: var(--ok); } .job.built .s { color: var(--ok); }
+.job.next { border: 1px dashed var(--warn); } .job.next .s { color: var(--warn); }
+.legend { display: flex; flex-wrap: wrap; gap: .9rem; font-size: .78rem; color: var(--muted); margin-bottom: .5rem; }
+.legend i { display: inline-block; width: .6rem; height: .6rem; border-radius: 2px; margin-right: .35rem; vertical-align: middle; }
+.chart { position: relative; }
+.tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.12); padding: .4rem .6rem; font-size: .78rem; max-width: 19rem; display: none; z-index: 2; }
+.tip .t1 { color: var(--muted); }
+.tbox { max-height: 26rem; overflow: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .82rem; font-variant-numeric: tabular-nums; }
+th { text-align: left; color: var(--muted); font-weight: 600; position: sticky; top: 0; background: var(--panel); padding: .35rem .5rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: .35rem .5rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.num { text-align: right; }
+.ok { color: var(--ok); } .bad { color: var(--bad); }
+code { font-size: .8em; }
+footer { color: var(--muted); font-size: .78rem; }
+@media (max-width: 40rem) { .hide-narrow { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Glean Commons</h1>
+    <p class="lede" id="lede"></p>
+  </header>
+  <section class="tiles" id="tiles"></section>
+
+  <section class="card">
+    <h2>Which jobs can a business hand to its AI?</h2>
+    <p class="note">Small-business job functions from <code>cells/small-business-core/JOBS.md</code>. Built jobs are callable through the Glean tool server (<code>mcp/</code>).</p>
+    <div class="legend"><span><i style="background:var(--ok)"></i>Built</span><span><i style="background:var(--warn)"></i>Next</span><span><i style="background:var(--line)"></i>Planned</span></div>
+    <div class="jobs" id="jobs"></div>
+  </section>
+
+  <section class="card">
+    <h2>Contribution chain</h2>
+    <p class="note">Every ledger entry in order, with a line to each parent it builds on. Color shows which AI helped. Hover a dot for details.</p>
+    <div class="legend" id="agents"></div>
+    <div class="chart" id="chain"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <h2>Callable tools</h2>
+      <p class="note">Every tool any MCP-capable AI can call, by job.</p>
+      <div class="tbox"><table><thead><tr><th>Tool</th><th>Job</th><th class="hide-narrow">Cell</th><th>Does</th></tr></thead><tbody id="tools"></tbody></table></div>
+    </section>
+    <section class="card">
+      <h2>Integrity</h2>
+      <p class="note">Checks run by <code>ledger/verify.py</code> when this page was built.</p>
+      <table><thead><tr><th>Check</th><th>Result</th><th>Detail</th></tr></thead><tbody id="integrity"></tbody></table>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>Registry</h2>
+    <p class="note">Every project in <code>commons.json</code>: version, parents credited, callable tools, recorded uses.</p>
+    <div class="tbox"><table><thead><tr><th>Project</th><th>Type</th><th>Status</th><th class="hide-narrow">Version</th><th class="num hide-narrow">Parents</th><th class="num">Tools</th><th class="num">Uses</th></tr></thead><tbody id="projects"></tbody></table></div>
+  </section>
+
+  <footer>Built from the repo by <code>python3 scripts/build_dashboard.py</code>. CI fails if this page is out of date, so it always matches <code>main</code>. Uses are honest reported use; zero means not measured yet. Ledger tip <code id="tip"></code>.</footer>
+</main>
+
+<script>
+const DATA = /*DATA*/null;
+const $ = (id) => document.getElementById(id);
+const el = (tag, props = {}, ...kids) => { const e = document.createElement(tag); Object.assign(e, props); e.append(...kids); return e; };
+const fmt = (n) => Number(n).toLocaleString('en');
+const day = (s) => new Date(s).toLocaleDateString('en', {month: 'short', day: 'numeric', timeZone: 'UTC'});
+const AGENTS = {Human: 'var(--c4)', Claude: 'var(--c1)', 'Grok Bot': 'var(--c2)', 'Cursor Agent': 'var(--c3)'};
+const colorOf = (a) => AGENTS[a] || 'var(--c4)';
+const S = DATA.summary[0];
+
+$('lede').append(
+  el('b', {textContent: fmt(S.projects)}), ' projects and ', el('b', {textContent: fmt(S.tools)}), ' callable tools, covering ',
+  el('b', {textContent: fmt(S.jobs_built)}), ' of ', el('b', {textContent: fmt(S.jobs_total)}),
+  ' small-business job functions. The ledger chain of ', el('b', {textContent: fmt(S.entries)}),
+  ' contributions verifies end to end. Real-world use isn’t measured yet: recorded uses total ', el('b', {textContent: fmt(S.uses)}), '.');
+[[S.projects, 'Projects in the registry'], [S.entries, 'Ledger entries, chain verified'], [S.tools, 'Tools any AI can call'],
+ [`${S.jobs_built} / ${S.jobs_total}`, 'Job functions built'], [S.uses, 'Recorded uses (Proof of Use)']]
+  .forEach(([v, l]) => $('tiles').append(el('div', {className: 'tile'}, el('div', {className: 'v', textContent: typeof v === 'number' ? fmt(v) : v}), el('div', {className: 'l', textContent: l}))));
+$('tip').textContent = S.ledger_tip;
+
+DATA.jobs.forEach((j) => $('jobs').append(el('div', {className: 'job ' + j.status},
+  el('div', {textContent: j.job}),
+  el('div', {className: 's', textContent: j.status === 'built' ? `${j.tools} tool${j.tools === 1 ? '' : 's'}` : (j.status === 'next' ? 'Next to build' : 'Planned')}))));
+
+const present = Object.keys(AGENTS).filter((a) => DATA.ledger.some((e) => e.agent === a));
+present.forEach((a) => $('agents').append(el('span', {}, Object.assign(document.createElement('i'), {style: `background:${colorOf(a)}`}), a === 'Human' ? 'No AI' : a)));
+
+function drawChain() {
+  const box = $('chain'); box.replaceChildren();
+  const rows = DATA.ledger, W = Math.max(320, box.clientWidth);
+  const laneOf = (e) => (e.title.startsWith('Upstream') ? 'upstream' : ({whitepaper: 'whitepaper', repo: 'repo', cell: 'cell', video: 'video'}[e.type] || 'other'));
+  const names = {whitepaper: 'Vision', repo: 'Repo', upstream: 'Upstream credit', other: 'Tools', video: 'Media', cell: 'Cells'};
+  const lanes = ['whitepaper', 'repo', 'upstream', 'other', 'video', 'cell'].filter((l) => rows.some((e) => laneOf(e) === l));
+  const L = 112, R = 18, T = 14, laneH = 44, H = T + laneH * lanes.length + 24;
+  const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', '100%');
+  const add = (tag, attrs, text) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (text != null) n.textContent = text; svg.append(n); return n; };
+  const x = (i) => L + 8 + (rows.length > 1 ? i * (W - L - R - 8) / (rows.length - 1) : 0);
+  const y = (l) => T + laneH * lanes.indexOf(l) + laneH / 2;
+  lanes.forEach((l) => { add('line', {x1: L, x2: W - R, y1: y(l), y2: y(l), stroke: 'var(--line)'}); add('text', {x: L - 10, y: y(l) + 4, 'text-anchor': 'end', 'font-size': 12, fill: 'var(--muted)'}, names[l]); });
+  const pos = new Map(rows.map((e, i) => [e.id, [x(i), y(laneOf(e))]]));
+  const links = [];
+  rows.forEach((e) => (e.parents ? e.parents.split('|') : []).forEach((p) => { if (pos.has(p)) {
+    const [x1, y1] = pos.get(p), [x2, y2] = pos.get(e.id), mx = (x1 + x2) / 2;
+    links.push([e.id, add('path', {d: `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`, fill: 'none', stroke: 'var(--muted)', 'stroke-opacity': .4, 'stroke-width': 1.25})]);
+  } }));
+  const tip = el('div', {className: 'tip'});
+  rows.forEach((e) => {
+    const [cx, cy] = pos.get(e.id);
+    const c = add('circle', {cx, cy, r: 7, fill: colorOf(e.agent), stroke: 'var(--panel)', 'stroke-width': 2});
+    c.addEventListener('pointerenter', () => {
+      c.setAttribute('r', 9);
+      links.forEach(([id, p]) => { p.setAttribute('stroke-opacity', id === e.id ? .95 : .12); p.setAttribute('stroke', id === e.id ? colorOf(e.agent) : 'var(--muted)'); });
+      tip.replaceChildren(el('div', {className: 't1', textContent: `#${e.seq} · ${day(e.created)} · v${e.version}`}), el('div', {}, el('b', {textContent: e.title})),
+        el('div', {textContent: `Creator: ${e.creator}`}), el('div', {textContent: `AI: ${e.agent === 'Human' ? 'none' : e.agent}`}),
+        el('div', {textContent: `Builds on: ${e.parents ? e.parents.split('|').join(', ') : 'nothing (root)'}`}),
+        el('div', {className: 't1', textContent: `hash ${e.hash} ← ${e.prev}`}));
+      tip.style.display = 'block';
+      const scale = box.clientWidth / W, tw = tip.offsetWidth;
+      tip.style.left = Math.min(Math.max(0, cx * scale - tw / 2), box.clientWidth - tw) + 'px';
+      tip.style.top = (cy * scale + 14) + 'px';
+    });
+    c.addEventListener('pointerleave', () => { c.setAttribute('r', 7); tip.style.display = 'none'; links.forEach(([, p]) => { p.setAttribute('stroke-opacity', .4); p.setAttribute('stroke', 'var(--muted)'); }); });
+  });
+  add('text', {x: x(0), y: H - 6, 'font-size': 12, fill: 'var(--muted)'}, 'Root: ' + day(rows[0].created));
+  add('text', {x: x(rows.length - 1), y: H - 6, 'font-size': 12, fill: 'var(--muted)', 'text-anchor': 'end'}, 'Latest: ' + day(rows[rows.length - 1].created));
+  box.append(svg, tip);
+}
+drawChain();
+let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(drawChain, 120); });
+
+const desc = {reads: 'reads the books', writes: 'writes '};
+DATA.tools.forEach((t) => $('tools').append(el('tr', {},
+  el('td', {}, el('code', {textContent: t.tool})), el('td', {textContent: t.job}), el('td', {className: 'hide-narrow', textContent: t.cell}),
+  el('td', {textContent: t.kind === 'writes' ? 'writes ' + t.writes : 'reads only'}))));
+DATA.integrity.forEach((r) => $('integrity').append(el('tr', {},
+  el('td', {textContent: r.check}), el('td', {className: r.result === 'verified' ? 'ok' : 'bad', textContent: r.result}), el('td', {textContent: r.detail}))));
+const order = {active: 0, published: 1, draft: 2, seed: 3, wip: 4, template: 5, pointer: 6};
+[...DATA.projects].sort((a, b) => (b.tools - a.tools) || ((order[a.status] ?? 9) - (order[b.status] ?? 9)) || a.name.localeCompare(b.name))
+  .forEach((p) => $('projects').append(el('tr', {},
+    el('td', {textContent: p.name}), el('td', {textContent: p.type}), el('td', {textContent: p.status}), el('td', {className: 'hide-narrow', textContent: p.version}),
+    el('td', {className: 'num hide-narrow', textContent: p.parents}), el('td', {className: 'num', textContent: p.tools}), el('td', {className: 'num', textContent: p.uses}))));
+</script>
+</body>
+</html>

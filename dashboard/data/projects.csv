@@ -1,0 +1,17 @@
+id,name,type,status,path,version,parents,tools,uses
+whitepaper-v1.0,The Glean System Whitepaper (Draft 1.0),whitepaper,published,whitepaper/,1.0,0,0,0
+glean-commons-repo,Glean Commons repository,doc,seed,.,0.1.0,1,0,0
+ledger,Contribution-chain ledger,tool,active,ledger/,0.1.0,1,0,0
+vision-explainer-video,Glean System vision explainer video pipeline,pipeline,wip,video/,0.1.0-wip,1,0,0
+cell-template,Cell template,cell,template,cells/_template/,0.1.0,1,0,0
+commons-analyst,Commons Analyst,tool,active,analyst/,0.1.0,1,0,0
+experiments,Experiment declarations,doc,active,experiments/,0.1.0,1,0,0
+upstream-forward-future-loopy,Upstream: Forward-Future/loopy (Loop Library),upstream,pointer,upstream/forward-future/loopy/,upstream-pointer-0.1,1,0,0
+commons-catalog,Searchable catalog + llms.txt,tool,active,scripts/,0.1.0,1,0,0
+upstream-aurelio-labs-semantic-router,Upstream: Aurelio Labs semantic-router,upstream,pointer,upstream/aurelio-labs/semantic-router/,upstream-pointer-0.1,1,0,0
+upstream-567-labs-instructor,Upstream: 567-labs/instructor (structured outputs),upstream,pointer,upstream/567-labs/instructor/,upstream-pointer-0.1,1,0,0
+glean-router,Glean Router,tool,active,router/,0.1.0,3,0,0
+invoice-followup,Invoice follow-up drafter,cell,draft,cells/invoice-followup/,0.2.0,1,1,0
+small-business-core,Small Business Core (the books),cell,draft,cells/small-business-core/,0.2.0,2,12,0
+glean-mcp,Glean tool server (MCP),tool,active,mcp/,0.1.0,3,3,0
+commons-dashboard,Glean Commons dashboard,tool,active,dashboard/,0.1.0,3,0,0

@@ -1,7 +1,7 @@
 {
   "generated_from": {
-    "commons_sha256": "b675dc3176d4e26102eba028d413bc522b8d20a3e7670e37fefaf8a50135c516",
-    "ledger_tip": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2"
+    "commons_sha256": "262120cb1c1f2d06edbc7152bafd151f19b4192ec916a79cbf53dd4a46c5ea1c",
+    "ledger_tip": "3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e"
   },
   "order": [
     "measured_before_unmeasured",
@@ -11,6 +11,58 @@
     "id_asc"
   ],
   "projects": [
+    {
+      "ancestry": [
+        "glean-commons-repo",
+        "whitepaper-v1.0",
+        "commons-catalog",
+        "glean-mcp",
+        "small-business-core-v0.2"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [],
+      "entry_hash": "3f490f327f60ab1ea8f5e4edbeca854d2bbb087aec92885707832e086cd8546e",
+      "how_to_change": {
+        "edit": [
+          "dashboard/template.html",
+          "scripts/build_dashboard.py",
+          "dashboard/cell.json"
+        ],
+        "labels": [
+          "project:commons-dashboard",
+          "type:tool"
+        ],
+        "note": "Edit template.html and the generator, never index.html or data/ by hand. Output must stay deterministic so CI can check it. No external scripts or network calls in the page."
+      },
+      "id": "commons-dashboard",
+      "name": "Glean Commons dashboard",
+      "parents": [
+        "glean-commons-repo",
+        "commons-catalog",
+        "glean-mcp"
+      ],
+      "path": "dashboard/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "active",
+      "summary": "scripts/build_dashboard.py turns commons.json, the ledger, every cells/*/tools.json and JOBS.md into dashboard/data/*.csv, data.json and a self-contained dashboard/index.html (no dependencies; opens anywhere; GitHub Pages ready)....",
+      "tags": [
+        "dashboard",
+        "metrics",
+        "ledger",
+        "proof-of-use",
+        "jobs",
+        "registry"
+      ],
+      "type": "tool",
+      "upstream": null,
+      "uses": 0,
+      "variants": [],
+      "when_to_use": "Use to see the state of the commons at a glance: job coverage, the contribution chain, callable tools, integrity checks, and the registry. Rebuild with python3 scripts/build_dashboard.py after any change."
+    },
     {
       "ancestry": [
         "commons-analyst",
@@ -70,7 +122,9 @@
         "small-business-core-v0.2"
       ],
       "canonical_version": "0.1.0",
-      "children": [],
+      "children": [
+        "commons-dashboard"
+      ],
       "entry_hash": "404259c47ec197b569860f3bc15acdfe024f35dc5d8c69cae2f374885c0604f2",
       "how_to_change": {
         "edit": [
@@ -339,6 +393,7 @@
       ],
       "canonical_version": "0.1.0",
       "children": [
+        "commons-dashboard",
         "glean-mcp"
       ],
       "entry_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
@@ -648,6 +703,7 @@
         "cell-template",
         "commons-analyst",
         "commons-catalog",
+        "commons-dashboard",
         "glean-mcp",
         "glean-router",
         "invoice-followup",

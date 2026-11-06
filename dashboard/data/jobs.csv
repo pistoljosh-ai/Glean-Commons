@@ -1,0 +1,13 @@
+order,job,status,tools
+1,Owner,built,2
+2,Office manager,built,2
+3,Scheduler,built,3
+4,Billing clerk,built,2
+5,Collections,built,1
+6,Bookkeeper,built,3
+7,Estimator,next,0
+8,Purchasing / expenses,next,0
+9,Receptionist,planned,0
+10,Dispatcher,planned,0
+11,Marketer,planned,0
+12,Analyst,planned,0

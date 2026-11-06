@@ -50,7 +50,7 @@ python3 ledger/add_entry.py \
 ```
 
 4. Update `commons.json` and the folder’s `cell.json` so they agree.
-5. Run `python3 ledger/verify.py`.
+5. Run `python3 ledger/verify.py`, then rebuild the generated files: `python3 scripts/build_catalog.py` and `python3 scripts/build_dashboard.py`. CI fails if either is stale.
 6. Open a **pull request or issue**. Never merge (see the one exception under Hard rules). Never force-push. Never invent approval.
 
 ## Credit rules
