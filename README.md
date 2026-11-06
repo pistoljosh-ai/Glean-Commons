@@ -86,7 +86,7 @@ Checks every ledger hash and that `commons.json` agrees with each project's `cel
 
 ## License
 
-No license file yet. See [LICENSE-OPTIONS.md](LICENSE-OPTIONS.md). Until Timmy picks one, assume all rights reserved for review drafts; do not treat this as cleared for reuse.
+Code (scripts, workflows, `*.py`, `*.json` schemas) is Apache-2.0 ([LICENSE](LICENSE)). Whitepaper, docs, diagrams, video, and other media are CC BY-SA 4.0 ([LICENSE-docs](LICENSE-docs)).
 
 ---
 

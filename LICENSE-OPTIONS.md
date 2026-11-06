@@ -1,6 +1,8 @@
-# License options (not chosen yet)
+# License options
 
-No `LICENSE` file is in the repo until Timmy picks one. Until then, treat this draft as all rights reserved.
+**Chosen Nov 6, 2026:** Apache-2.0 (code) + CC BY-SA 4.0 (docs/media).
+
+Code (scripts, workflows, `*.py`, `*.json` schemas) is Apache-2.0 ([LICENSE](LICENSE)). Whitepaper, docs, diagrams, video, and other media are CC BY-SA 4.0 ([LICENSE-docs](LICENSE-docs)).
 
 ## Recommendation
 
@@ -16,8 +18,9 @@ Together these match the whitepaper’s “every contribution is tracked publicl
 - **MIT** for code — shorter, very common; weaker patent language than Apache-2.0.
 - **CC BY 4.0** for docs — attribution without share-alike (derivatives need not stay open).
 
-## How to apply later
+## How it was applied
 
-1. Add `LICENSE` (Apache-2.0) and `LICENSE-DOCUMENTS` (CC BY-SA 4.0), or a short `NOTICE` that points to both.
-2. Note the choice in the README and in a ledger entry.
-3. Prefer SPDX identifiers in new source file headers (`SPDX-License-Identifier: Apache-2.0`).
+1. `LICENSE` is the Apache License 2.0, with the appendix notice: Copyright 2026 Timmy Gack and Glean Commons contributors.
+2. `LICENSE-docs` is the CC BY-SA 4.0 legal code.
+3. The README License section states the split.
+4. Prefer SPDX identifiers in new source file headers (`SPDX-License-Identifier: Apache-2.0`).
