@@ -1,0 +1,15 @@
+{
+  "id": "glean-3d-explainer",
+  "title": "Glean Commons 3D explainer",
+  "type": "cell",
+  "creator": "Timmy Gack",
+  "ai_assist": "Codex",
+  "parents": [
+    "vision-explainer-video"
+  ],
+  "created": "2026-11-06T22:43:02Z",
+  "version": "0.1.0",
+  "commit": "",
+  "uses": 0,
+  "notes": "Local Blender/FFmpeg renderer with two animated 3D characters, a caption storyboard, and an original synthesized score. No measured use claimed."
+}

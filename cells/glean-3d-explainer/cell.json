@@ -1,0 +1,21 @@
+{
+  "id": "glean-3d-explainer",
+  "name": "Glean Commons 3D explainer",
+  "type": "cell",
+  "path": "cells/glean-3d-explainer/",
+  "status": "prototype",
+  "maintainers": [
+    "Timmy Gack"
+  ],
+  "parents": [
+    "vision-explainer-video"
+  ],
+  "entry_hash": null,
+  "tags": [
+    "video",
+    "animation",
+    "3d",
+    "explainer",
+    "blender"
+  ]
+}
