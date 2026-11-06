@@ -1,0 +1,39 @@
+{
+  "id": "glean-3d-explainer",
+  "name": "Glean Commons 3D explainer",
+  "type": "cell",
+  "path": "cells/glean-3d-explainer/",
+  "status": "prototype",
+  "maintainers": [
+    "Timmy Gack"
+  ],
+  "parents": [
+    "vision-explainer-video"
+  ],
+  "entry_hash": null,
+  "tags": [
+    "video",
+    "animation",
+    "3d",
+    "explainer",
+    "blender"
+  ],
+  "manifest": "cells/glean-3d-explainer/cell.json",
+  "description": "Render a captioned 3D Glean Commons explainer with animated people and an original score.",
+  "how_to_change": {
+    "edit": [
+      "cells/glean-3d-explainer/cell.md",
+      "cells/glean-3d-explainer/storyboard.json",
+      "cells/glean-3d-explainer/scene.py",
+      "cells/glean-3d-explainer/score.py",
+      "cells/glean-3d-explainer/render.py"
+    ],
+    "labels": [
+      "project:video",
+      "type:pipeline"
+    ]
+  },
+  "canonical_version": "0.1.0",
+  "variants": [],
+  "experiments": []
+}
