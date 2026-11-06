@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "2e60ab21283e9fb1b11da565a956f0dea4291e2499f7f466534f9857eb565a9e",
+  "tip_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -81,6 +81,26 @@
       "notes": "Import pointer only. Upstream https://github.com/Forward-Future/loopy, MIT, Copyright (c) 2026 Forward Future. First Glean Commons import-with-ancestry test.",
       "prev_hash": "6b5504ba594be6d205380d75d55c7084fcd9bae7ee23793dae6762d3a199a799",
       "entry_hash": "2e60ab21283e9fb1b11da565a956f0dea4291e2499f7f466534f9857eb565a9e"
+    },
+    {
+      "id": "commons-catalog",
+      "title": "Searchable catalog + llms.txt (find before you build)",
+      "type": "other",
+      "creator": "Timmy Gack (vision) + AI Co-Laborer",
+      "ai_assist": "AI Co-Laborer (Grok Bot): catalog, search CLI, and llms.txt",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "parent_hashes": [
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c"
+      ],
+      "created": "2026-11-06T21:19:18Z",
+      "version": "0.1.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "Searchable catalog of every commons project so people and agents can find the best proven cell before building a new one.",
+      "prev_hash": "2e60ab21283e9fb1b11da565a956f0dea4291e2499f7f466534f9857eb565a9e",
+      "entry_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199"
     }
   ]
 }

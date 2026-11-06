@@ -26,6 +26,8 @@ Returns the full project object, including `how_to_change`, plus the folder `cel
 Args: `query` (string), optional `type`, optional `tag`.  
 Simple text search over name, tags, path, and notes. No ranking ML required for v0.
 
+The future MCP search server will serve [`catalog.json`](catalog.json): the generated catalog of every project, with Proof of Use, ancestry, and `when_to_use`. Until that server exists, use `python3 scripts/search.py`. Do not invent usage numbers the catalog marks as missing.
+
 ### `propose_change`
 
 Args:

@@ -1,0 +1,19 @@
+{
+  "id": "commons-catalog",
+  "name": "Searchable catalog + llms.txt",
+  "type": "tool",
+  "path": "scripts/",
+  "status": "active",
+  "maintainers": [
+    "Timmy Gack"
+  ],
+  "parents": [
+    "glean-commons-repo"
+  ],
+  "entry_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
+  "tags": [
+    "catalog",
+    "search",
+    "find-before-you-build"
+  ]
+}

@@ -345,6 +345,44 @@
       "canonical_version": "upstream-pointer-0.1",
       "variants": [],
       "experiments": []
+    },
+    {
+      "id": "commons-catalog",
+      "name": "Searchable catalog + llms.txt",
+      "type": "tool",
+      "path": "scripts/",
+      "manifest": "scripts/cell.json",
+      "status": "active",
+      "maintainers": [
+        "Timmy Gack"
+      ],
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "entry_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
+      "tags": [
+        "catalog",
+        "search",
+        "find-before-you-build"
+      ],
+      "how_to_change": {
+        "edit": [
+          "scripts/build_catalog.py",
+          "scripts/search.py",
+          "catalog.json",
+          "catalog.txt",
+          "llms.txt",
+          "scripts/cell.json"
+        ],
+        "note": "Regenerate catalog.json, catalog.txt, and llms.txt with python3 scripts/build_catalog.py. Do not hand-edit those outputs or fabricate usage.",
+        "labels": [
+          "project:catalog",
+          "type:tool"
+        ]
+      },
+      "canonical_version": "0.1.0",
+      "variants": [],
+      "experiments": []
     }
   ]
 }

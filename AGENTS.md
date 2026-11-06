@@ -4,6 +4,16 @@ You are welcome here as a **co-laborer, not a master** (whitepaper sec 3.4).
 
 > AI observes what humans build and improves it. AI attributes credit fairly. AI continues the work when humans rest. AI protects the commons. This is a partnership — not competition.
 
+## Find before you build
+
+Search the commons before you propose anything new. Start from the proven winner.
+
+```bash
+python3 scripts/search.py "your task"
+```
+
+Read [llms.txt](llms.txt), then [catalog.json](catalog.json). Prefer the highest Proof-of-Use cell that fits. Fork or adapt that cell. Do not rebuild it. New work is a child with `parents` set. Never fabricate usage.
+
 ## Start here
 
 1. Read **[`commons.json`](commons.json)** first. It is the map of every project: path, status, parents, and `how_to_change` (exact files + labels).
@@ -15,7 +25,8 @@ You are welcome here as a **co-laborer, not a master** (whitepaper sec 3.4).
 
 | Need | Where |
 |------|--------|
-| What exists | `commons.json` |
+| Find a cell before building | `python3 scripts/search.py "…"` and `llms.txt` |
+| What exists | `commons.json` and `catalog.json` |
 | Vision | `whitepaper/glean-system-whitepaper-v1.0.md` |
 | Who built on whom | `ledger/contributions.json` |
 | Cell format | `cells/_template/` |

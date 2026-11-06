@@ -1,0 +1,477 @@
+{
+  "generated_from": {
+    "commons_sha256": "305cfc4821048a5fb9b7f10c74a054d951d847b8ceeddb2a349a29ef403992c0",
+    "ledger_tip": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199"
+  },
+  "order": [
+    "measured_before_unmeasured",
+    "pou_score_desc",
+    "uses_desc",
+    "ancestry_depth_desc",
+    "id_asc"
+  ],
+  "projects": [
+    {
+      "ancestry": [
+        "commons-analyst",
+        "glean-commons-repo",
+        "whitepaper-v1.0"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [],
+      "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+      "how_to_change": {
+        "edit": [
+          "experiments/README.md",
+          "experiments/_template/experiment.json",
+          "experiments/cell.json"
+        ],
+        "labels": [
+          "project:experiments",
+          "type:docs"
+        ],
+        "note": "New tests get their own folder under experiments/ and a link from the parent project's experiments[]."
+      },
+      "id": "experiments",
+      "name": "Experiment declarations",
+      "parents": [
+        "commons-analyst"
+      ],
+      "path": "experiments/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "active",
+      "summary": "A/B (and A/B/n) tests for Glean cells and pipelines. Free, file-based, honest.",
+      "tags": [
+        "experiments",
+        "ab-test"
+      ],
+      "type": "doc",
+      "upstream": null,
+      "uses": 0,
+      "variants": [
+        {
+          "id": "template",
+          "parent": null,
+          "path": "experiments/_template/",
+          "status": "canonical"
+        }
+      ],
+      "when_to_use": "Use when you need Experiment declarations (doc, active) instead of building it again."
+    },
+    {
+      "ancestry": [
+        "glean-commons-repo",
+        "whitepaper-v1.0"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [],
+      "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+      "how_to_change": {
+        "edit": [
+          "cells/_template/cell.md",
+          "cells/_template/cell.json",
+          "cells/README.md"
+        ],
+        "labels": [
+          "project:cell-template",
+          "type:cell"
+        ],
+        "note": "Format for every Glean cell (Grok Bot template or tool). New cells copy this folder, then get their own ledger entry."
+      },
+      "id": "cell-template",
+      "name": "Cell template",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "path": "cells/_template/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "template",
+      "summary": "A cell is a reusable Glean tool — usually a public Grok Bot template — that helps real people and records its ancestry in the ledger.",
+      "tags": [
+        "template",
+        "cell",
+        "format"
+      ],
+      "type": "cell",
+      "upstream": null,
+      "uses": 0,
+      "variants": [
+        {
+          "id": "template",
+          "parent": null,
+          "path": "cells/_template/",
+          "status": "canonical"
+        }
+      ],
+      "when_to_use": "Use when you are starting a new cell from the shared format (Cell template)."
+    },
+    {
+      "ancestry": [
+        "glean-commons-repo",
+        "whitepaper-v1.0"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [
+        "experiments"
+      ],
+      "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+      "how_to_change": {
+        "edit": [
+          "ANALYST.md",
+          "analyst/compare.py",
+          "analyst/sample_events.csv",
+          "analyst/cell.json"
+        ],
+        "labels": [
+          "project:analyst",
+          "type:tool"
+        ],
+        "note": "Analyst recommends only. Humans approve promotions. Keep compare.py stdlib-only."
+      },
+      "id": "commons-analyst",
+      "name": "Commons Analyst",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "path": "analyst/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "active",
+      "summary": "Spec for the AI that watches the scaffolding — forks, variants, and experiments — and recommends what should become canonical.",
+      "tags": [
+        "analyst",
+        "ab-test",
+        "proof-of-use"
+      ],
+      "type": "tool",
+      "upstream": null,
+      "uses": 0,
+      "variants": [
+        {
+          "id": "v0",
+          "parent": null,
+          "path": "analyst/",
+          "status": "canonical"
+        }
+      ],
+      "when_to_use": "Use when you need the Commons Analyst tool instead of writing a new one."
+    },
+    {
+      "ancestry": [
+        "glean-commons-repo",
+        "whitepaper-v1.0"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [],
+      "entry_hash": "7318c26003f8ffe0f218f867f432d3cda0b4b759402e3fc349b3a1facb7c9199",
+      "how_to_change": {
+        "edit": [
+          "scripts/build_catalog.py",
+          "scripts/search.py",
+          "catalog.json",
+          "catalog.txt",
+          "llms.txt",
+          "scripts/cell.json"
+        ],
+        "labels": [
+          "project:catalog",
+          "type:tool"
+        ],
+        "note": "Regenerate catalog.json, catalog.txt, and llms.txt with python3 scripts/build_catalog.py. Do not hand-edit those outputs or fabricate usage."
+      },
+      "id": "commons-catalog",
+      "name": "Searchable catalog + llms.txt",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "path": "scripts/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "active",
+      "summary": "Searchable catalog of every commons project so people and agents can find the best proven cell before building a new one.",
+      "tags": [
+        "catalog",
+        "search",
+        "find-before-you-build"
+      ],
+      "type": "tool",
+      "upstream": null,
+      "uses": 0,
+      "variants": [],
+      "when_to_use": "Use when you need the Searchable catalog + llms.txt tool instead of writing a new one."
+    },
+    {
+      "ancestry": [
+        "glean-commons-repo",
+        "whitepaper-v1.0"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [],
+      "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+      "how_to_change": {
+        "edit": [
+          "ledger/contributions.json",
+          "ledger/verify.py",
+          "ledger/add_entry.py",
+          "LEDGER.md",
+          "CHAIN.md"
+        ],
+        "labels": [
+          "project:ledger",
+          "type:tool"
+        ],
+        "note": "Append entries only via ledger/add_entry.py. Never hand-edit entry_hash, prev_hash, or parent_hashes. Run python3 ledger/verify.py before opening a PR."
+      },
+      "id": "ledger",
+      "name": "Contribution-chain ledger",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "path": "ledger/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "active",
+      "summary": "Every idea has an ancestry. — The Glean System, Draft 1.0, sec 4.3",
+      "tags": [
+        "ledger",
+        "hash-chain",
+        "ancestry"
+      ],
+      "type": "tool",
+      "upstream": null,
+      "uses": 0,
+      "variants": [
+        {
+          "id": "v0",
+          "parent": null,
+          "path": "ledger/",
+          "status": "canonical"
+        }
+      ],
+      "when_to_use": "Use when you need the Contribution-chain ledger tool instead of writing a new one."
+    },
+    {
+      "ancestry": [
+        "glean-commons-repo",
+        "whitepaper-v1.0"
+      ],
+      "canonical_version": "upstream-pointer-0.1",
+      "children": [],
+      "entry_hash": "2e60ab21283e9fb1b11da565a956f0dea4291e2499f7f466534f9857eb565a9e",
+      "how_to_change": {
+        "edit": [
+          "upstream/forward-future/loopy/README.md",
+          "commons.json"
+        ],
+        "labels": [
+          "project:upstream-loopy",
+          "type:upstream"
+        ],
+        "note": "Pointer entry. Any local adaptation becomes a new cell with this id as parent. Keep the MIT notice if code is ever copied."
+      },
+      "id": "upstream-forward-future-loopy",
+      "name": "Upstream: Forward-Future/loopy (Loop Library)",
+      "parents": [
+        "glean-commons-repo"
+      ],
+      "path": "upstream/forward-future/loopy/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "pointer",
+      "summary": "Import pointer only. Upstream https://github.com/Forward-Future/loopy, MIT, Copyright (c) 2026 Forward Future. First Glean Commons import-with-ancestry test.",
+      "tags": [
+        "upstream",
+        "agent-skills",
+        "loops",
+        "mit",
+        "forward-future"
+      ],
+      "type": "upstream",
+      "upstream": {
+        "credit": "Forward Future / Matthew Berman (primary commits @mberman84); community PR contributors",
+        "license": "MIT",
+        "url": "https://github.com/Forward-Future/loopy"
+      },
+      "uses": 0,
+      "variants": [],
+      "when_to_use": "Use when you need a credited pointer to Upstream: Forward-Future/loopy (Loop Library) before adapting it; do not copy the code, make a child cell."
+    },
+    {
+      "ancestry": [
+        "whitepaper-v1.0"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [
+        "cell-template",
+        "commons-analyst",
+        "commons-catalog",
+        "ledger",
+        "upstream-forward-future-loopy"
+      ],
+      "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
+      "how_to_change": {
+        "edit": [
+          "README.md",
+          "commons.json",
+          "CONTRIBUTING.md",
+          "AGENTS.md",
+          "MCP.md",
+          "LICENSE-OPTIONS.md"
+        ],
+        "labels": [
+          "project:commons",
+          "type:docs"
+        ],
+        "note": "Root docs and registry. Keep commons.json in sync with folder manifests."
+      },
+      "id": "glean-commons-repo",
+      "name": "Glean Commons repository",
+      "parents": [
+        "whitepaper-v1.0"
+      ],
+      "path": ".",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "seed",
+      "summary": "Public open-source home of the commons: whitepaper, ledger, cells, and contribution chain. Seed draft prepared for Timmy review before first push.",
+      "tags": [
+        "commons",
+        "meta",
+        "registry"
+      ],
+      "type": "doc",
+      "upstream": null,
+      "uses": 0,
+      "variants": [
+        {
+          "id": "main",
+          "parent": null,
+          "path": ".",
+          "status": "canonical"
+        }
+      ],
+      "when_to_use": "Use when you need Glean Commons repository (doc, seed) instead of building it again."
+    },
+    {
+      "ancestry": [
+        "whitepaper-v1.0"
+      ],
+      "canonical_version": "0.1.0-wip",
+      "children": [],
+      "entry_hash": "6b5504ba594be6d205380d75d55c7084fcd9bae7ee23793dae6762d3a199a799",
+      "how_to_change": {
+        "edit": [
+          "video/README.md",
+          "video/cell.json"
+        ],
+        "labels": [
+          "project:video",
+          "type:pipeline"
+        ],
+        "note": "Pipeline code is still being built off-repo at /workspace/glean/video/. Do not copy unfinished sources here yet. When it lands, update this project and append a ledger version bump."
+      },
+      "id": "vision-explainer-video",
+      "name": "Glean System vision explainer video pipeline",
+      "parents": [
+        "whitepaper-v1.0"
+      ],
+      "path": "video/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "wip",
+      "summary": "Code-based Remotion pipeline for a vision explainer. Built from the whitepaper; lands in video/ when finished. Free/open-source tools preferred.",
+      "tags": [
+        "video",
+        "explainer",
+        "remotion"
+      ],
+      "type": "pipeline",
+      "upstream": null,
+      "uses": 0,
+      "variants": [
+        {
+          "id": "pipeline-wip",
+          "parent": "whitepaper-v1.0",
+          "path": "video/",
+          "status": "testing"
+        }
+      ],
+      "when_to_use": "Use when you need Glean System vision explainer video pipeline (pipeline, wip) instead of building it again."
+    },
+    {
+      "ancestry": [],
+      "canonical_version": "1.0",
+      "children": [
+        "glean-commons-repo",
+        "vision-explainer-video"
+      ],
+      "entry_hash": "b437b40f9254bed6920a2535febac5eff11738ec61833507f03e3db9d096b58c",
+      "how_to_change": {
+        "edit": [
+          "whitepaper/glean-system-whitepaper-v1.0.md",
+          "whitepaper/glean-system-whitepaper.docx"
+        ],
+        "labels": [
+          "project:whitepaper",
+          "type:docs"
+        ],
+        "note": "Never overwrite Draft 1.0. New ideas go in a new version file (e.g. v1.1) plus a ledger entry that parents whitepaper-v1.0."
+      },
+      "id": "whitepaper-v1.0",
+      "name": "The Glean System Whitepaper (Draft 1.0)",
+      "parents": [],
+      "path": "whitepaper/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "published",
+      "summary": "Root contribution. Visionary framework for a human-centered, AI-augmented, decentralized economy powered by Proof of Use.",
+      "tags": [
+        "vision",
+        "proof-of-use",
+        "philosophy"
+      ],
+      "type": "whitepaper",
+      "upstream": null,
+      "uses": 0,
+      "variants": [
+        {
+          "id": "v1.0",
+          "parent": null,
+          "path": "whitepaper/",
+          "status": "canonical"
+        }
+      ],
+      "when_to_use": "Use when you need the vision and principles behind the commons (The Glean System Whitepaper (Draft 1.0))."
+    }
+  ],
+  "schema_version": 1
+}

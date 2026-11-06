@@ -15,3 +15,9 @@ jobs:
           python-version: "3.12"
       - name: Verify hash-linked ledger and commons manifests
         run: python3 ledger/verify.py
+      - name: Rebuild catalog and fail if committed outputs are stale
+        run: |
+          python3 scripts/build_catalog.py
+          git diff --exit-code -- catalog.json catalog.txt llms.txt
+      - name: Test catalog search
+        run: python3 tests/test_catalog.py

@@ -1,0 +1,39 @@
+# Glean Commons
+
+> Usefulness becomes the new currency.
+
+The Glean System is a decentralized, AI-augmented ecosystem built to rebalance human life around freedom, contribution, and shared prosperity. It rejects the industrial-era model that forces individuals into rigid schedules, commutes, and corporate dependency. Instead, it proposes a digital commons powered by Proof of Use — a new economic principle where value is created and distributed based on how much human-helping tools, ideas, and services are actually used.
+
+## Instructions for AI agents
+
+- Search the catalog first.
+- Prefer the highest Proof-of-Use cell that fits.
+- Fork or adapt the winner instead of rebuilding.
+- Any new work is a child cell with parents set.
+- Propose changes via the pull request and issue templates.
+- Humans approve all merges, rewards, and publishing.
+- Never fabricate usage.
+
+## Catalog and docs
+
+- [catalog.json](catalog.json): Machine-readable catalog. Search this first.
+- [catalog.txt](catalog.txt): Plain-text catalog, one block per project.
+- [README.md](README.md): What Glean Commons is.
+- [PROOF-OF-USE.md](PROOF-OF-USE.md): Five signals and the proposed scorecard.
+- [CONTRIBUTING.md](CONTRIBUTING.md): How to fork, improve, and add a ledger entry.
+- [INTAKE.md](INTAKE.md): How to import an upstream project with ancestry.
+- [MCP.md](MCP.md): Future MCP server. Search will serve catalog.json.
+- [ANALYST.md](ANALYST.md): Forks, experiments, and promote or coexist.
+- [AGENTS.md](AGENTS.md): Rules for AI co-laborers.
+
+## Projects
+
+- [Experiment declarations](experiments/): A/B (and A/B/n) tests for Glean cells and pipelines. Free, file-based, honest.
+- [Cell template](cells/_template/): A cell is a reusable Glean tool — usually a public Grok Bot template — that helps real people and records its ancestry in the ledger.
+- [Commons Analyst](analyst/): Spec for the AI that watches the scaffolding — forks, variants, and experiments — and recommends what should become canonical.
+- [Searchable catalog + llms.txt](scripts/): Searchable catalog of every commons project so people and agents can find the best proven cell before building a new one.
+- [Contribution-chain ledger](ledger/): Every idea has an ancestry. — The Glean System, Draft 1.0, sec 4.3
+- [Upstream: Forward-Future/loopy (Loop Library)](upstream/forward-future/loopy/): Import pointer only. Upstream https://github.com/Forward-Future/loopy, MIT, Copyright (c) 2026 Forward Future. First Glean Commons import-with-ancestry test.
+- [Glean Commons repository](README.md): Public open-source home of the commons: whitepaper, ledger, cells, and contribution chain. Seed draft prepared for Timmy review before first push.
+- [Glean System vision explainer video pipeline](video/): Code-based Remotion pipeline for a vision explainer. Built from the whitepaper; lands in video/ when finished. Free/open-source tools preferred.
+- [The Glean System Whitepaper (Draft 1.0)](whitepaper/): Root contribution. Visionary framework for a human-centered, AI-augmented, decentralized economy powered by Proof of Use.
