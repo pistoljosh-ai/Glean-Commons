@@ -1,0 +1,11 @@
+{
+  "id": "folio-edit-erase",
+  "name": "Folio edit-mode erase patch",
+  "type": "cell",
+  "path": "cells/folio-edit-erase/",
+  "status": "draft",
+  "maintainers": ["Timmy Gack"],
+  "parents": ["glean-commons-repo"],
+  "entry_hash": null,
+  "tags": ["pdf", "folio", "edit", "patch", "mit", "external"]
+}

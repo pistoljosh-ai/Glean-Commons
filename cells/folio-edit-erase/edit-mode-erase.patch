@@ -1,0 +1,288 @@
+diff --git a/README.md b/README.md
+index eb2c60b..05527da 100644
+--- a/README.md
++++ b/README.md
+@@ -88,7 +88,7 @@ URL opening, webpage conversion, and Word conversion require the desktop app. Fa
+ 
+ ### Edit existing text and images
+ 
+-Choose **Edit mode**, then click the text you want to change and type on the page. Press **Enter** or click outside the line to apply it. **Esc** cancels typing. Clear a line to delete it.
++Choose **Edit mode**, then click the text you want to change. The cursor starts at the end of the line. **Backspace** deletes the previous character and **Delete** deletes the next one. Press **Enter** or click outside the line to apply it. **Esc** cancels typing. Clear the line and press Enter, or choose **Remove line**, to delete those words from the PDF. That removes the text objects. It does not cover them with a box.
+ 
+ Click an embedded picture and choose **Replace image…** to select a PNG or JPEG. You can leave Edit mode to read your changes or use **Save copy** to export and open the edited PDF.
+ 
+diff --git a/scripts/test-edit-erase.mjs b/scripts/test-edit-erase.mjs
+new file mode 100644
+index 0000000..729836e
+--- /dev/null
++++ b/scripts/test-edit-erase.mjs
+@@ -0,0 +1,164 @@
++// Edit-mode erase regression. Synthetic PDF only. Requires the dev server assets (`npm run assets`).
++// Starts its own Vite server unless FOLIO_DEV_URL is already set.
++import assert from "node:assert/strict";
++import { createRequire } from "node:module";
++import { appendFileSync, mkdtempSync, mkdirSync, rmSync } from "node:fs";
++import { tmpdir } from "node:os";
++import path from "node:path";
++import { _electron as electron } from "playwright-core";
++import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
++import { createServer } from "vite";
++import { electronPath } from "./electron-path.mjs";
++import { readerPage } from "./reader-page.mjs";
++
++const root = path.resolve(import.meta.dirname, "..");
++const require = createRequire(import.meta.url);
++const shots = path.join(root, "release", "edit-erase");
++const logFile = path.join(shots, "log.txt");
++mkdirSync(shots, { recursive: true });
++rmSync(logFile, { force: true });
++const log = message => { appendFileSync(logFile, message + "\n"); console.log(message); };
++
++const doc = await PDFDocument.create();
++const pdfPage = doc.addPage([320, 240]);
++const font = await doc.embedFont(StandardFonts.Helvetica);
++pdfPage.drawText("BakedHello", { x: 36, y: 180, size: 18, font, color: rgb(0, 0, 0) });
++pdfPage.drawText("DropMe", { x: 180, y: 180, size: 18, font, color: rgb(0, 0, 0) });
++pdfPage.drawText("KeepMe", { x: 36, y: 40, size: 14, font, color: rgb(0, 0, 0) });
++const form = doc.getForm();
++const field = form.createTextField("synth.field");
++field.setText("FormHello");
++field.addToPage(pdfPage, { x: 36, y: 100, width: 160, height: 22, font, textColor: rgb(0, 0, 0) });
++const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64");
++pdfPage.drawImage(await doc.embedPng(png), { x: 260, y: 40, width: 24, height: 24 });
++const pdf = Buffer.from(await doc.save());
++
++let server;
++const devUrl = process.env.FOLIO_DEV_URL;
++if (!devUrl) {
++  server = await createServer({ root, server: { host: "127.0.0.1", port: 0, strictPort: false } });
++  await server.listen();
++}
++const origin = devUrl ? new URL(devUrl).origin : server.resolvedUrls.local[0].replace(/\/$/, "");
++const env = {
++  ...process.env,
++  FOLIO_DEV_URL: origin,
++  FOLIO_TEST_HIDDEN: "1",
++  FOLIO_TEST_USER_DATA: mkdtempSync(path.join(tmpdir(), "folio-edit-erase-")),
++};
++delete env.ELECTRON_RUN_AS_NODE;
++const app = await electron.launch({
++  executablePath: electronPath(env),
++  args: [root, "--mute-audio", ...(process.getuid?.() === 0 ? ["--no-sandbox"] : [])],
++  env,
++  timeout: 60_000,
++});
++const hardStop = setTimeout(() => {
++  console.error("edit-erase test timed out");
++  process.exit(1);
++}, 120_000);
++try {
++  const ui = readerPage(await app.firstWindow());
++  ui.window.setDefaultTimeout(20_000);
++  const failures = [];
++  ui.on("pageerror", error => failures.push(String(error)));
++  await ui.getByRole("button", { name: /Try a sample/ }).waitFor();
++  await app.evaluate(({ BrowserWindow }, b64) => {
++    BrowserWindow.getAllWindows()[0].webContents.send("folio:open-file", {
++      name: "synthetic-erase.pdf", data: Buffer.from(b64, "base64"),
++    });
++  }, pdf.toString("base64"));
++  await ui.window.waitForFunction(() => document.title.startsWith("synthetic-erase.pdf"));
++  const sheet = ui.locator('.page[data-page-number="1"]');
++  const textOf = async () => (await sheet.locator(".textLayer").innerText()).replace(/\s+/g, " ").trim();
++  await sheet.locator(".textLayer").getByText("BakedHello", { exact: true }).waitFor();
++  await ui.getByRole("button", { name: "Edit mode", exact: true }).click();
++  const input = sheet.getByRole("textbox", { name: "Edit text on page" });
++  const item = name => sheet.getByRole("button", { name, exact: true });
++  const openItem = async name => {
++    log("open " + name);
++    await item(name).click({ timeout: 12_000, force: true });
++    await input.waitFor({ timeout: 12_000 });
++  };
++
++  await ui.locator(".viewer-container").click({ position: { x: 6, y: 6 } });
++  const title = await ui.title();
++  await ui.keyboard.press("Backspace");
++  await ui.keyboard.press("Delete");
++  assert.equal(await ui.title(), title, "Backspace left the document");
++  assert.match(await textOf(), /BakedHello/);
++  assert.match(await textOf(), /KeepMe/);
++
++  await openItem("BakedHello");
++  const opened = await input.evaluate(el => ({
++    active: document.activeElement === el,
++    value: el.value,
++    start: el.selectionStart,
++    end: el.selectionEnd,
++  }));
++  assert.deepEqual(opened, { active: true, value: "BakedHello", start: 10, end: 10 });
++  await ui.screenshot({ path: path.join(shots, "caret-at-end.png") });
++  await input.press("Backspace");
++  assert.equal(await input.inputValue(), "BakedHell");
++  await input.press("ArrowLeft");
++  await input.press("Delete");
++  assert.equal(await input.inputValue(), "BakedHel");
++  await input.press("Enter");
++  await sheet.locator(".textLayer").getByText("BakedHel", { exact: true }).waitFor();
++  assert.match(await textOf(), /KeepMe/);
++  assert.match(await textOf(), /DropMe/);
++  assert.doesNotMatch(await textOf(), /BakedHello|BakedHell(?!o)/);
++  await ui.screenshot({ path: path.join(shots, "committed-two-characters.png") });
++
++  await openItem("BakedHel");
++  await input.press("ControlOrMeta+a");
++  await input.press("Backspace");
++  assert.equal(await input.inputValue(), "");
++  assert.match(await textOf(), /BakedHel/, "clearing the field hides the preview but must not pretend the PDF changed before Enter");
++  await input.press("Enter");
++  await sheet.locator(".textLayer").getByText("BakedHel", { exact: true }).waitFor({ state: "detached", timeout: 15_000 });
++  const afterClear = await textOf();
++  assert.doesNotMatch(afterClear, /BakedHel/);
++  assert.match(afterClear, /KeepMe/);
++  assert.match(afterClear, /DropMe/);
++  await item("Image 1").waitFor();
++  await ui.screenshot({ path: path.join(shots, "line-removed.png") });
++
++  await openItem("DropMe");
++  await ui.getByRole("button", { name: "Remove line", exact: true }).click();
++  await sheet.locator(".textLayer").getByText("DropMe", { exact: true }).waitFor({ state: "detached", timeout: 15_000 });
++  const afterRemove = await textOf();
++  assert.doesNotMatch(afterRemove, /DropMe/);
++  assert.match(afterRemove, /KeepMe/);
++  await item("Image 1").waitFor();
++  await ui.screenshot({ path: path.join(shots, "remove-line.png") });
++
++  await ui.getByRole("button", { name: "Exit edit mode", exact: true }).click();
++  const box = sheet.locator(".annotationLayer input, .annotationLayer textarea");
++  assert.equal(await box.count(), 1);
++  assert.equal(await box.inputValue(), "FormHello");
++  await box.click();
++  await box.press("End");
++  await box.press("Backspace");
++  assert.equal(await box.inputValue(), "FormHell");
++
++  await ui.getByRole("button", { name: "Text", exact: true }).click();
++  await sheet.locator(".annotationEditorLayer").click({ position: { x: 80, y: 80 } });
++  const editor = ui.locator('.freeTextEditor .internal[contenteditable="true"]');
++  await editor.waitFor();
++  await editor.fill("BoxHi");
++  await editor.press("Backspace");
++  assert.equal((await editor.innerText()).replace(/\n/g, ""), "BoxH");
++  await ui.screenshot({ path: path.join(shots, "text-box.png") });
++
++  assert.deepEqual(failures, []);
++  log("ok  edit mode backspace, delete, remove line, form field, and text box");
++} catch (error) {
++  log("FAIL " + (error && error.stack ? error.stack : error));
++  process.exitCode = 1;
++} finally {
++  clearTimeout(hardStop);
++  setTimeout(() => process.exit(process.exitCode ?? 0), 4_000).unref();
++  await Promise.race([app.close().catch(() => {}), new Promise(resolve => setTimeout(resolve, 2_000))]);
++  if (server) await Promise.race([server.close(), new Promise(resolve => setTimeout(resolve, 2_000))]);
++}
+diff --git a/src/ContentEditor.tsx b/src/ContentEditor.tsx
+index db2e1e5..02b57eb 100644
+--- a/src/ContentEditor.tsx
++++ b/src/ContentEditor.tsx
+@@ -119,7 +119,13 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+   }, [pdf, viewer, bus]);
+ 
+   useLayoutEffect(() => {
+-    if (selected?.target.kind === "text") { input.current?.focus({ preventScroll: true }); input.current?.select(); }
++    // A caret at the end lets Backspace delete the previous character. Selecting the
++    // whole line made the first Backspace or Delete wipe it instead of editing it.
++    const field = input.current;
++    if (selected?.target.kind !== "text" || !field) return;
++    field.focus({ preventScroll: true });
++    const end = field.value.length;
++    field.setSelectionRange(end, end);
+   }, [selected]);
+ 
+   const commit = (change: Change): Promise<boolean> => {
+@@ -158,6 +164,7 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+ 
+   const pick = (s: Surface, target: EditTarget) => {
+     if (pending.current) return;
++    if (selectedRef.current?.page === s.page && selectedRef.current.target === target) return;
+     setError(""); setValue(target.label); setSelected({ page: s.page, target, paper: target.style ? paperColor(s,target) : "" });
+     if (!target.style) return;
+     // Use the same embedded or system font as the page renderer while the caret is visible.
+@@ -190,17 +197,41 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+   useEffect(() => {
+     if (!selected) return;
+     const outside = (e: PointerEvent) => {
+-      if (!pending.current && e.target instanceof Element && !e.target.closest(".folio-inline-text, .folio-image-actions, .folio-content-target")) void finish();
++      if (!pending.current && e.target instanceof Element && !e.target.closest(".folio-inline-text, .folio-image-actions, .folio-content-target, .folio-remove-line")) void finish();
+     };
+     document.addEventListener("pointerdown", outside);
+     return () => document.removeEventListener("pointerdown", outside);
+   }, [selected, value]);
+ 
++  useEffect(() => {
++    const onKey = (event: KeyboardEvent) => {
++      if ((event.key !== "Backspace" && event.key !== "Delete") || event.altKey || event.ctrlKey || event.metaKey) return;
++      const target = event.target;
++      if (target instanceof Element && target.closest("input, textarea, select, [contenteditable='true'], .freeTextEditor")) return;
++      // Edit mode is open for the life of this component. Backspace must not walk browser history.
++      if (event.key === "Backspace") event.preventDefault();
++      const button = target instanceof Element ? target.closest<HTMLElement>(".folio-content-target") : null;
++      const current = selectedRef.current;
++      if (!button || button.dataset.kind !== "text" || !current || current.target.kind !== "text" || button.getAttribute("aria-label") !== current.target.label) return;
++      event.preventDefault();
++      const field = input.current;
++      if (!field) return;
++      field.focus({ preventScroll: true });
++      const end = field.value.length;
++      const next = field.value.slice(0, Math.max(0, end - 1));
++      if (next === field.value) return;
++      setValue(next);
++      requestAnimationFrame(() => input.current?.setSelectionRange(next.length, next.length));
++    };
++    window.addEventListener("keydown", onKey, true);
++    return () => window.removeEventListener("keydown", onKey, true);
++  }, []);
++
+   return <>
+     {surfaces.map(s => createPortal(<>
+       {(targets.get(s.page) ?? []).map(t => <button key={t.index} type="button" className="folio-content-target"
+         data-kind={t.kind} aria-label={t.label} aria-pressed={selected?.page === s.page && selected.target === t}
+-        disabled={busy} style={rectangle(t,s.viewport)} onClick={() => pick(s,t)}
++        disabled={busy} style={{ ...rectangle(t,s.viewport), ...(selected?.page === s.page && selected.target === t ? { pointerEvents: "none" } : {}) }} onClick={() => pick(s,t)}
+         onPointerDown={e => {
+           if (!modified || e.button !== 0) return;
+           e.preventDefault();
+@@ -215,6 +246,7 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+           onChange={e => { setValue(e.target.value); setError(""); }}
+           onKeyDown={e => {
+             if (e.nativeEvent.isComposing) return;
++            if (e.key === "Backspace" || e.key === "Delete") e.stopPropagation();
+             if (e.key === "Tab" && !pending.current) void finish();
+             if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); void finish(); }
+             if (e.key === "Escape" && !pending.current) { e.stopPropagation(); selectedRef.current = null; setSelected(null); setError(""); }
+@@ -228,6 +260,9 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+       </div>)}
+     </>,s.host,s.page))}
+     <div className="folio-edit-status" role={error ? "alert" : "status"}>{error || (busy ? "Applying edit…" :
+-      surfaces.length > 0 && surfaces.every(s => targets.get(s.page)?.length === 0) ? "No editable text or images on this page." : "")}</div>
++      selected?.target.kind === "text" ? "Backspace deletes the previous character. Enter applies the line. Clear it and press Enter, or use Remove line, to delete those words from the PDF." :
++      surfaces.length > 0 && surfaces.every(s => targets.get(s.page)?.length === 0) ? "No editable text or images on this page." : "")}
++      {selected?.target.kind === "text" && !busy && <button type="button" className="folio-remove-line" onClick={() => void commit({ kind: "text", index: selected.target.index, text: "" })}>Remove line</button>}
++    </div>
+   </>;
+ }
+diff --git a/src/styles.css b/src/styles.css
+index a96ca33..a41a58d 100644
+--- a/src/styles.css
++++ b/src/styles.css
+@@ -1625,8 +1625,9 @@ kbd {
+ .folio-inline-text { field-sizing: content; width: auto; margin: 0; padding: 0 1px; border: none; border-radius: 1px; line-height: 1.15; transform-origin: 0 0; outline: 2px solid #3377ac; box-shadow: 0 0 0 3px #ffffff70; }
+ .folio-image-actions { margin: 6px; max-width: calc(100% - 12px); }
+ .folio-image-actions .btn { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); border: 1px solid var(--line-strong); white-space: nowrap; }
+-.folio-edit-status { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 9; padding: 6px 12px; border-radius: 7px; color: var(--text); background: var(--surface); box-shadow: var(--shadow-sm); font-size: 13px; }
++.folio-edit-status { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 9; padding: 6px 12px; border-radius: 7px; color: var(--text); background: var(--surface); box-shadow: var(--shadow-sm); font-size: 13px; max-width: min(640px, calc(100% - 24px)); }
+ .folio-edit-status:empty { display: none; }
++.folio-remove-line { margin-left: 8px; border: 0; border-radius: 6px; padding: 2px 8px; background: #3377ac; color: white; cursor: pointer; }
+ .folio-edit-status[role=alert] { color: var(--accent-text); }
+ 
+ .segmented .edit-mode-toggle { margin-inline-start: 4px; }

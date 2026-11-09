@@ -1,0 +1,27 @@
+{
+  "id": "folio-edit-erase",
+  "name": "Folio edit-mode erase patch",
+  "type": "cell",
+  "path": "cells/folio-edit-erase/",
+  "manifest": "cells/folio-edit-erase/cell.json",
+  "status": "draft",
+  "maintainers": ["Timmy Gack"],
+  "parents": ["glean-commons-repo"],
+  "entry_hash": null,
+  "tags": ["pdf", "folio", "edit", "patch", "mit", "external"],
+  "when_to_use": "Use when Edit mode in the pinned Folio revision should delete one character at a time and remove a baked-in text line from the PDF. Apply the patch to that revision. Folio is not vendored here.",
+  "how_to_change": {
+    "edit": [
+      "cells/folio-edit-erase/edit-mode-erase.patch",
+      "cells/folio-edit-erase/apply_and_test.py",
+      "cells/folio-edit-erase/test_patch.py",
+      "cells/folio-edit-erase/cell.md",
+      "cells/folio-edit-erase/cell.json"
+    ],
+    "note": "The patch is applied to Folio at 0590fac31d915810c881ca6144fc7e8bb32e82c0. Keep the upstream MIT copyright. Do not vendor the Folio tree or describe a white box as deletion. Do not promote this to canonical.",
+    "labels": ["project:folio-edit-erase", "type:cell"]
+  },
+  "canonical_version": "0.1.0",
+  "variants": [],
+  "experiments": []
+}
