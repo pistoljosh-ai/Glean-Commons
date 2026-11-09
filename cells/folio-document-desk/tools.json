@@ -1,0 +1,31 @@
+{
+  "contract_version": 1,
+  "cell": "folio-document-desk",
+  "module": "tools.py",
+  "context": {
+    "books": "Passed by the local tool server and ignored. This tool does not read or write the books."
+  },
+  "tools": [
+    {
+      "name": "folio_pdf_desk",
+      "job": "documents",
+      "reads": [],
+      "writes": [],
+      "description": "Show the pinned external Folio PDF reader and identify a local PDF by size and sha256, or compare a local git clone to that pin. This does not install, launch, or download Folio, and it does not parse document text.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["provenance", "slip", "compare-checkout"],
+            "description": "provenance prints the pin. slip identifies one local PDF. compare-checkout reads git metadata in a local clone."
+          },
+          "path": {
+            "type": "string",
+            "description": "Local PDF for slip, or local Folio clone for compare-checkout. Omit for provenance."
+          }
+        }
+      }
+    }
+  ]
+}
