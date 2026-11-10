@@ -1,0 +1,167 @@
+# Build a patched Folio Mac app for Apple silicon and upload it as a CI artifact.
+# This is not a GitHub Release and it does not use anyone's signing keys.
+name: Folio Mac arm64
+
+on:
+  pull_request:
+    paths:
+      - cells/folio-edit-erase/**
+      - .github/workflows/folio-mac-arm64.yml
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  mac-arm64:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Require an Apple silicon runner
+        run: |
+          set -eu
+          uname -m
+          sw_vers
+          test "$(uname -m)" = "arm64"
+
+      - name: Checkout pinned Folio and apply the Glean patch
+        env:
+          PIN: 0590fac31d915810c881ca6144fc7e8bb32e82c0
+        run: |
+          set -eu
+          git clone --filter=blob:none --no-checkout https://github.com/Forward-Future/folio.git folio-src
+          git -C folio-src fetch --depth 1 origin "$PIN"
+          git -C folio-src checkout --detach "$PIN"
+          test "$(git -C folio-src rev-parse HEAD)" = "$PIN"
+          git -C folio-src apply "$GITHUB_WORKSPACE/cells/folio-edit-erase/edit-mode-erase.patch"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          info = {
+              "label": "Glean Commons edit build",
+              "note": "Custom build of Forward-Future/folio. Upstream is MIT, Copyright (c) 2026 mberman84. This copy includes the Glean edit-mode erase patch and does not install upstream updates.",
+              "base": "0590fac31d915810c881ca6144fc7e8bb32e82c0",
+              "commonsSha": os.environ["GITHUB_SHA"],
+              "disableUpdates": True,
+          }
+          Path("folio-src/electron/glean-build.json").write_text(json.dumps(info, indent=2) + "\n", encoding="utf-8")
+          Path("folio-src/electron/GLEAN-BUILD.txt").write_text(
+              "Folio Glean Commons edit build\n"
+              "Upstream: https://github.com/Forward-Future/folio\n"
+              "Pinned revision: 0590fac31d915810c881ca6144fc7e8bb32e82c0\n"
+              "License: MIT\n"
+              "Copyright (c) 2026 mberman84\n"
+              "package.json author: Forward Future\n"
+              "Patch: Glean Commons cells/folio-edit-erase/edit-mode-erase.patch\n"
+              "Commons revision: " + os.environ["GITHUB_SHA"] + "\n"
+              "Upstream auto-update: off\n"
+              "Signing: ad-hoc only. Not notarized. Not an official Folio release.\n",
+              encoding="utf-8")
+          PY
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: folio-src/package-lock.json
+
+      - name: Install and package arm64
+        working-directory: folio-src
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+        run: |
+          set -eu
+          npm ci
+          npm run assets
+          npm run build
+          # Directory only. Archives are created after the ad-hoc seal so the
+          # downloadable zip and dmg contain that seal. identity "-" did not.
+          npx electron-builder --mac dir --arm64 --publish never \
+            -c.mac.identity=null \
+            -c.mac.hardenedRuntime=false
+          app=$(find release -type d -name 'Folio.app' | head -n 1)
+          test -n "$app"
+          test -x "$app/Contents/MacOS/Folio"
+          file "$app/Contents/MacOS/Folio" | tee /tmp/folio-file.txt
+          grep -q arm64 /tmp/folio-file.txt
+          # Ad-hoc bundle seal. This is not notarization and uses no Developer ID.
+          codesign --force --deep --sign - "$app"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          test -f "$app/Contents/_CodeSignature/CodeResources"
+          "$app/Contents/MacOS/Folio" > /tmp/folio-launch.log 2>&1 &
+          pid=$!
+          sleep 20
+          if ! kill -0 "$pid"; then
+            echo "Packaged app exited early"
+            cat /tmp/folio-launch.log
+            exit 1
+          fi
+          kill "$pid" || true
+          rm -f release/Folio-Glean-edit-arm64-sealed.zip release/Folio-Glean-edit-arm64-sealed.dmg
+          ditto -c -k --keepParent "$app" release/Folio-Glean-edit-arm64-sealed.zip
+          hdiutil create -volname FolioGlean -srcfolder "$app" -ov -format UDZO release/Folio-Glean-edit-arm64-sealed.dmg
+          # Verify the app inside each archive, not the loose directory.
+          rm -rf /tmp/sealed-zip /tmp/sealed-dmg
+          mkdir -p /tmp/sealed-zip
+          ditto -x -k release/Folio-Glean-edit-arm64-sealed.zip /tmp/sealed-zip
+          codesign --verify --deep --strict --verbose=2 /tmp/sealed-zip/Folio.app
+          test -f /tmp/sealed-zip/Folio.app/Contents/_CodeSignature/CodeResources
+          codesign -dv --verbose=4 /tmp/sealed-zip/Folio.app > /tmp/folio-codesign.txt 2>&1
+          grep -q "Signature=adhoc" /tmp/folio-codesign.txt
+          grep -q "Sealed Resources" /tmp/folio-codesign.txt
+          if grep -q "linker-signed" /tmp/folio-codesign.txt; then
+            echo "Archive still has only a linker signature"
+            cat /tmp/folio-codesign.txt
+            exit 1
+          fi
+          device=$(hdiutil attach -nobrowse -readonly release/Folio-Glean-edit-arm64-sealed.dmg | awk 'END {print $NF}')
+          test -n "$device"
+          codesign --verify --deep --strict --verbose=2 "$device/Folio.app"
+          test -f "$device/Folio.app/Contents/_CodeSignature/CodeResources"
+          hdiutil detach "$device"
+          {
+            echo "product: Folio.app (Glean Commons edit build)"
+            echo "archive: Folio-Glean-edit-arm64-sealed.zip and .dmg"
+            echo "verified: app extracted from the zip, and app on the dmg"
+            echo "arch: arm64"
+            echo "base: 0590fac31d915810c881ca6144fc7e8bb32e82c0"
+            echo "commons: $GITHUB_SHA"
+            echo "signing: ad-hoc bundle seal (codesign -s -). Not notarized. No Developer ID."
+            echo "runner: $(sw_vers -productVersion) $(uname -m)"
+            echo "updates: disabled via electron/glean-build.json"
+            echo
+            echo "file:"
+            cat /tmp/folio-file.txt
+            echo
+            echo "codesign of app extracted from the zip:"
+            cat /tmp/folio-codesign.txt
+          } > release/BUILD-INFO.txt
+          shasum -a 256 release/Folio-Glean-edit-arm64-sealed.dmg release/Folio-Glean-edit-arm64-sealed.zip >> release/BUILD-INFO.txt
+          cat release/BUILD-INFO.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: folio-glean-mac-arm64-sealed
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            folio-src/release/Folio-Glean-edit-arm64-sealed.dmg
+            folio-src/release/Folio-Glean-edit-arm64-sealed.zip
+            folio-src/release/BUILD-INFO.txt
+
+      - name: Edit-mode UI test on macOS
+        working-directory: folio-src
+        env:
+          FOLIO_SHOW_APP: "1"
+        run: node scripts/test-edit-erase.mjs
+
+      - name: Upload edit-test notes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: folio-mac-edit-test-notes
+          if-no-files-found: ignore
+          retention-days: 14
+          path: folio-src/release/edit-erase/

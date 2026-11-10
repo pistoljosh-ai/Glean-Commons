@@ -1,0 +1,13 @@
+{
+  "id": "folio-edit-erase",
+  "title": "Folio edit mode: character delete and line removal",
+  "type": "cell",
+  "creator": "Timmy Gack",
+  "ai_assist": "Grok 4.7 (Cursor cloud agent): reproduced Edit-mode keys on a synthetic PDF at the pinned Folio revision and wrote the downstream patch and test.",
+  "parents": ["glean-commons-repo"],
+  "created": "2026-11-09T23:15:00Z",
+  "version": "0.1.0",
+  "commit": "",
+  "uses": 0,
+  "notes": "Downstream patch for https://github.com/Forward-Future/folio at 0590fac31d915810c881ca6144fc7e8bb32e82c0. MIT, Copyright (c) 2026 mberman84. package.json author Forward Future. Does not vendor Folio and does not relicense it. A pull-request workflow packages an ad-hoc-signed arm64 Mac app as a CI artifact and turns upstream auto-update off in that copy. The pointer PR is not on main, so this parents glean-commons-repo. uses=0."
+}
