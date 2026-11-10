@@ -86,6 +86,10 @@ jobs:
           test -x "$app/Contents/MacOS/Folio"
           file "$app/Contents/MacOS/Folio" | tee /tmp/folio-file.txt
           grep -q arm64 /tmp/folio-file.txt
+          # electron-builder's identity "-" can leave only the linker signature.
+          # Sign the bundle ad-hoc with no Developer ID so Finder can open this one app.
+          codesign --force --deep --sign - "$app"
+          codesign --verify --deep --verbose=2 "$app"
           codesign -dv --verbose=4 "$app" > /tmp/folio-codesign.txt 2>&1 || true
           cat /tmp/folio-codesign.txt
           "$app/Contents/MacOS/Folio" > /tmp/folio-launch.log 2>&1 &

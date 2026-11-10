@@ -1,15 +1,18 @@
 diff --git a/README.md b/README.md
-index eb2c60b..05527da 100644
+index eb2c60b..a531076 100644
 --- a/README.md
 +++ b/README.md
-@@ -88,7 +88,7 @@ URL opening, webpage conversion, and Word conversion require the desktop app. Fa
+@@ -88,9 +88,9 @@ URL opening, webpage conversion, and Word conversion require the desktop app. Fa
  
  ### Edit existing text and images
  
 -Choose **Edit mode**, then click the text you want to change and type on the page. Press **Enter** or click outside the line to apply it. **Esc** cancels typing. Clear a line to delete it.
 +Choose **Edit mode**, then click the text you want to change. The cursor starts at the end of the line. **Backspace** deletes the previous character and **Delete** deletes the next one. Press **Enter** or click outside the line to apply it. **Esc** cancels typing. Clear the line and press Enter, or choose **Remove line**, to delete those words from the PDF. That removes the text objects. It does not cover them with a box.
  
- Click an embedded picture and choose **Replace image…** to select a PNG or JPEG. You can leave Edit mode to read your changes or use **Save copy** to export and open the edited PDF.
+-Click an embedded picture and choose **Replace image…** to select a PNG or JPEG. You can leave Edit mode to read your changes or use **Save copy** to export and open the edited PDF.
++Click an embedded picture and choose **Replace image…** to select a PNG or JPEG, or **Remove image** to delete that placement. Backspace or Delete also removes the selected picture when you are not typing in a text field. Escape or a click away dismisses the controls. You can leave Edit mode to read your changes or use **Save copy** to export and open the edited PDF. Removing a placement does not paint over the picture, and it is not a secure redaction: an unused image stream can remain in the file. Signature marks made with the Sign tool are annotations, not this picture control.
+ 
+ Open **More → Version history** to review your changes. Saving a changed copy keeps the original PDF and a numbered version on this device. Text edits show the old and new wording, and image replacements show the filename and page. Open or download an earlier version from the panel. History is available for unencrypted PDFs up to 50 MB and can be cleared per document.
  
 diff --git a/electron/main.cjs b/electron/main.cjs
 index 9ee96af..b76cd42 100644
@@ -53,10 +56,10 @@ index 9ee96af..b76cd42 100644
      handle("folio:download-ocr-model", async (_event, code) => {
 diff --git a/scripts/test-edit-erase.mjs b/scripts/test-edit-erase.mjs
 new file mode 100644
-index 0000000..b9a2cc0
+index 0000000..810bff9
 --- /dev/null
 +++ b/scripts/test-edit-erase.mjs
-@@ -0,0 +1,197 @@
+@@ -0,0 +1,233 @@
 +// Edit-mode erase regression. Synthetic PDF only. Requires the dev server assets (`npm run assets`).
 +// Starts its own Vite server unless FOLIO_DEV_URL is already set.
 +import assert from "node:assert/strict";
@@ -89,7 +92,9 @@ index 0000000..b9a2cc0
 +field.setText("FormHello");
 +field.addToPage(pdfPage, { x: 36, y: 100, width: 160, height: 22, font, textColor: rgb(0, 0, 0) });
 +const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64");
-+pdfPage.drawImage(await doc.embedPng(png), { x: 260, y: 40, width: 24, height: 24 });
++const embedded = await doc.embedPng(png);
++pdfPage.drawImage(embedded, { x: 200, y: 120, width: 36, height: 36 });
++pdfPage.drawImage(embedded, { x: 250, y: 120, width: 36, height: 36 });
 +const pdf = Buffer.from(await doc.save());
 +
 +let server;
@@ -223,7 +228,41 @@ index 0000000..b9a2cc0
 +  assert.doesNotMatch(afterRemove, /DropMe/);
 +  assert.match(afterRemove, /KeepMe/);
 +  await item("Image 1").waitFor();
++  await item("Image 2").waitFor();
 +  await ui.screenshot({ path: path.join(shots, "remove-line.png") });
++
++  const openImage = async name => {
++    log("open image " + name);
++    await item(name).click({ timeout: 15_000, force: true });
++    await ui.getByRole("button", { name: "Remove image", exact: true }).waitFor({ timeout: 10_000 });
++    await ui.getByRole("button", { name: "Replace image…", exact: true }).waitFor();
++  };
++  await openImage("Image 1");
++  await ui.keyboard.press("Escape");
++  assert.equal(await ui.getByRole("button", { name: "Remove image", exact: true }).count(), 0);
++  await openImage("Image 1");
++  const removed = await ui.evaluate(() => {
++    const button = [...document.querySelectorAll("button")].find(item => item.textContent === "Remove image");
++    if (!button) return false;
++    button.click();
++    return true;
++  });
++  assert.equal(removed, true);
++  const imageCount = () => sheet.locator('button[data-kind="image"]').count();
++  await ui.waitForFunction(() => document.querySelectorAll('.page[data-page-number="1"] button[data-kind="image"]').length === 1);
++  assert.equal(await imageCount(), 1);
++  assert.match(await textOf(), /KeepMe/);
++  await ui.getByRole("button", { name: "Exit edit mode", exact: true }).click();
++  await ui.getByRole("button", { name: "Edit mode", exact: true }).click();
++  await ui.getByRole("button", { name: "Exit edit mode", exact: true }).waitFor();
++  await ui.waitForFunction(() => document.querySelectorAll('.page[data-page-number="1"] button[data-kind="image"]').length === 1);
++  assert.equal(await imageCount(), 1, "image removal did not survive leaving and re-entering Edit mode");
++  assert.match(await textOf(), /KeepMe/);
++  await openImage("Image 1");
++  await ui.keyboard.press("Delete");
++  await ui.waitForFunction(() => document.querySelectorAll('.page[data-page-number="1"] button[data-kind="image"]').length === 0);
++  assert.match(await textOf(), /KeepMe/);
++  await ui.screenshot({ path: path.join(shots, "images-removed.png") });
 +
 +  await ui.getByRole("button", { name: "Exit edit mode", exact: true }).click();
 +  const box = sheet.locator(".annotationLayer input, .annotationLayer textarea");
@@ -255,10 +294,18 @@ index 0000000..b9a2cc0
 +  if (server) await Promise.race([server.close(), new Promise(resolve => setTimeout(resolve, 2_000))]);
 +}
 diff --git a/src/ContentEditor.tsx b/src/ContentEditor.tsx
-index db2e1e5..02b57eb 100644
+index db2e1e5..d05c7ba 100644
 --- a/src/ContentEditor.tsx
 +++ b/src/ContentEditor.tsx
-@@ -119,7 +119,13 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+@@ -60,6 +60,7 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+   const waiter = useRef<{ resolve: (data: Uint8Array) => void; reject: (reason: Error) => void } | null>(null);
+   const pending = useRef<Promise<boolean> | null>(null);
+   const selectedRef = useRef(selected);
++  const commitRef = useRef<(change: Change) => Promise<boolean>>(async () => false);
+   selectedRef.current = selected;
+   const modified = selected?.target.kind === "text" && value !== selected.target.label;
+   useEffect(() => { onDirty(!!modified || busy); return () => onDirty(false); }, [modified, busy, onDirty]);
+@@ -119,7 +120,13 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
    }, [pdf, viewer, bus]);
  
    useLayoutEffect(() => {
@@ -273,7 +320,24 @@ index db2e1e5..02b57eb 100644
    }, [selected]);
  
    const commit = (change: Change): Promise<boolean> => {
-@@ -158,6 +164,7 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+@@ -137,7 +144,7 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+         });
+         const detail: PdfChange = change.kind === "text"
+           ? { kind: "text", page: selected.page, before: selected.target.label, after: change.text }
+-          : { kind: "image", page: selected.page, fileName: change.file.name };
++          : { kind: "image", page: selected.page, fileName: change.kind === "image" ? change.file.name : "" };
+         return worker.current === w && await apply(result, detail);
+       } catch (e) {
+         if (worker.current === w) { setError(e instanceof Error ? e.message : "Couldn't apply the edit."); input.current?.focus({ preventScroll: true }); }
+@@ -146,6 +153,7 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+     })();
+     pending.current = transaction; return transaction;
+   };
++  commitRef.current = commit;
+   const finish = () => {
+     if (pending.current) return pending.current;
+     if (selected && modified) return commit({ kind: "text", index: selected.target.index, text: value });
+@@ -158,6 +166,7 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
  
    const pick = (s: Surface, target: EditTarget) => {
      if (pending.current) return;
@@ -281,7 +345,7 @@ index db2e1e5..02b57eb 100644
      setError(""); setValue(target.label); setSelected({ page: s.page, target, paper: target.style ? paperColor(s,target) : "" });
      if (!target.style) return;
      // Use the same embedded or system font as the page renderer while the caret is visible.
-@@ -190,17 +197,41 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+@@ -190,17 +199,47 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
    useEffect(() => {
      if (!selected) return;
      const outside = (e: PointerEvent) => {
@@ -299,8 +363,14 @@ index db2e1e5..02b57eb 100644
 +      if (target instanceof Element && target.closest("input, textarea, select, [contenteditable='true'], .freeTextEditor")) return;
 +      // Edit mode is open for the life of this component. Backspace must not walk browser history.
 +      if (event.key === "Backspace") event.preventDefault();
-+      const button = target instanceof Element ? target.closest<HTMLElement>(".folio-content-target") : null;
 +      const current = selectedRef.current;
++      if (current?.target.kind === "image") {
++        event.preventDefault();
++        event.stopPropagation();
++        void commitRef.current({ kind: "image-remove", index: current.target.index });
++        return;
++      }
++      const button = target instanceof Element ? target.closest<HTMLElement>(".folio-content-target") : null;
 +      if (!button || button.dataset.kind !== "text" || !current || current.target.kind !== "text" || button.getAttribute("aria-label") !== current.target.label) return;
 +      event.preventDefault();
 +      const field = input.current;
@@ -325,7 +395,7 @@ index db2e1e5..02b57eb 100644
          onPointerDown={e => {
            if (!modified || e.button !== 0) return;
            e.preventDefault();
-@@ -215,6 +246,7 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+@@ -215,12 +254,21 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
            onChange={e => { setValue(e.target.value); setError(""); }}
            onKeyDown={e => {
              if (e.nativeEvent.isComposing) return;
@@ -333,7 +403,22 @@ index db2e1e5..02b57eb 100644
              if (e.key === "Tab" && !pending.current) void finish();
              if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); void finish(); }
              if (e.key === "Escape" && !pending.current) { e.stopPropagation(); selectedRef.current = null; setSelected(null); setError(""); }
-@@ -228,6 +260,9 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
+           }} />
+-      </> : <div className="folio-image-actions" style={{ left: rectangle(selected.target,s.viewport).left, top: rectangle(selected.target,s.viewport).top }}>
++      </> : <div className="folio-image-actions" style={{ left: rectangle(selected.target,s.viewport).left, top: rectangle(selected.target,s.viewport).top }}
++        onKeyDown={e => {
++          if (e.key === "Escape" && !pending.current) { e.preventDefault(); e.stopPropagation(); selectedRef.current = null; setSelected(null); setError(""); }
++          if ((e.key === "Backspace" || e.key === "Delete") && !e.altKey && !e.ctrlKey && !e.metaKey) {
++            e.preventDefault(); e.stopPropagation();
++            void commit({ kind: "image-remove", index: selected.target.index });
++          }
++        }}>
+         <button className="btn" disabled={busy} onClick={() => file.current?.click()}>Replace image…</button>
++        <button className="btn" disabled={busy} onClick={() => void commit({ kind: "image-remove", index: selected.target.index })}>Remove image</button>
+         <input hidden ref={file} type="file" aria-label="Replacement image" accept="image/png,image/jpeg" onChange={e => {
+           const picked = e.target.files?.[0]; e.target.value = "";
+           if (picked) void commit({ kind: "image", index: selected.target.index, file: picked });
+@@ -228,6 +276,9 @@ export function ContentEditor({ ref, nextSelection, pdf, viewer, bus, snapshot,
        </div>)}
      </>,s.host,s.page))}
      <div className="folio-edit-status" role={error ? "alert" : "status"}>{error || (busy ? "Applying edit…" :
@@ -362,6 +447,63 @@ index 68ea463..fb9b615 100644
        {info?.mode === "portable" && <p className="search-hint">Use the Setup installer for automatic updates and a single installed copy.</p>}
        {info?.mode === "package" && <p className="search-hint">New versions arrive with your system's software updates (apt).</p>}
        <div className="form-actions">
+diff --git a/src/VersionHistoryPanel.tsx b/src/VersionHistoryPanel.tsx
+index 5558503..77cf226 100644
+--- a/src/VersionHistoryPanel.tsx
++++ b/src/VersionHistoryPanel.tsx
+@@ -6,7 +6,7 @@ function Changes({ changes }: { changes: PdfChange[] }) {
+   return <ul className="version-changes">{changes.map((change, i) =>
+     <li key={i}>
+       <div className="version-change-heading"><Icon size={14} name={change.kind === "text" ? "text" : change.kind === "image" ? "camera" : change.kind === "pages" ? "grid" : "pen"} />
+-        {change.kind === "text" ? change.after ? "Edited text" : "Removed text" : change.kind === "image" ? "Replaced image" :
++        {change.kind === "text" ? change.after ? "Edited text" : "Removed text" : change.kind === "image" ? (change.fileName ? "Replaced image" : "Removed image") :
+           change.kind === "pages" ? "Reordered pages" : "Updated annotations or fields"}
+         {"page" in change && <span>Page {change.page}</span>}
+       </div>
+@@ -14,7 +14,7 @@ function Changes({ changes }: { changes: PdfChange[] }) {
+         <del aria-label="Previous text">{change.before}</del>
+         {change.after && <ins aria-label="New text">{change.after}</ins>}
+       </div>}
+-      {change.kind === "image" && <p>{change.fileName}</p>}
++      {change.kind === "image" && change.fileName && <p>{change.fileName}</p>}
+       {change.kind === "pages" && <p>{change.order.join(" → ")}</p>}
+     </li>)}</ul>;
+ }
+diff --git a/src/contentEditor.worker.ts b/src/contentEditor.worker.ts
+index 2cdeb79..d42ed5f 100644
+--- a/src/contentEditor.worker.ts
++++ b/src/contentEditor.worker.ts
+@@ -1,7 +1,7 @@
+ import { init, type WrappedPdfiumModule } from "@embedpdf/pdfium";
+ import wasmUrl from "@embedpdf/pdfium/pdfium.wasm?url";
+ import { checkPdfSize } from "./pdfInput";
+-import { replacePageImage } from "./pdfImageEdit";
++import { removePageImage, replacePageImage } from "./pdfImageEdit";
+ 
+ export interface EditTarget {
+   index: number;
+@@ -13,7 +13,7 @@ export interface EditTarget {
+   box: number[];
+   style?: { origin: number[]; axis: number[]; size: number; flags: number; bold: boolean; color: string };
+ }
+-export type Change = { kind: "text"; index: number; text: string } | { kind: "image"; index: number; file: File };
++export type Change = { kind: "text"; index: number; text: string } | { kind: "image"; index: number; file: File } | { kind: "image-remove"; index: number };
+ export type EditorRequest = { source: Uint8Array } | { page: number } | { page: number; change: Change; snapshot: Uint8Array };
+ export type EditorReply = { page: number; targets: EditTarget[] } | { bytes: Uint8Array } | { error: string; page?: number };
+ 
+@@ -171,9 +171,11 @@ self.onmessage = async ({ data }: MessageEvent<EditorRequest>) => {
+     const { change, snapshot } = data;
+     const result = withPage(m, snapshot, page, (doc, handle) => {
+       const { targets, imageCount } = pageView(m, handle);
+-      const target = targets.find(t => t.index === change.index && t.kind === change.kind);
++      const wanted = change.kind === "image-remove" ? "image" : change.kind;
++      const target = targets.find(t => t.index === change.index && t.kind === wanted);
+       if (!target) throw new Error("Select the item again.");
+       if (change.kind === "image") return replacePageImage(snapshot, page, target.ordinal!, imageCount, change.file);
++      if (change.kind === "image-remove") return removePageImage(snapshot, page, target.ordinal!, imageCount);
+       replaceText(m, handle, target, change.text);
+       if (!m.FPDFPage_GenerateContent(handle)) throw new Error("Couldn't write this page.");
+       return save(m, doc);
 diff --git a/src/desktop.d.ts b/src/desktop.d.ts
 index 0a35b69..641ad69 100644
 --- a/src/desktop.d.ts
@@ -377,13 +519,89 @@ index 0a35b69..641ad69 100644
    /** "win32", "darwin", or "linux". */
    platform: string;
    /** Opens the releases page (macOS, where updates are downloaded manually). */
+diff --git a/src/pdfImageEdit.ts b/src/pdfImageEdit.ts
+index 507d430..451c458 100644
+--- a/src/pdfImageEdit.ts
++++ b/src/pdfImageEdit.ts
+@@ -12,7 +12,7 @@ const MAX_CONTENT = 16 * 1024 * 1024;
+ function imageOperands(bytes: Uint8Array, pdf: PDFDocument, resources: PDFDict) {
+   const stream = ByteStream.of(bytes);
+   const parser = PDFObjectParser.forByteStream(stream, pdf.context);
+-  const placements: { start: number; end: number }[] = [];
++  const placements: { key: PDFName; start: number; end: number; doEnd: number }[] = [];
+   let operand: { key: PDFName; start: number; end: number } | null = null;
+   while (!stream.done()) {
+     const c = stream.peek(), start = stream.offset();
+@@ -32,7 +32,9 @@ function imageOperands(bytes: Uint8Array, pdf: PDFDocument, resources: PDFDict)
+     if (token === "BI") throw new Error("Folio can't replace images on pages containing inline image data.");
+     if (token === "Do" && operand) {
+       const image = resources.lookup(operand.key);
+-      if (image instanceof PDFRawStream && image.dict.get(name("Subtype")) === name("Image")) placements.push(operand);
++      if (image instanceof PDFRawStream && image.dict.get(name("Subtype")) === name("Image")) {
++        placements.push({ ...operand, doEnd: stream.offset() });
++      }
+     }
+     operand = null;
+   }
+@@ -102,3 +104,48 @@ export async function replacePageImage(source: Uint8Array, pageNumber: number, o
+   checkPdfSize(bytes.length);
+   return bytes;
+ }
++
++/** Drop one image placement from the page content. Does not paint over it. */
++export async function removePageImage(source: Uint8Array, pageNumber: number, ordinal: number, count: number) {
++  const pdf = await PDFDocument.load(source, { updateMetadata: false });
++  const page = pdf.getPage(pageNumber - 1).node;
++  const resources = page.Resources();
++  const xObjects = resources?.lookupMaybe(name("XObject"), PDFDict);
++  if (!resources || !xObjects) throw new Error("Couldn't find an embedded image on this page.");
++  const contents = page.Contents();
++  const streams = contents instanceof PDFArray ? contents.asArray().map(ref => pdf.context.lookup(ref)) : [contents];
++  let size = 0;
++  const parts = streams.map(s => {
++    if (!(s instanceof PDFRawStream)) throw new Error("Couldn't read this page's image placements.");
++    const part = decodePDFRawStream(s).getBytes(MAX_CONTENT - size + 1);
++    size += part.length + 1;
++    if (size > MAX_CONTENT) throw new Error("This page's drawing instructions are too large to edit.");
++    return part;
++  });
++  const commands = new Uint8Array(size);
++  let offset = 0;
++  for (const part of parts) { commands.set(part, offset); offset += part.length; commands[offset++] = 10; }
++  const placements = imageOperands(commands, pdf, xObjects);
++  const place = placements[ordinal];
++  if (placements.length !== count || !place) throw new Error("Couldn't identify this image placement reliably.");
++  offset = 0;
++  const index = parts.findIndex(part => {
++    if (place.start >= offset && place.doEnd <= offset + part.length) return true;
++    offset += part.length + 1;
++    return false;
++  });
++  if (index < 0) throw new Error("This image placement crosses content streams.");
++  const part = parts[index], start = place.start - offset, end = place.doEnd - offset;
++  const changed = new Uint8Array(part.length - (end - start));
++  changed.set(part.subarray(0, start));
++  changed.set(part.subarray(end), start);
++  const ref = pdf.context.register(pdf.context.flateStream(changed));
++  if (contents instanceof PDFArray) {
++    const updated = contents.clone();
++    updated.set(index, ref);
++    page.set(name("Contents"), updated);
++  } else page.set(name("Contents"), ref);
++  const bytes = await pdf.save({ updateFieldAppearances: false });
++  checkPdfSize(bytes.length);
++  return bytes;
++}
 diff --git a/src/styles.css b/src/styles.css
-index a96ca33..a41a58d 100644
+index a96ca33..b5e785f 100644
 --- a/src/styles.css
 +++ b/src/styles.css
-@@ -1625,8 +1625,9 @@ kbd {
+@@ -1623,10 +1623,11 @@ kbd {
+ .folio-old-text { pointer-events: none; }
+ .app[data-night] :is(.folio-old-text, .folio-inline-text) { filter: invert(0.88) hue-rotate(180deg) contrast(0.92); }
  .folio-inline-text { field-sizing: content; width: auto; margin: 0; padding: 0 1px; border: none; border-radius: 1px; line-height: 1.15; transform-origin: 0 0; outline: 2px solid #3377ac; box-shadow: 0 0 0 3px #ffffff70; }
- .folio-image-actions { margin: 6px; max-width: calc(100% - 12px); }
+-.folio-image-actions { margin: 6px; max-width: calc(100% - 12px); }
++.folio-image-actions { display: flex; gap: 6px; margin: 6px; max-width: calc(100% - 12px); z-index: 2; }
  .folio-image-actions .btn { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); border: 1px solid var(--line-strong); white-space: nowrap; }
 -.folio-edit-status { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 9; padding: 6px 12px; border-radius: 7px; color: var(--text); background: var(--surface); box-shadow: var(--shadow-sm); font-size: 13px; }
 +.folio-edit-status { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 9; padding: 6px 12px; border-radius: 7px; color: var(--text); background: var(--surface); box-shadow: var(--shadow-sm); font-size: 13px; max-width: min(640px, calc(100% - 24px)); }

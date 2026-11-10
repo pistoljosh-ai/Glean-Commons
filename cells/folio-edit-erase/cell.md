@@ -64,8 +64,9 @@ That checks the patch text. It does not download Folio.
 `scripts/test-edit-erase.mjs` in the patched tree builds a synthetic page with Helvetica text (`BakedHello`, `DropMe`, `KeepMe`), one form field (`FormHello`), and a one-pixel image. It then drives the real Electron reader:
 
 - Backspace and Delete with no line focused leave the page in place.
-- The caret starts at the end. Backspace and Delete each remove one character. Enter saves `BakedHel`. `KeepMe`, `DropMe`, the form, and the image stay.
+- The caret starts at the end. Backspace and Delete each remove one character. Enter saves `BakedHel`. `KeepMe`, `DropMe`, the form, and both images stay.
 - Clearing the line and pressing Enter removes `BakedHel` from the page text.
+- **Remove image** deletes one embedded image placement. The other image and `KeepMe` remain after leaving and re-entering Edit mode. Delete removes the remaining image. This is the same control as **Replace image…**. It does not remove Sign-tool annotations, and it is not a secure redaction.
 - **Remove line** removes `DropMe` the same way.
 - The form field's own Backspace changes `FormHello` to `FormHell`.
 - A Text-tool box `BoxHi` becomes `BoxH` with Backspace.
