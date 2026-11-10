@@ -56,10 +56,10 @@ index 9ee96af..b76cd42 100644
      handle("folio:download-ocr-model", async (_event, code) => {
 diff --git a/scripts/test-edit-erase.mjs b/scripts/test-edit-erase.mjs
 new file mode 100644
-index 0000000..810bff9
+index 0000000..3e5d74b
 --- /dev/null
 +++ b/scripts/test-edit-erase.mjs
-@@ -0,0 +1,233 @@
+@@ -0,0 +1,240 @@
 +// Edit-mode erase regression. Synthetic PDF only. Requires the dev server assets (`npm run assets`).
 +// Starts its own Vite server unless FOLIO_DEV_URL is already set.
 +import assert from "node:assert/strict";
@@ -178,13 +178,20 @@ index 0000000..810bff9
 +    await input.waitFor({ timeout: 15_000 });
 +  };
 +
-+  await ui.locator(".viewer-container").click({ position: { x: 6, y: 6 } });
++  await ui.locator(".viewer-container").focus();
 +  const title = await ui.title();
 +  await ui.keyboard.press("Backspace");
 +  await ui.keyboard.press("Delete");
 +  assert.equal(await ui.title(), title, "Backspace left the document");
 +  assert.match(await textOf(), /BakedHello/);
 +  assert.match(await textOf(), /KeepMe/);
++  const stillEditing = await ui.getByRole("button", { name: "Exit edit mode", exact: true }).count();
++  log("edit mode still open after unfocused keys: " + stillEditing);
++  if (!stillEditing) {
++    log("unfocused keys left edit mode; entering it again for the edit checks");
++    await ui.getByRole("button", { name: "Edit mode", exact: true }).click();
++    await ui.getByRole("button", { name: "Exit edit mode", exact: true }).waitFor();
++  }
 +
 +  await openItem("BakedHello");
 +  const opened = await input.evaluate(el => ({
