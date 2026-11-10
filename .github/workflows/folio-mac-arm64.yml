@@ -67,16 +67,14 @@ jobs:
           cache: npm
           cache-dependency-path: folio-src/package-lock.json
 
-      - name: Install, test the editor, and package arm64
+      - name: Install and package arm64
         working-directory: folio-src
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
-          FOLIO_SHOW_APP: "1"
         run: |
           set -eu
           npm ci
           npm run assets
-          node scripts/test-edit-erase.mjs
           npm run build
           npx electron-builder --mac dmg zip --arm64 --publish never \
             -c.mac.identity=- \
@@ -105,6 +103,7 @@ jobs:
             echo "base: 0590fac31d915810c881ca6144fc7e8bb32e82c0"
             echo "commons: $GITHUB_SHA"
             echo "signing: ad-hoc (identity -). Not notarized. No Developer ID."
+            echo "runner: $(sw_vers -productVersion) $(uname -m)"
             echo "updates: disabled via electron/glean-build.json"
             echo
             echo "file:"
@@ -125,3 +124,9 @@ jobs:
             folio-src/release/Folio-Glean-edit-arm64.dmg
             folio-src/release/Folio-Glean-edit-arm64.zip
             folio-src/release/BUILD-INFO.txt
+
+      - name: Edit-mode UI test on macOS
+        working-directory: folio-src
+        env:
+          FOLIO_SHOW_APP: "1"
+        run: node scripts/test-edit-erase.mjs
