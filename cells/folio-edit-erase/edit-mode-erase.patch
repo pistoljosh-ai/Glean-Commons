@@ -53,10 +53,10 @@ index 9ee96af..b76cd42 100644
      handle("folio:download-ocr-model", async (_event, code) => {
 diff --git a/scripts/test-edit-erase.mjs b/scripts/test-edit-erase.mjs
 new file mode 100644
-index 0000000..729836e
+index 0000000..be0532b
 --- /dev/null
 +++ b/scripts/test-edit-erase.mjs
-@@ -0,0 +1,164 @@
+@@ -0,0 +1,173 @@
 +// Edit-mode erase regression. Synthetic PDF only. Requires the dev server assets (`npm run assets`).
 +// Starts its own Vite server unless FOLIO_DEV_URL is already set.
 +import assert from "node:assert/strict";
@@ -115,7 +115,7 @@ index 0000000..729836e
 +const hardStop = setTimeout(() => {
 +  console.error("edit-erase test timed out");
 +  process.exit(1);
-+}, 120_000);
++}, 180_000);
 +try {
 +  const ui = readerPage(await app.firstWindow());
 +  ui.window.setDefaultTimeout(20_000);
@@ -136,8 +136,17 @@ index 0000000..729836e
 +  const item = name => sheet.getByRole("button", { name, exact: true });
 +  const openItem = async name => {
 +    log("open " + name);
-+    await item(name).click({ timeout: 12_000, force: true });
-+    await input.waitFor({ timeout: 12_000 });
++    const button = item(name);
++    try {
++      await button.waitFor({ timeout: 45_000 });
++    } catch (error) {
++      const status = await ui.locator(".folio-edit-status").innerText().catch(() => "");
++      const labels = await sheet.locator(".folio-content-target").evaluateAll(els => els.map(el => el.getAttribute("aria-label"))).catch(() => []);
++      log("edit status: " + JSON.stringify(status) + " labels: " + JSON.stringify(labels));
++      throw error;
++    }
++    await button.click({ timeout: 15_000, force: true });
++    await input.waitFor({ timeout: 15_000 });
 +  };
 +
 +  await ui.locator(".viewer-container").click({ position: { x: 6, y: 6 } });

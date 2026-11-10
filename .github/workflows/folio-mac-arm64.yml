@@ -3,8 +3,6 @@
 name: Folio Mac arm64
 
 on:
-  push:
-    branches: [cursor/folio-edit-erase-c310]
   pull_request:
     paths:
       - cells/folio-edit-erase/**
