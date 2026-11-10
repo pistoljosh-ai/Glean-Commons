@@ -130,3 +130,12 @@ jobs:
         env:
           FOLIO_SHOW_APP: "1"
         run: node scripts/test-edit-erase.mjs
+
+      - name: Upload edit-test notes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: folio-mac-edit-test-notes
+          if-no-files-found: ignore
+          retention-days: 14
+          path: folio-src/release/edit-erase/

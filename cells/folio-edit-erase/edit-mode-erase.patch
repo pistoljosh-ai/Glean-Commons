@@ -53,10 +53,10 @@ index 9ee96af..b76cd42 100644
      handle("folio:download-ocr-model", async (_event, code) => {
 diff --git a/scripts/test-edit-erase.mjs b/scripts/test-edit-erase.mjs
 new file mode 100644
-index 0000000..abf16a8
+index 0000000..b9a2cc0
 --- /dev/null
 +++ b/scripts/test-edit-erase.mjs
-@@ -0,0 +1,174 @@
+@@ -0,0 +1,197 @@
 +// Edit-mode erase regression. Synthetic PDF only. Requires the dev server assets (`npm run assets`).
 +// Starts its own Vite server unless FOLIO_DEV_URL is already set.
 +import assert from "node:assert/strict";
@@ -120,7 +120,8 @@ index 0000000..abf16a8
 +  const ui = readerPage(await app.firstWindow());
 +  ui.window.setDefaultTimeout(20_000);
 +  const failures = [];
-+  ui.on("pageerror", error => failures.push(String(error)));
++  ui.on("pageerror", error => { const text = String(error); failures.push(text); log("pageerror " + text); });
++  ui.on("console", msg => { if (msg.type() === "error") log("console " + msg.text()); });
 +  await ui.getByRole("button", { name: /Try a sample/ }).waitFor();
 +  await app.evaluate(({ BrowserWindow }, b64) => {
 +    BrowserWindow.getAllWindows()[0].webContents.send("folio:open-file", {
@@ -131,7 +132,29 @@ index 0000000..abf16a8
 +  const sheet = ui.locator('.page[data-page-number="1"]');
 +  const textOf = async () => (await sheet.locator(".textLayer").innerText()).replace(/\s+/g, " ").trim();
 +  await sheet.locator(".textLayer").getByText("BakedHello", { exact: true }).waitFor();
-+  await ui.getByRole("button", { name: "Edit mode", exact: true }).click();
++  const editButton = ui.getByRole("button", { name: "Edit mode", exact: true });
++  await editButton.click();
++  let entered = await ui.getByRole("button", { name: "Exit edit mode", exact: true }).waitFor({ timeout: 8_000 }).then(() => "mouse").catch(() => "");
++  log("edit mode after mouse click: " + (entered || "not entered"));
++  if (!entered) {
++    const dom = await ui.evaluate(() => {
++      const target = [...document.querySelectorAll("button")].find(button =>
++        (button.getAttribute("aria-label") || button.textContent || "").trim() === "Edit mode");
++      if (!target) return { found: false };
++      target.click();
++      return { found: true, pressed: target.getAttribute("aria-pressed") };
++    });
++    log("dom click: " + JSON.stringify(dom));
++    entered = await ui.getByRole("button", { name: "Exit edit mode", exact: true }).waitFor({ timeout: 8_000 }).then(() => "dom").catch(() => "");
++    log("edit mode after dom click: " + (entered || "not entered"));
++  }
++  if (!entered) {
++    const toast = await ui.locator(".toast").innerText().catch(() => "");
++    log("toast: " + JSON.stringify(toast));
++    await ui.screenshot({ path: path.join(shots, "edit-mode-did-not-start.png") }).catch(() => {});
++    throw new Error("Edit mode did not start. Mouse click and DOM click both left the button unpressed.");
++  }
++  log("entered edit mode via " + entered);
 +  const input = sheet.getByRole("textbox", { name: "Edit text on page" });
 +  const item = name => sheet.getByRole("button", { name, exact: true });
 +  const openItem = async name => {

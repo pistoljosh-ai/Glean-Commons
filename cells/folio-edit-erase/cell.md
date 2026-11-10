@@ -37,24 +37,11 @@ The patch, `edit-mode-erase.patch`:
 
 Ctrl+Z still undoes typing inside the field. After Enter, Folio's existing version history is the record of the change. This patch does not add a second undo stack.
 
-## Install on an Apple silicon Mac
+## Mac app
 
-The Mac app is built by the workflow `.github/workflows/folio-mac-arm64.yml` on a GitHub-hosted Apple silicon runner. It is a CI artifact named `folio-glean-mac-arm64`, not a GitHub Release. The disk image is `Folio-Glean-edit-arm64.dmg`. Inside it, the app is still named `Folio.app` so it can replace the copy in `/Applications` and keep the same user-data folder.
+A GitHub-hosted Apple silicon runner packages `Folio-Glean-edit-arm64.dmg` and uploads it as the CI artifact `folio-glean-mac-arm64`. That is not a GitHub Release. Do not replace the installed Folio until the Mac edit/delete/save test on that run is green. A package that only stays open, or an editor test that passed on Linux, is not that result.
 
-The build is ad-hoc signed (`identity: "-"`). It is not notarized and it does not use anyone's Developer ID. macOS will say it cannot verify the developer. Open that one app from the confirmation in System Settings → Privacy & Security, or right-click the app and choose Open. Do not turn Gatekeeper off for the whole Mac.
-
-Upstream auto-update is off in this copy (`electron/glean-build.json`). An official Folio build checks Forward-Future/folio-releases and can replace `/Applications/Folio.app` if you install that official build later. This custom copy will not download that update by itself. About Folio shows "Glean edit build" and the pinned revision.
-
-Back up the old app first. This does not touch `~/Library/Application Support/Folio` or your documents.
-
-```bash
-mkdir -p ~/Folio-backup
-if [ -d /Applications/Folio.app ]; then
-  ditto /Applications/Folio.app "$HOME/Folio-backup/Folio.app-$(date +%Y%m%d)"
-fi
-```
-
-Open the dmg and copy `Folio.app` onto `/Applications`, replacing the app there if Finder asks. To undo, copy the backup back the same way. Leave the Library folder alone.
+The packaged app is ad-hoc / linker-signed, not notarized, and not a Developer ID build. Upstream auto-update is turned off inside this copy. Installing an official Folio later can still replace `/Applications/Folio.app`. User files under `~/Library/Application Support/Folio` are not part of the app bundle.
 
 ## How to build it yourself
 
@@ -101,4 +88,5 @@ No use is recorded (`uses: 0`).
 - This is not Timmy's installed build.
 - Removing a text run is not secure redaction. The words are dropped from the page content this editor rewrites. A prior copy, version history, or an unreferenced stream could still hold them. Do not use it for secrets.
 - Scanned pages, outlined letters, and grouped art are still not editable as text.
-- No installer was built. No upstream pull request was opened.
+- The Mac disk image is an experimental CI artifact until the Mac edit/delete/save test passes. Do not replace an installed Folio with it before that.
+- No upstream pull request was opened.
