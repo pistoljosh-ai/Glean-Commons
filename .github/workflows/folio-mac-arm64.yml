@@ -71,6 +71,7 @@ jobs:
         working-directory: folio-src
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
+          FOLIO_SHOW_APP: "1"
         run: |
           set -eu
           npm ci

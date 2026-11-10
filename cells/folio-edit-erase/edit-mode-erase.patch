@@ -53,10 +53,10 @@ index 9ee96af..b76cd42 100644
      handle("folio:download-ocr-model", async (_event, code) => {
 diff --git a/scripts/test-edit-erase.mjs b/scripts/test-edit-erase.mjs
 new file mode 100644
-index 0000000..be0532b
+index 0000000..abf16a8
 --- /dev/null
 +++ b/scripts/test-edit-erase.mjs
-@@ -0,0 +1,173 @@
+@@ -0,0 +1,174 @@
 +// Edit-mode erase regression. Synthetic PDF only. Requires the dev server assets (`npm run assets`).
 +// Starts its own Vite server unless FOLIO_DEV_URL is already set.
 +import assert from "node:assert/strict";
@@ -102,7 +102,7 @@ index 0000000..be0532b
 +const env = {
 +  ...process.env,
 +  FOLIO_DEV_URL: origin,
-+  FOLIO_TEST_HIDDEN: "1",
++  FOLIO_TEST_HIDDEN: process.env.FOLIO_SHOW_APP === "1" ? "0" : "1",
 +  FOLIO_TEST_USER_DATA: mkdtempSync(path.join(tmpdir(), "folio-edit-erase-")),
 +};
 +delete env.ELECTRON_RUN_AS_NODE;
@@ -142,7 +142,8 @@ index 0000000..be0532b
 +    } catch (error) {
 +      const status = await ui.locator(".folio-edit-status").innerText().catch(() => "");
 +      const labels = await sheet.locator(".folio-content-target").evaluateAll(els => els.map(el => el.getAttribute("aria-label"))).catch(() => []);
-+      log("edit status: " + JSON.stringify(status) + " labels: " + JSON.stringify(labels));
++      const pressed = await ui.getByRole("button", { name: /edit mode/i }).first().getAttribute("aria-pressed").catch(() => "");
++      log("edit status: " + JSON.stringify(status) + " pressed: " + pressed + " labels: " + JSON.stringify(labels));
 +      throw error;
 +    }
 +    await button.click({ timeout: 15_000, force: true });
