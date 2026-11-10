@@ -37,7 +37,26 @@ The patch, `edit-mode-erase.patch`:
 
 Ctrl+Z still undoes typing inside the field. After Enter, Folio's existing version history is the record of the change. This patch does not add a second undo stack.
 
-## How to try it
+## Install on an Apple silicon Mac
+
+The Mac app is built by the workflow `.github/workflows/folio-mac-arm64.yml` on a GitHub-hosted Apple silicon runner. It is a CI artifact named `folio-glean-mac-arm64`, not a GitHub Release. The disk image is `Folio-Glean-edit-arm64.dmg`. Inside it, the app is still named `Folio.app` so it can replace the copy in `/Applications` and keep the same user-data folder.
+
+The build is ad-hoc signed (`identity: "-"`). It is not notarized and it does not use anyone's Developer ID. macOS will say it cannot verify the developer. Open that one app from the confirmation in System Settings → Privacy & Security, or right-click the app and choose Open. Do not turn Gatekeeper off for the whole Mac.
+
+Upstream auto-update is off in this copy (`electron/glean-build.json`). An official Folio build checks Forward-Future/folio-releases and can replace `/Applications/Folio.app` if you install that official build later. This custom copy will not download that update by itself. About Folio shows "Glean edit build" and the pinned revision.
+
+Back up the old app first. This does not touch `~/Library/Application Support/Folio` or your documents.
+
+```bash
+mkdir -p ~/Folio-backup
+if [ -d /Applications/Folio.app ]; then
+  ditto /Applications/Folio.app "$HOME/Folio-backup/Folio.app-$(date +%Y%m%d)"
+fi
+```
+
+Open the dmg and copy `Folio.app` onto `/Applications`, replacing the app there if Finder asks. To undo, copy the backup back the same way. Leave the Library folder alone.
+
+## How to build it yourself
 
 From a clean machine, in this repo:
 
@@ -45,14 +64,7 @@ From a clean machine, in this repo:
 python3 cells/folio-edit-erase/apply_and_test.py
 ```
 
-That clones the pinned revision, applies the patch, installs Folio's own dependencies, and runs the UI test. The checkout path is printed at the end. Then:
-
-```bash
-cd /that/checkout
-npm run dev
-```
-
-Open a PDF you can throw away. Choose **Edit mode**, click a line of real text, and press Backspace. Press Enter to keep a shorter line. Clear the line and press Enter, or choose **Remove line**, to delete it. Save a copy from Folio if you want a file. This is the dev server, not a packaged Folio installer.
+That clones the pinned revision, applies the patch, installs Folio's own dependencies, and runs the UI test. The checkout path is printed at the end. A Mac app still has to be packaged on macOS (`npx electron-builder --mac dmg zip --arm64 --publish never` with `CSC_IDENTITY_AUTO_DISCOVERY=false` and `-c.mac.identity=-`). The Linux checkout can run the editor test; it cannot produce the arm64 app.
 
 ```bash
 python3 cells/folio-edit-erase/test_patch.py

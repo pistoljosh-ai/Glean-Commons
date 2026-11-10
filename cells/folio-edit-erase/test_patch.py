@@ -22,6 +22,7 @@ def main() -> None:
         assert f"diff --git {name} " in text, name
     assert "package-lock.json" not in text
     assert "setSelectionRange" in text
+    assert "disableUpdates" in text
     assert "folio-remove-line" in text
     assert "Remove line" in text
     assert "fillRect" not in text

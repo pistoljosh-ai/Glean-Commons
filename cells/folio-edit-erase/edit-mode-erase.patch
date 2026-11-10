@@ -11,6 +11,46 @@ index eb2c60b..05527da 100644
  
  Click an embedded picture and choose **Replace image…** to select a PNG or JPEG. You can leave Edit mode to read your changes or use **Save copy** to export and open the edited PDF.
  
+diff --git a/electron/main.cjs b/electron/main.cjs
+index 9ee96af..b76cd42 100644
+--- a/electron/main.cjs
++++ b/electron/main.cjs
+@@ -209,7 +209,21 @@ function installLocation() {
+ const MAC_SIGNED = !!require("../package.json").folioMacSigned;
+ const NOTIFY_ONLY = IS_MAC && !MAC_SIGNED;
+ 
++function readGleanBuild() {
++  try {
++    return JSON.parse(fs.readFileSync(path.join(__dirname, "glean-build.json"), "utf8"));
++  } catch {
++    return null;
++  }
++}
++
+ function setupAutoUpdate() {
++  const glean = readGleanBuild();
++  if (glean?.disableUpdates) {
++    updateStatus = { state: "unsupported", message: "glean-build" };
++    logUpdate(`Glean build: upstream auto-update is off (${glean.base || "unpinned"})`);
++    return;
++  }
+   loadUpdatePreference();
+   // Installed Windows builds, Linux AppImages, and Macs check for updates. Dev runs and the portable Windows exe
+   // don't; Linux packages (.deb) are updated by apt along with the rest of the system.
+@@ -605,8 +619,11 @@ if (!app.requestSingleInstanceLock()) {
+       if (importing?.id && importing.id === id) importing.controller.abort();
+       return true;
+     });
+-    handle("folio:app-info", () => ({ version: app.getVersion(), mode: installKind(), location: installLocation(), platform: process.platform,
+-      notifyOnly: NOTIFY_ONLY }));
++    handle("folio:app-info", () => {
++      const glean = readGleanBuild();
++      return { version: glean ? `${app.getVersion()} (Glean edit build)` : app.getVersion(), mode: installKind(), location: installLocation(), platform: process.platform,
++        notifyOnly: NOTIFY_ONLY, glean };
++    });
+     handle("folio:open-installation", () => shell.openPath(installLocation()));
+     handle("folio:open-download", () => shell.openExternal(RELEASES_PAGE));
+     handle("folio:download-ocr-model", async (_event, code) => {
 diff --git a/scripts/test-edit-erase.mjs b/scripts/test-edit-erase.mjs
 new file mode 100644
 index 0000000..729836e
@@ -271,6 +311,39 @@ index db2e1e5..02b57eb 100644
 +    </div>
    </>;
  }
+diff --git a/src/Dialogs.tsx b/src/Dialogs.tsx
+index 68ea463..fb9b615 100644
+--- a/src/Dialogs.tsx
++++ b/src/Dialogs.tsx
+@@ -52,11 +52,13 @@ export function AboutDialog({ onClose }: { onClose: () => void }) {
+   return <Modal title="About Folio" onClose={onClose}>
+     <dl className="info-list">
+       <div><dt>Version</dt><dd>{info?.version ?? (desktop ? "Loading..." : "Browser edition")}</dd></div>
++      {info?.glean && <div><dt>Build</dt><dd>{info.glean.label || "Glean Commons edit build"}</dd></div>}
+       <div><dt>Edition</dt><dd>{EDITIONS[info?.mode ?? ""] ?? (desktop ? "Development" : "Web")}</dd></div>
+       {info && <div><dt>Location</dt><dd className="installation-path">{info.location}</dd></div>}
+     </dl>
+     <div className="about-update">
+       {!desktop && <p>Documents and reading preferences stay on this device.</p>}
++      {info?.glean && <p className="search-hint">{info.glean.note}{info.glean.base ? ` Pinned upstream revision ${info.glean.base}.` : ""} Upstream auto-update is off in this copy.</p>}
+       {info?.mode === "portable" && <p className="search-hint">Use the Setup installer for automatic updates and a single installed copy.</p>}
+       {info?.mode === "package" && <p className="search-hint">New versions arrive with your system's software updates (apt).</p>}
+       <div className="form-actions">
+diff --git a/src/desktop.d.ts b/src/desktop.d.ts
+index 0a35b69..641ad69 100644
+--- a/src/desktop.d.ts
++++ b/src/desktop.d.ts
+@@ -24,7 +24,9 @@ interface FolioDesktop {
+   cancelFetchPdf(id: string): Promise<boolean>;
+   getAppInfo(): Promise<{ version: string; mode: "development" | "portable" | "installed" | "appimage" | "package"; location: string; platform: string;
+     /** True when updates are announced with a download link instead of installed (unsigned macOS builds). */
+-    notifyOnly: boolean }>;
++    notifyOnly: boolean;
++    /** Present only in a Glean Commons build. Upstream Folio does not set this. */
++    glean?: { label?: string; note?: string; base?: string; disableUpdates?: boolean } | null }>;
+   /** "win32", "darwin", or "linux". */
+   platform: string;
+   /** Opens the releases page (macOS, where updates are downloaded manually). */
 diff --git a/src/styles.css b/src/styles.css
 index a96ca33..a41a58d 100644
 --- a/src/styles.css
