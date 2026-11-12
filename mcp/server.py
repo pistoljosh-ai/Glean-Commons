@@ -45,7 +45,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CELLS = ROOT / "cells"
-SERVER_VERSION = "0.2.0"
+sys.path.insert(0, str(ROOT / "variants"))
+import engine as V  # noqa: E402  (variants/engine.py: your own version of any tool)
+SERVER_VERSION = "0.3.0"
 PROTOCOLS = ["2025-06-18", "2025-03-26", "2024-11-05"]
 REPO_URL = "https://github.com/pistoljosh-ai/Glean-Commons"
 MAX_BODY = 1_000_000
@@ -57,30 +59,70 @@ INSTRUCTIONS = """You are helping someone get work done through Glean Commons, a
 - If a tool answers "NEEDS INPUT: ...", ask the person that question in plain words. Never guess.
 - After any change, say back exactly what was recorded. Changes are versioned; undo_last_change can revert one.
 - Reminders and messages are drafts. Never claim you sent anything.
-- If nothing can do what they asked, say so, and call note_missing_capability when it is available so it can be built."""
+- If nothing can do what they asked, say so, and call note_missing_capability when it is available so it can be built.
+- If they want a tool to work differently ("stop it doing X", "I'd rather it said Y"), make them their own version: version_start, read and edit the working copy, version_test, version_save. Their version runs for them only, with history and undo. Offer version_share only if they want others to have it.
+- Before version_adopt with confirm, show the person what the change does. It is someone else's code."""
 
 
 # ---------------- discovery ----------------
 
-def load_cells(root: Path = CELLS):
-    """Return {tool_name: (spec, function, cell_id)} from every cells/*/tools.json."""
-    for d in sorted(p for p in root.iterdir() if p.is_dir()):
-        if str(d) not in sys.path:
-            sys.path.insert(0, str(d))
+_OVERLAY_ROOTS: set[Path] = set()  # every versions folder this process has loaded cell code from
+
+
+def _forget_cell_modules(roots: list[Path]) -> None:
+    """Drop cached cell code and its import paths so the next load reads the files again."""
+    roots = [str(r.resolve()) for r in roots if r]
+    under = lambda p: any(str(p).startswith(r + os.sep) or str(p) == r for r in roots)  # noqa: E731
+    for name, mod in list(sys.modules.items()):
+        f = getattr(mod, "__file__", None)
+        if name.startswith("glean_cell_") or (f and under(Path(f).resolve())):
+            del sys.modules[name]
+    sys.path[:] = [p for p in sys.path if not (p and under(Path(p).resolve()))]
+    importlib.invalidate_caches()
+
+
+def _load_one(folder: Path, registry: dict, mine: bool) -> None:
+    spec = json.loads((folder / "tools.json").read_text(encoding="utf-8"))
+    cell = spec.get("cell") or folder.name
+    mod_name = "glean_cell_" + cell.replace("-", "_")
+    mspec = importlib.util.spec_from_file_location(mod_name, folder / spec.get("module", "tools.py"))
+    module = importlib.util.module_from_spec(mspec)
+    mspec.loader.exec_module(module)
+    found = {}
+    for t in spec["tools"]:
+        if t["name"] in registry or t["name"] in found:
+            raise ValueError(f"tool name '{t['name']}' is declared twice")
+        found[t["name"]] = (dict(t, mine=True) if mine else t, getattr(module, t.get("function", t["name"])), cell)
+    registry.update(found)
+
+
+def load_cells(root: Path = CELLS, overlay: dict[str, Path] | None = None, warnings: list[str] | None = None):
+    """Return {tool_name: (spec, function, cell_id)} from every cells/*/tools.json.
+
+    overlay maps a cell to the folder holding the person's own version of it.
+    If their version fails to load, the original is used and a warning is kept.
+    """
+    overlay = overlay or {}
+    folders = [d for d in sorted(root.iterdir()) if d.is_dir() and not d.name.startswith(("_", "."))]
+    for d in folders:
+        path = str(overlay.get(d.name, d))
+        if path not in sys.path:
+            sys.path.insert(0, path)
     registry = {}
-    for contract in sorted(root.glob("*/tools.json")):
-        spec = json.loads(contract.read_text(encoding="utf-8"))
-        cell = spec.get("cell") or contract.parent.name
-        mod_path = contract.parent / spec.get("module", "tools.py")
-        mod_name = "glean_cell_" + cell.replace("-", "_")
-        mspec = importlib.util.spec_from_file_location(mod_name, mod_path)
-        module = importlib.util.module_from_spec(mspec)
-        mspec.loader.exec_module(module)
-        for t in spec["tools"]:
-            if t["name"] in registry:
-                raise ValueError(f"tool name '{t['name']}' declared by both {registry[t['name']][2]} and {cell}")
-            fn = getattr(module, t.get("function", t["name"]))
-            registry[t["name"]] = (t, fn, cell)
+    for d in folders:
+        mine = overlay.get(d.name)
+        if mine and (mine / "tools.json").is_file():
+            try:
+                _load_one(mine, registry, True)
+                continue
+            except Exception as exc:  # their version is broken: fall back, do not lose ground
+                (warnings if warnings is not None else []).append(
+                    f"Your version of {d.name} failed to load ({exc}); running the original instead.")
+                sys.path[:] = [p for p in sys.path if p != str(mine)]
+                sys.path.insert(0, str(d))
+                sys.modules.pop("glean_cell_" + d.name.replace("-", "_"), None)
+        if (d / "tools.json").is_file():
+            _load_one(d, registry, False)
     return registry
 
 
@@ -102,6 +144,9 @@ SYNONYMS = {
     "price": "offer", "prices": "offer", "service": "offer", "services": "offer", "product": "offer", "charge": "offer",
     "how": "status", "doing": "status", "summary": "status", "overview": "status", "attention": "status",
     "revert": "undo", "mistake": "undo", "oops": "undo", "changed": "history", "changes": "history", "log": "history",
+    "customize": "start own version", "customise": "start own version", "tweak": "start own version", "modify": "start own version",
+    "differently": "own version", "different": "own version", "instead": "own version", "rather": "own version",
+    "adopt": "adopt version", "share": "share version", "publish": "share version",
     "find": "search", "exists": "search", "existing": "search", "missing": "missing", "wish": "missing",
 }
 STOP = set(("a an the to for of and or my me i we our is are it this that on in at with can you please do need want help "
@@ -211,6 +256,8 @@ def commons_tools(server: "Server"):
             if len(hits) > 1:
                 lines.append("Also possible:")
                 lines += [f"- {n}: {server.tools[n][0]['description']}" for _, n in hits[1:]]
+            if "version_start" in server.tools and server.tools[hits[0][1]][2] != "glean-mcp":
+                lines.append("Want it to work differently? version_start makes this person their own version of it.")
             return "\n".join(lines)
         catalog = _search_cells(None, request)
         lines = [f"No tool here does that yet: \"{request.strip()}\"."]
@@ -261,23 +308,140 @@ def commons_tools(server: "Server"):
     return {n: (spec, fn, "glean-mcp") for n, (spec, fn) in tools.items()}
 
 
+# ---------------- your own version of any tool ----------------
+
+def version_tools(server: "Server"):
+    """Speak a change to a tool; keep it, share it, adopt someone else's. Local mode only."""
+    vs = server.variants
+
+    def guard(fn, reload=False):
+        def run(_books, **kw):
+            try:
+                out = fn(**kw)
+            except V.Problem as p:
+                return f"NEEDS INPUT: {p}"
+            if reload:
+                server.reload()
+            return out
+        return run
+
+    def cell_of(ref: str) -> str:
+        ref = (ref or "").strip()
+        if ref in server.catalog_tools:
+            return server.catalog_tools[ref][2]
+        if ref in vs.cells():
+            return ref
+        hits = rank_tools(ref, server.catalog_tools, 1)
+        if hits:
+            return server.catalog_tools[hits[0][1]][2]
+        raise V.Problem(f"Which tool do you mean by '{ref}'? Tool families: {', '.join(vs.cells())}.")
+
+    def start(tool: str, wish: str) -> str:
+        return vs.start(cell_of(tool), wish)
+
+    def test(tool: str) -> str:
+        ok, report = vs.test(cell_of(tool))
+        head = {True: "Tests pass with your change.", False: "Tests FAIL with your change.", None: "Nothing to run."}[ok]
+        return head + "\n" + report
+
+    def save(tool: str, name: str, author: str = "", ai_assist: str = "", folder: str = "", wish: str = "", commit: str = "") -> str:
+        if folder:
+            return vs.capture_upstream(folder, name, wish, author, ai_assist, commit, upstream=tool)
+        return vs.save(cell_of(tool), name, author, ai_assist)
+
+    def mine() -> str:
+        return vs.listing()
+
+    def shared(tool: str = "") -> str:
+        rows = [r for r in V.standing() if not tool or tool.lower() in (r["tool"] + " " + r["name"]).lower()]
+        if not rows:
+            return "No shared versions yet" + (f" for '{tool}'." if tool else ".") + " Be the first: make your own, then share it."
+        return "\n".join(f"{r['id']} ({r['tool']}) by {r['author']}: {r['wish']} — {r['next']}" for r in rows)
+
+    T = lambda name, desc, props, required=(), **extra: dict(  # noqa: E731
+        {"name": name, "job": "your versions", "description": desc,
+         "inputSchema": {"type": "object", "required": list(required), "properties": props}}, **extra)
+    S = {"type": "string"}
+    tool_arg = {"type": "string", "description": "The tool or tool family, e.g. draft_payment_reminders or invoice-followup"}
+    tools = {
+        "version_start": (T("version_start", "Start making this person their own version of a tool: say which tool and how they want it to work differently. Opens a private working copy; the original and other people are unaffected.",
+                            {"tool": tool_arg, "wish": {"type": "string", "description": "What should be different, in their words"}}, ("tool", "wish")),
+                          guard(start)),
+        "version_read": (T("version_read", "Read a file from the working copy of a tool being changed.",
+                           {"tool": tool_arg, "file": S}, ("tool", "file")),
+                         guard(lambda tool, file: vs.read(cell_of(tool), file))),
+        "version_edit": (T("version_edit", "Edit a file in the working copy: replace one exact piece of text (find must appear exactly once), or pass content to write the whole file.",
+                           {"tool": tool_arg, "file": S, "find": S, "replace": S, "content": S}, ("tool", "file")),
+                         guard(lambda tool, file, find="", replace="", content=None: vs.edit(cell_of(tool), file, find, replace, content))),
+        "version_test": (T("version_test", "Run the tool's own tests against the working copy.", {"tool": tool_arg}, ("tool",)), guard(test)),
+        "version_save": (T("version_save", "Save the change as this person's own version and switch it on. Refuses if the tool's tests fail. Kept in their private history; nothing is shared. For a program outside the commons, pass folder (their local git copy) to save the change as a patch.",
+                           {"tool": tool_arg, "name": {"type": "string", "description": "Short name for this version"},
+                            "author": {"type": "string", "description": "The person's name"}, "ai_assist": {"type": "string", "description": "Name of the AI that helped"},
+                            "folder": {"type": "string", "description": "Only for outside programs: path to their local git copy"},
+                            "wish": {"type": "string", "description": "Only with folder: what the change is for"},
+                            "commit": {"type": "string", "description": "Only with folder: the commit the change starts from (default: current)"}}, ("tool", "name")),
+                         guard(save, reload=True)),
+        "my_versions": (T("my_versions", "List this person's own versions of tools, which one is switched on, and any change in progress.", {}), guard(mine)),
+        "version_switch": (T("version_switch", "Switch a tool between this person's versions: a version name, 'original', or 'previous' to go back. Nothing is deleted.",
+                             {"tool": tool_arg, "to": {"type": "string", "description": "A version name or id, 'original', or 'previous'"}}, ("tool", "to")),
+                           guard(lambda tool, to: vs.switch(cell_of(tool), to), reload=True)),
+        "version_share": (T("version_share", "Package one of this person's versions as a single file they can send to someone or offer to the commons. Contains only the change, never their data.",
+                            {"version": {"type": "string", "description": "Version name or id (default: the one switched on for tool)"},
+                             "tool": tool_arg, "author": S, "github_login": S}),
+                          guard(lambda version="", tool="", author="", github_login="": vs.share(version, cell_of(tool) if tool else None, author, github_login))),
+        "version_adopt": (T("version_adopt", "Try a version someone shared (an id from shared_versions, or a file). Without confirm it only shows what the change does. With confirm it checks the change fits and passes tests, then switches it on.",
+                            {"source": {"type": "string", "description": "Shared version id or name, or a path to a version file"},
+                             "confirm": {"type": "boolean"}, "folder": {"type": "string", "description": "Only for outside programs: path to their local git copy"}}, ("source",)),
+                          guard(lambda source, confirm=False, folder="": vs.adopt(source, bool(confirm), folder), reload=True)),
+    }
+    tools["shared_versions"] = (T("shared_versions", "List versions of tools that people have shared with the commons, who made each, how many independent people adopted it, and whether it is close to becoming the original.",
+                                  {"tool": {"type": "string", "description": "Optional: only versions of this tool"}}, stateless=True),
+                                guard(shared))
+    if server.public or vs is None:
+        tools = {"shared_versions": tools["shared_versions"]}
+    return {n: (spec, fn, "glean-mcp") for n, (spec, fn) in tools.items()}
+
+
 # ---------------- server ----------------
 
 FRONT = ("do", "call", "what_can_you_do")
 
 
 class Server:
-    def __init__(self, books: Path | None, public: bool = False, front_door: bool = False):
+    def __init__(self, books: Path | None, public: bool = False, front_door: bool = False,
+                 versions: Path | None = None):
         self.public = public
         self.front_door = front_door
         self.books = None if public else books
-        cells = load_cells()
-        self.catalog_tools = cells  # every tool in the commons, for discovery
-        if public:
-            cells = {n: v for n, v in cells.items() if v[0].get("stateless")}
-        self.tools = cells
-        self.tools.update(commons_tools(self))
+        if versions is None and self.books is not None:
+            versions = self.books.with_name(self.books.name + "-versions")
+        # The person's own versions of tools. Never in public mode. With no folder it only lists.
+        self.variants = None if public else V.Variants(versions)
+        self.notices: list[str] = []
         self.lock = threading.RLock()  # re-entrant: the call tool runs other tools
+        self.tools: dict = {}
+        if self.variants is not None and versions is not None and versions.is_dir():
+            try:
+                self.notices += self.variants.refresh()
+            except Exception as exc:  # never let a versions problem stop the server
+                self.notices.append(f"Could not check your own versions: {exc}")
+        self.reload()
+
+    def reload(self):
+        """(Re)read every tool, preferring the person's own version of a cell where one is switched on."""
+        with self.lock:
+            overlay = self.variants.active_dirs() if self.variants is not None else {}
+            if self.variants and self.variants.home:
+                _OVERLAY_ROOTS.add(self.variants.home)
+            _forget_cell_modules([CELLS, *_OVERLAY_ROOTS])
+            cells = load_cells(overlay=overlay, warnings=self.notices)
+            self.catalog_tools = cells  # every tool in the commons, for discovery
+            if self.public:
+                cells = {n: v for n, v in cells.items() if v[0].get("stateless")}
+            tools = dict(cells)
+            self.tools = tools
+            tools.update(commons_tools(self))
+            tools.update(version_tools(self))
 
     def ensure_books(self):
         if self.books is not None and not (self.books / "customers.csv").exists():
@@ -306,6 +470,9 @@ class Server:
                     self.ensure_books()
                 with redirect_stdout(io.StringIO()):  # stdout belongs to the protocol
                     text = fn(self.books, **kwargs)
+                if self.notices and name not in ("do", "call"):
+                    text = "Note: " + " ".join(self.notices) + "\n\n" + str(text)
+                    self.notices.clear()
             return {"content": [{"type": "text", "text": str(text)}], "isError": False}
         except Exception as exc:  # report, don't crash the session
             traceback.print_exc(file=sys.stderr)
@@ -437,6 +604,8 @@ def serve_http(server: Server, host: str, port: int, allowed_origins: set[str]):
 def main() -> int:
     p = argparse.ArgumentParser(description="Glean Commons MCP tool server")
     p.add_argument("--books", default=os.environ.get("GLEAN_BOOKS", str(Path.home() / "glean-books")))
+    p.add_argument("--versions", default=os.environ.get("GLEAN_VERSIONS", ""),
+                   help="folder for your own versions of tools (default: next to the books folder)")
     p.add_argument("--public", action="store_true", help="stateless tools only; safe to host (no private data)")
     p.add_argument("--front-door", action="store_true", help="list only do, call and what_can_you_do")
     p.add_argument("--http", type=int, metavar="PORT", default=None, help="serve Streamable HTTP on PORT instead of stdio")
@@ -446,7 +615,8 @@ def main() -> int:
     a = p.parse_args()
     if a.http is not None and not a.public and a.host not in ("127.0.0.1", "localhost", "::1"):
         p.error("refusing to expose private books on a network address; use --public, or bind to 127.0.0.1")
-    server = Server(Path(a.books).expanduser(), public=a.public, front_door=a.front_door)
+    server = Server(Path(a.books).expanduser(), public=a.public, front_door=a.front_door,
+                    versions=Path(a.versions).expanduser() if a.versions else None)
     if a.list:
         for t in server.tool_list():
             print(f"{t['name']}: {t['description']}")

@@ -36,6 +36,7 @@ jobs:
       - name: Commit fold, catalog, and dashboard
         run: |
           git add -u -- ledger registry commons.json catalog.json catalog.txt llms.txt cells dashboard
+          git add -- dashboard  # new generated files too (e.g. a new dataset)
           if git diff --cached --quiet; then
             echo "Nothing to commit."
             exit 0

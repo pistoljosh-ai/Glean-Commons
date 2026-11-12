@@ -62,6 +62,16 @@ After a human merges, one workflow folds pending entries one at a time onto the 
 - **No reward allocation by yourself.** You may *recommend* a PoU score or credit split; people decide (sec 4.4 vision vs. co-laborer limit).
 - **Protect the commons.** Flag gaming, duplicates, or unsafe changes in the PR description.
 
+## Your own version of a tool (variants)
+
+Anyone can tell their AI to make a tool work differently. That change is a **variant**: one small file that says "start from this tool, change these files like so". See [variants/README.md](variants/README.md).
+
+- **Make it for the person first.** Use the tool server's `version_start` → `version_read` / `version_edit` → `version_test` → `version_save`. Their version runs only for them, in their own versions folder, with history and undo. Do not edit `cells/` to satisfy one person's preference.
+- **Share only when they ask.** `version_share` writes the file. A pull request adds `variants/shared/<tool>/<id>.json` and `ledger/pending/variant-<id>.json` (credit: the person, and you as `ai_assist`).
+- **Adoption is one voice per GitHub account.** `variants/adoptions/<id>/<login>.json`, added by that account. Never add one for someone else. Never invent adopters.
+- **Promotion is a person's decision.** At 30 independent adopters `scripts/promote_variant.py` can prepare it. You may prepare and open the pull request. You never merge a promotion, even your own.
+- Before `version_adopt` with `confirm`, show the person what the change does. It is someone else's code.
+
 ## Forks and experiments
 
 - Register variants under the parent project in `commons.json` (`variants[]`, `experiments[]`).

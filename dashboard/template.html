@@ -61,6 +61,12 @@ footer { color: var(--muted); font-size: .78rem; }
   </section>
 
   <section class="card">
+    <h2>Versions people have shared</h2>
+    <p class="note">Anyone can tell their AI to make a tool work differently, keep that as their own version, and share it (<code>variants/</code>). Each independent adopter counts once. At 30, a person decides whether it becomes the original.</p>
+    <div class="tbox"><table><thead><tr><th>Version</th><th>Tool</th><th class="hide-narrow">By</th><th>What it changes</th><th class="num">Adopters</th><th>Next</th></tr></thead><tbody id="variants"></tbody></table></div>
+  </section>
+
+  <section class="card">
     <h2>Contribution chain</h2>
     <p class="note">Every ledger entry in order, with a line to each parent it builds on. Color shows which AI helped. Hover a dot for details.</p>
     <div class="legend" id="agents"></div>
@@ -105,7 +111,7 @@ $('lede').append(
   ' small-business job functions. The ledger chain of ', el('b', {textContent: fmt(S.entries)}),
   ' contributions verifies end to end. Real-world use isn’t measured yet: recorded uses total ', el('b', {textContent: fmt(S.uses)}), '.');
 [[S.projects, 'Projects in the registry'], [S.entries, 'Ledger entries, chain verified'], [S.tools, 'Tools any AI can call'],
- [`${S.jobs_built} / ${S.jobs_total}`, 'Job functions built'], [S.uses, 'Recorded uses (Proof of Use)']]
+ [`${S.jobs_built} / ${S.jobs_total}`, 'Job functions built'], [S.shared_versions, 'Shared versions of tools'], [S.uses, 'Recorded uses (Proof of Use)']]
   .forEach(([v, l]) => $('tiles').append(el('div', {className: 'tile'}, el('div', {className: 'v', textContent: typeof v === 'number' ? fmt(v) : v}), el('div', {className: 'l', textContent: l}))));
 $('tip').textContent = S.ledger_tip;
 
@@ -166,6 +172,10 @@ DATA.tools.forEach((t) => $('tools').append(el('tr', {},
   el('td', {textContent: t.kind === 'writes' ? 'writes ' + t.writes : 'reads only'}))));
 DATA.integrity.forEach((r) => $('integrity').append(el('tr', {},
   el('td', {textContent: r.check}), el('td', {className: r.result === 'verified' ? 'ok' : 'bad', textContent: r.result}), el('td', {textContent: r.detail}))));
+if (!DATA.variants.length) $('variants').append(el('tr', {}, el('td', {colSpan: 6, textContent: 'None yet.'})));
+DATA.variants.forEach((v) => $('variants').append(el('tr', {},
+  el('td', {textContent: v.name}), el('td', {textContent: v.tool}), el('td', {className: 'hide-narrow', textContent: v.author}),
+  el('td', {textContent: v.wish}), el('td', {className: 'num', textContent: v.adopters}), el('td', {textContent: v.next}))));
 const order = {active: 0, published: 1, draft: 2, seed: 3, wip: 4, template: 5, pointer: 6};
 [...DATA.projects].sort((a, b) => (b.tools - a.tools) || ((order[a.status] ?? 9) - (order[b.status] ?? 9)) || a.name.localeCompare(b.name))
   .forEach((p) => $('projects').append(el('tr', {},

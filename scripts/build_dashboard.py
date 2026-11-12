@@ -98,14 +98,19 @@ def build() -> dict:
          "detail": f"{len(commons)} projects agree" if not com_err else "; ".join(com_err)[:200]},
     ]
 
+    sys.path.insert(0, str(ROOT / "variants"))
+    import engine as variants_engine  # variants/engine.py
+    variants = variants_engine.standing(ROOT)
+
     summary = [{
+        "shared_versions": len(variants),
         "projects": len(projects), "entries": len(ledger), "tools": len(tools),
         "jobs_built": sum(1 for j in jobs if j["status"] == "built"), "jobs_total": len(jobs),
         "uses": sum(int(e.get("uses", 0)) for e in ledger),
         "ledger_tip": ledger[-1]["entry_hash"][:12],
     }]
     return {"summary": summary, "jobs": jobs, "ledger": ledger_rows, "projects": projects,
-            "tools": tools, "integrity": integrity}
+            "tools": tools, "integrity": integrity, "variants": variants}
 
 
 def to_csv(rows: list[dict]) -> str:
