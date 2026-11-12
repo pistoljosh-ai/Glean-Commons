@@ -4,7 +4,7 @@
   "hash_alg": "sha256",
   "canonical": "JSON object excluding entry_hash; sort_keys=true; separators=(',', ':'); UTF-8",
   "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-  "tip_hash": "1e65c16eaf9ea504b7b366a500393416ab90661c78355ea658015adce45cdeeb",
+  "tip_hash": "3ddd388c344f6d838e27bac3bc66136c2b3f40ab921243b0d02d5b2b0ba37071",
   "entries": [
     {
       "id": "whitepaper-v1.0",
@@ -385,6 +385,52 @@
       "notes": "Step toward one URL anyone adds to their AI. do(request) finds the right tool from plain words (everyday-word map, honest 'nothing does that yet'); call(name, arguments) runs any tool; --front-door lists only do/call/what_can_you_do so the commons can grow to thousands of cells. --public exposes only tools marked stateless (holds no one's data) and still points people to local-only tools. Stdlib Streamable HTTP (POST /mcp, origin checks, health) and a Dockerfile; refuses to expose private books on a network address. Fixes search_cells passing the wrong shape to search.py, and a lock deadlock found by the new tests. Not yet hosted anywhere. uses=0.",
       "prev_hash": "522b7b85d82e6dd9a24d70017e2d428161a88007c0e1fb341261864cedc1ae39",
       "entry_hash": "1e65c16eaf9ea504b7b366a500393416ab90661c78355ea658015adce45cdeeb"
+    },
+    {
+      "id": "variants",
+      "title": "Variants: your own version of any tool, shareable, promotable",
+      "type": "other",
+      "creator": "Timmy Gack",
+      "ai_assist": "Claude (Anthropic, Fable 5.2): design, engine, tool-server integration, CI checks, promotion script, tests, docs",
+      "parents": [
+        "glean-mcp-front-door",
+        "small-business-core-v0.2",
+        "glean-commons-repo"
+      ],
+      "parent_hashes": [
+        "1e65c16eaf9ea504b7b366a500393416ab90661c78355ea658015adce45cdeeb",
+        "963a10e76860b8d3445125c0239f452aaf107b16758a811a6b855269ac8593a5",
+        "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c"
+      ],
+      "created": "2026-11-12T17:40:00Z",
+      "version": "0.1.0",
+      "commit": "",
+      "uses": 0,
+      "notes": "Timmy's idea: speak a change to a tool, keep it under your own version control, share it, and let liked versions propagate as the original. A variant is one content-addressed file (base tool + changed files + the wish). Tool server v0.3 runs the person's version in place of the original, re-fits it when the original changes, and falls back safely. Sharing goes through variants/shared with ledger credit; adoption is one file per GitHub account; at 30 independent adopters (ANALYST.md) promote_variant.py prepares a human-approved promotion. Also supports patches on pinned outside programs. Fold workflow now adds new dashboard files; the on-main stale check moved to the fold. uses=0.",
+      "prev_hash": "1e65c16eaf9ea504b7b366a500393416ab90661c78355ea658015adce45cdeeb",
+      "entry_hash": "ea405d362627d2fb861abc129226d55e712f1c1f1fac117ac388cc9fa5afb362"
+    },
+    {
+      "id": "variant-plan-before-pressure-e0bb1b9fc2",
+      "title": "Variant of invoice-followup: plan before pressure",
+      "type": "cell",
+      "creator": "Timmy Gack",
+      "ai_assist": "Claude (Anthropic, Fable 5.2): proposed and wrote the change, using the version tools themselves",
+      "parents": [
+        "invoice-followup-v0.2",
+        "variants"
+      ],
+      "parent_hashes": [
+        "b502e9e311dcb3eceaf7bf047f968703e8040cc5c95dfdb84fb612aa2c33d379",
+        "ea405d362627d2fb861abc129226d55e712f1c1f1fac117ac388cc9fa5afb362"
+      ],
+      "created": "2026-11-12T17:41:00Z",
+      "version": "variant",
+      "commit": "",
+      "uses": 0,
+      "notes": "First shared variant, made end to end with version_start/edit/test/save/share. The final notice offers a payment plan instead of hinting at 'further steps'. Wording proposed by Claude as a working example; 0 adopters; not promoted.",
+      "prev_hash": "ea405d362627d2fb861abc129226d55e712f1c1f1fac117ac388cc9fa5afb362",
+      "entry_hash": "3ddd388c344f6d838e27bac3bc66136c2b3f40ab921243b0d02d5b2b0ba37071"
     }
   ]
 }

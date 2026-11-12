@@ -1,7 +1,7 @@
 {
   "generated_from": {
-    "commons_sha256": "6f846df60d14a0cd7efb22bf75f49e710ac48650aaa24917832bda864037a67a",
-    "ledger_tip": "1e65c16eaf9ea504b7b366a500393416ab90661c78355ea658015adce45cdeeb"
+    "commons_sha256": "d5fef377bde3c6bf36ae38400aaff73e5f45961c143e592d80d2b63c0aa6544a",
+    "ledger_tip": "3ddd388c344f6d838e27bac3bc66136c2b3f40ab921243b0d02d5b2b0ba37071"
   },
   "order": [
     "measured_before_unmeasured",
@@ -11,6 +11,67 @@
     "id_asc"
   ],
   "projects": [
+    {
+      "ancestry": [
+        "glean-mcp-front-door",
+        "glean-mcp",
+        "glean-commons-repo",
+        "whitepaper-v1.0",
+        "commons-catalog",
+        "small-business-core-v0.2"
+      ],
+      "canonical_version": "0.1.0",
+      "children": [],
+      "entry_hash": "ea405d362627d2fb861abc129226d55e712f1c1f1fac117ac388cc9fa5afb362",
+      "how_to_change": {
+        "edit": [
+          "variants/engine.py",
+          "variants/test_variants.py",
+          "variants/README.md",
+          "mcp/server.py",
+          "mcp/test_versions.py",
+          "scripts/check_variants.py",
+          "scripts/promote_variant.py",
+          "tests/test_variants_commons.py"
+        ],
+        "labels": [
+          "project:variants",
+          "type:tool"
+        ],
+        "note": "Stdlib only. A person's version never touches cells/ or anyone else. Adoption counts must stay honest: one voice per account, author excluded. Promotion is prepared by script and merged by a person."
+      },
+      "id": "variants",
+      "name": "Variants (your own version of any tool)",
+      "parents": [
+        "glean-mcp-front-door",
+        "small-business-core-v0.2",
+        "glean-commons-repo"
+      ],
+      "path": "variants/",
+      "pou": {
+        "components": null,
+        "reason": "no usage data yet",
+        "score": null
+      },
+      "status": "active",
+      "summary": "Timmy's idea: speak a change to a tool, keep it under your own version control, share it, and let liked versions propagate as the original. A variant is one content-addressed file (base tool + changed files + the wish). Tool server v0.3...",
+      "tags": [
+        "variants",
+        "versions",
+        "customize",
+        "personal",
+        "share",
+        "adopt",
+        "promote",
+        "speak-to-build",
+        "version-control"
+      ],
+      "type": "tool",
+      "upstream": null,
+      "uses": 0,
+      "variants": [],
+      "when_to_use": "Use when someone wants a tool to work differently for them: make their own version by conversation, keep it with history, share it as one file, adopt others' versions, and promote widely adopted ones to the original with human approval."
+    },
     {
       "ancestry": [
         "glean-commons-repo",
@@ -72,7 +133,9 @@
         "small-business-core-v0.2"
       ],
       "canonical_version": "0.2.0",
-      "children": [],
+      "children": [
+        "variants"
+      ],
       "entry_hash": "1e65c16eaf9ea504b7b366a500393416ab90661c78355ea658015adce45cdeeb",
       "how_to_change": {
         "edit": [
@@ -817,7 +880,8 @@
         "upstream-567-labs-instructor",
         "upstream-aurelio-labs-semantic-router",
         "upstream-forward-future-loopy",
-        "upstream-opentimestamps-client"
+        "upstream-opentimestamps-client",
+        "variants"
       ],
       "entry_hash": "6ebad274ab4cd321c242b4fbaaf58ec3da693a0567c9a0b99ad98a4d97fe350c",
       "how_to_change": {

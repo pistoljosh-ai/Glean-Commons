@@ -2,12 +2,12 @@
  "integrity": [
   {
    "check": "Ledger hash chain",
-   "detail": "18 entries; tip 1e65c16eaf9e",
+   "detail": "20 entries; tip 3ddd388c344f",
    "result": "verified"
   },
   {
    "check": "Registry matches manifests",
-   "detail": "18 projects agree",
+   "detail": "19 projects agree",
    "result": "verified"
   }
  ],
@@ -337,6 +337,34 @@
    "type": "other",
    "uses": 0,
    "version": "0.2.0"
+  },
+  {
+   "agent": "Claude",
+   "created": "2026-11-12T17:40:00Z",
+   "creator": "Timmy Gack",
+   "hash": "ea405d362627",
+   "id": "variants",
+   "parents": "glean-mcp-front-door|small-business-core-v0.2|glean-commons-repo",
+   "prev": "1e65c16eaf9e",
+   "seq": 19,
+   "title": "Variants: your own version of any tool, shareable, promotable",
+   "type": "other",
+   "uses": 0,
+   "version": "0.1.0"
+  },
+  {
+   "agent": "Claude",
+   "created": "2026-11-12T17:41:00Z",
+   "creator": "Timmy Gack",
+   "hash": "3ddd388c344f",
+   "id": "variant-plan-before-pressure-e0bb1b9fc2",
+   "parents": "invoice-followup-v0.2|variants",
+   "prev": "ea405d362627",
+   "seq": 20,
+   "title": "Variant of invoice-followup: plan before pressure",
+   "type": "cell",
+   "uses": 0,
+   "version": "variant"
   }
  ],
  "projects": [
@@ -500,7 +528,7 @@
    "parents": 3,
    "path": "mcp/",
    "status": "active",
-   "tools": 5,
+   "tools": 15,
    "type": "tool",
    "uses": 0,
    "version": "0.1.0"
@@ -537,16 +565,28 @@
    "type": "tool",
    "uses": 0,
    "version": "0.2.0"
+  },
+  {
+   "id": "variants",
+   "name": "Variants (your own version of any tool)",
+   "parents": 3,
+   "path": "variants/",
+   "status": "active",
+   "tools": 0,
+   "type": "tool",
+   "uses": 0,
+   "version": "0.1.0"
   }
  ],
  "summary": [
   {
-   "entries": 18,
+   "entries": 20,
    "jobs_built": 6,
    "jobs_total": 12,
-   "ledger_tip": "1e65c16eaf9e",
-   "projects": 18,
-   "tools": 18,
+   "ledger_tip": "3ddd388c344f",
+   "projects": 19,
+   "shared_versions": 1,
+   "tools": 28,
    "uses": 0
   }
  ],
@@ -659,6 +699,13 @@
   {
    "cell": "glean-mcp",
    "job": "commons",
+   "kind": "reads",
+   "tool": "my_versions",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
    "kind": "writes",
    "tool": "note_missing_capability",
    "writes": "wishlist.md"
@@ -674,8 +721,86 @@
    "cell": "glean-mcp",
    "job": "commons",
    "kind": "reads",
+   "tool": "shared_versions",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
+   "tool": "version_adopt",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
+   "tool": "version_edit",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
+   "tool": "version_read",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
+   "tool": "version_save",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
+   "tool": "version_share",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
+   "tool": "version_start",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
+   "tool": "version_switch",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
+   "tool": "version_test",
+   "writes": ""
+  },
+  {
+   "cell": "glean-mcp",
+   "job": "commons",
+   "kind": "reads",
    "tool": "what_can_you_do",
    "writes": ""
+  }
+ ],
+ "variants": [
+  {
+   "adopters": 0,
+   "ai_assist": "Claude (Anthropic, Fable 5.2)",
+   "author": "Timmy Gack",
+   "created": "2026-11-12",
+   "fits": "yes",
+   "id": "plan-before-pressure-e0bb1b9fc2",
+   "name": "plan before pressure",
+   "next": "keep testing (0 of 30 independent adopters)",
+   "status": "testing",
+   "tool": "invoice-followup",
+   "wish": "The final notice should offer a payment plan instead of hinting at 'further steps'."
   }
  ]
 }

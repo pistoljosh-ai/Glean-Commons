@@ -17,3 +17,5 @@ seq,id,title,type,creator,agent,parents,created,version,uses,hash,prev
 16,parallel-ledger-and-anchors,"Parallel builds without ledger forks, plus OpenTimestamps anchors",other,Timmy Gack,Cursor Agent,glean-commons-repo|commons-dashboard|upstream-opentimestamps-client,2026-11-06T22:39:23Z,0.1.0,0,32a7d5232e43,d607a9749230
 17,credit-check,Every contribution carries its credit (CI check),other,Timmy Gack,Claude,glean-commons-repo|parallel-ledger-and-anchors,2026-11-06T22:50:00Z,0.1.0,0,522b7b85d82e,32a7d5232e43
 18,glean-mcp-front-door,"Glean tool server v0.2: front door, public mode, hosted HTTP",other,Timmy Gack,Claude,glean-mcp|commons-catalog,2026-11-06T23:30:00Z,0.2.0,0,1e65c16eaf9e,522b7b85d82e
+19,variants,"Variants: your own version of any tool, shareable, promotable",other,Timmy Gack,Claude,glean-mcp-front-door|small-business-core-v0.2|glean-commons-repo,2026-11-12T17:40:00Z,0.1.0,0,ea405d362627,1e65c16eaf9e
+20,variant-plan-before-pressure-e0bb1b9fc2,Variant of invoice-followup: plan before pressure,cell,Timmy Gack,Claude,invoice-followup-v0.2|variants,2026-11-12T17:41:00Z,variant,0,3ddd388c344f,ea405d362627

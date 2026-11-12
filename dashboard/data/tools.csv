@@ -14,6 +14,16 @@ record_payment,bookkeeper,small-business-core,writes,payments.csv
 undo_last_change,bookkeeper,small-business-core,writes,any
 call,commons,glean-mcp,reads,
 do,commons,glean-mcp,reads,
+my_versions,commons,glean-mcp,reads,
 note_missing_capability,commons,glean-mcp,writes,wishlist.md
 search_cells,commons,glean-mcp,reads,
+shared_versions,commons,glean-mcp,reads,
+version_adopt,commons,glean-mcp,reads,
+version_edit,commons,glean-mcp,reads,
+version_read,commons,glean-mcp,reads,
+version_save,commons,glean-mcp,reads,
+version_share,commons,glean-mcp,reads,
+version_start,commons,glean-mcp,reads,
+version_switch,commons,glean-mcp,reads,
+version_test,commons,glean-mcp,reads,
 what_can_you_do,commons,glean-mcp,reads,
