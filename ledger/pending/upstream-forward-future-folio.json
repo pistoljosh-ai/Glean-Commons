@@ -1,0 +1,13 @@
+{
+  "id": "upstream-forward-future-folio",
+  "title": "Upstream: Forward-Future/folio (PDF reader)",
+  "type": "other",
+  "creator": "mberman84 (MIT copyright line); Forward Future (package.json author). Matthew Berman announced this repository.",
+  "ai_assist": "Grok 4.7 (Cursor cloud agent): verified the public repository, license, and pin; wrote the pointer. No Folio code copied.",
+  "parents": ["glean-commons-repo"],
+  "created": "2026-11-09T21:45:00Z",
+  "version": "upstream-pointer-0.1",
+  "commit": "",
+  "uses": 0,
+  "notes": "Import pointer only. Upstream https://github.com/Forward-Future/folio pinned at 0590fac31d915810c881ca6144fc7e8bb32e82c0 (2026-11-07T20:16:56Z), MIT, Copyright (c) 2026 mberman84. package.json author Forward Future. Verbatim LICENSE stored as upstream/forward-future/folio/UPSTREAM-LICENSE. No source vendored. uses=0. GitHub stars are not Proof of Use."
+}

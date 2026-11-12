@@ -1,0 +1,11 @@
+{
+  "id": "folio-document-desk",
+  "name": "Folio document desk",
+  "type": "cell",
+  "path": "cells/folio-document-desk/",
+  "status": "draft",
+  "maintainers": ["Timmy Gack"],
+  "parents": ["upstream-forward-future-folio"],
+  "entry_hash": null,
+  "tags": ["pdf", "folio", "documents", "upstream", "mit", "external"]
+}

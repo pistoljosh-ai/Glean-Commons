@@ -1,0 +1,29 @@
+{
+  "id": "folio-document-desk",
+  "name": "Folio document desk",
+  "type": "cell",
+  "path": "cells/folio-document-desk/",
+  "manifest": "cells/folio-document-desk/cell.json",
+  "status": "draft",
+  "maintainers": ["Timmy Gack"],
+  "parents": ["upstream-forward-future-folio"],
+  "entry_hash": null,
+  "tags": ["pdf", "folio", "documents", "upstream", "mit", "external"],
+  "when_to_use": "Use when a local PDF needs a sha256 slip before a person opens it in external Folio, or when a local Folio clone should be compared to the pinned revision. Does not run Folio.",
+  "how_to_change": {
+    "edit": [
+      "cells/folio-document-desk/desk.py",
+      "cells/folio-document-desk/tools.py",
+      "cells/folio-document-desk/tools.json",
+      "cells/folio-document-desk/cell.md",
+      "cells/folio-document-desk/cell.json",
+      "cells/folio-document-desk/test_desk.py",
+      "cells/folio-document-desk/examples/SYNTHETIC-not-a-real-invoice.pdf"
+    ],
+    "note": "Stdlib only. Do not vendor Folio, do not mark the tool stateless, and do not launch the external app. Keep the tool off the public endpoint.",
+    "labels": ["project:folio-document-desk", "type:cell"]
+  },
+  "canonical_version": "0.1.0",
+  "variants": [],
+  "experiments": []
+}

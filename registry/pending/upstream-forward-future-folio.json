@@ -1,0 +1,40 @@
+{
+  "id": "upstream-forward-future-folio",
+  "name": "Upstream: Forward-Future/folio (PDF reader)",
+  "type": "upstream",
+  "path": "upstream/forward-future/folio/",
+  "manifest": null,
+  "status": "pointer",
+  "maintainers": ["Timmy Gack"],
+  "parents": ["glean-commons-repo"],
+  "entry_hash": null,
+  "tags": ["upstream", "pdf", "folio", "mit", "forward-future"],
+  "upstream": {
+    "url": "https://github.com/Forward-Future/folio",
+    "homepage": "https://github.com/Forward-Future/folio",
+    "license_spdx": "MIT",
+    "license_url": "https://github.com/Forward-Future/folio/blob/0590fac31d915810c881ca6144fc7e8bb32e82c0/LICENSE",
+    "copyright": "Copyright (c) 2026 mberman84",
+    "author_credit": "mberman84 (MIT copyright); Forward Future (package.json author); Matthew Berman announced the repo; primary commits @mberman84; community contributors",
+    "pinned_revision": "0590fac31d915810c881ca6144fc7e8bb32e82c0",
+    "pinned_revision_date": "2026-11-07T20:16:56Z",
+    "stars_verified": 402,
+    "stars_as_of": "2026-11-09",
+    "stars_are_proof_of_use": false,
+    "default_branch": "main",
+    "vendored_code": false
+  },
+  "how_to_change": {
+    "edit": [
+      "upstream/forward-future/folio/README.md",
+      "upstream/forward-future/folio/PIN.json",
+      "upstream/forward-future/folio/UPSTREAM-LICENSE"
+    ],
+    "note": "Pointer only. Folio stays external. A local adaptation is a child cell with this id as parent. UPSTREAM-LICENSE is the verbatim MIT license and must stay byte-for-byte with the pin. Do not relicense Folio as Apache-2.0. Do not promote this pointer to canonical in the same change.",
+    "labels": ["project:upstream-folio", "type:upstream"]
+  },
+  "canonical_version": "upstream-pointer-0.1",
+  "variants": [],
+  "experiments": [],
+  "when_to_use": "Use when you need the credited, pinned pointer to Forward Future Folio before adapting it. Do not copy the code; make a child cell."
+}

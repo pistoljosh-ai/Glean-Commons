@@ -1,0 +1,13 @@
+{
+  "id": "folio-document-desk",
+  "title": "Folio document desk",
+  "type": "cell",
+  "creator": "Timmy Gack",
+  "ai_assist": "Grok 4.7 (Cursor cloud agent): stdlib desk, tests, and intake notes. No Folio code copied.",
+  "parents": ["upstream-forward-future-folio"],
+  "created": "2026-11-09T21:50:00Z",
+  "version": "0.1.0",
+  "commit": "",
+  "uses": 0,
+  "notes": "Child of upstream-forward-future-folio. Router returned BUILD on 2026-11-09; Loopy is not a PDF reader and is not a parent. Identifies a local PDF by header and sha256 and compares a local git clone to the pin. Does not install, launch, parse, or vendor Folio. uses=0: no real-world use yet."
+}
