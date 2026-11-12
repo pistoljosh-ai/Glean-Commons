@@ -85,6 +85,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Agents: [AGENTS.md](AGENTS.md).
 
 **Honestly early.** This is Phase 1 of the whitepaper roadmap: ideation, foundational AI assistant, open-source repo setup. The whitepaper is here. The ledger is seeded and hash-linked. The cell format and a vision-explainer video pipeline are in progress. Proof of Use rewards are simulated as ledger points — not minted tokens. Everything here is open for community revision.
 
+## Your own version of any tool
+
+Tell your AI how a tool should work differently. You get your own version, kept with history. Share it as one file. If enough people adopt it, a person can promote it to the original, and everyone gets it. See [variants/README.md](variants/README.md).
+
 ## Forks, variants, and A/B tests
 
 When a fork helps more people, it can become the new canonical version — or **coexist** when people prefer different variants. The Commons Analyst recommends; humans approve. See [ANALYST.md](ANALYST.md), [experiments/](experiments/), and `python3 analyst/compare.py`.

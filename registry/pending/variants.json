@@ -1,0 +1,21 @@
+{
+  "id": "variants",
+  "name": "Variants (your own version of any tool)",
+  "type": "tool",
+  "path": "variants/",
+  "manifest": null,
+  "status": "active",
+  "maintainers": ["Timmy Gack"],
+  "parents": ["glean-mcp-front-door", "small-business-core-v0.2", "glean-commons-repo"],
+  "entry_hash": null,
+  "tags": ["variants", "versions", "customize", "personal", "share", "adopt", "promote", "speak-to-build", "version-control"],
+  "when_to_use": "Use when someone wants a tool to work differently for them: make their own version by conversation, keep it with history, share it as one file, adopt others' versions, and promote widely adopted ones to the original with human approval.",
+  "how_to_change": {
+    "edit": ["variants/engine.py", "variants/test_variants.py", "variants/README.md", "mcp/server.py", "mcp/test_versions.py", "scripts/check_variants.py", "scripts/promote_variant.py", "tests/test_variants_commons.py"],
+    "note": "Stdlib only. A person's version never touches cells/ or anyone else. Adoption counts must stay honest: one voice per account, author excluded. Promotion is prepared by script and merged by a person.",
+    "labels": ["project:variants", "type:tool"]
+  },
+  "canonical_version": "0.1.0",
+  "variants": [],
+  "experiments": []
+}

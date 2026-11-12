@@ -24,13 +24,13 @@ import sys
 # Paths whose changes are contributions that need credit.
 CONTRIBUTION_PREFIXES = (
     "cells/", "mcp/", "router/", "analyst/", "scripts/", "ledger/", "upstream/",
-    "experiments/", "video/", "whitepaper/", "dashboard/template.html", ".github/workflows/",
+    "experiments/", "video/", "whitepaper/", "dashboard/template.html", ".github/workflows/", "variants/",
 )
 # Generated or bookkeeping files: never count as a contribution on their own.
 GENERATED = (
     "catalog.json", "catalog.txt", "llms.txt", "commons.json", "ledger/contributions.json",
     "dashboard/index.html", "dashboard/data.json", "dashboard/data/", "anchors/",
-    "ledger/pending/", "registry/pending/",
+    "ledger/pending/", "registry/pending/", "variants/adoptions/",  # an adoption is a voice, not a contribution
 )
 
 

@@ -92,8 +92,15 @@ python3 mcp/server.py --list
 | Collections | `draft_payment_reminders` |
 | Bookkeeper | `record_payment`, `history`, `undo_last_change` |
 | Commons | `do`, `call`, `what_can_you_do`, `search_cells`, `note_missing_capability` (local only) |
+| Your versions | `version_start`, `version_read`, `version_edit`, `version_test`, `version_save`, `my_versions`, `version_switch`, `version_share`, `version_adopt` (local only), `shared_versions` |
 
 The full map of job functions, including the ones not built yet, is in [`cells/small-business-core/JOBS.md`](../cells/small-business-core/JOBS.md).
+
+## Make any tool your own
+
+> "When you draft the final notice, offer a payment plan instead of hinting at further steps."
+
+Say that to your AI and it makes **your own version** of the tool: it edits a private copy, runs the tool's tests, and saves the change. From then on your tools run your version. "Switch back", "what versions do I have?", and "share that" all work. Your versions live in a folder next to your books (`<books>-versions`, or `--versions`), with full history. If the original later changes, your version is re-fitted onto it; if it cannot be, the copy you had keeps running and you are told. How sharing and promotion work: [`variants/README.md`](../variants/README.md).
 
 ## Safety
 

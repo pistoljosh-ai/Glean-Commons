@@ -24,19 +24,17 @@ jobs:
         env:
           NO_CREDIT: ${{ contains(github.event.pull_request.labels.*.name, 'no-credit') && '1' || '0' }}
         run: python3 scripts/check_credit.py origin/${{ github.base_ref }}
+      - name: Shared variants fit, are unaltered, and pass their tool's tests; one adoption voice per account
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: python3 scripts/check_variants.py origin/${{ github.base_ref || 'main' }}
       - name: Test credit check
         run: python3 tests/test_credit.py
-      - name: On main, committed catalog and dashboard must match when nothing is pending
-        if: github.event_name == 'push'
+      - name: Catalog and dashboard still build
         run: |
-          pending=$(find ledger/pending registry/pending -name '*.json' 2>/dev/null | wc -l)
-          if [ "$pending" -eq 0 ]; then
-            python3 scripts/build_catalog.py
-            python3 scripts/build_dashboard.py
-            git diff --exit-code -- catalog.json catalog.txt llms.txt dashboard/
-          else
-            echo "Pending entries are folded on main; catalog and dashboard are rebuilt by the fold workflow."
-          fi
+          python3 scripts/build_catalog.py
+          python3 scripts/build_dashboard.py
+          echo "The fold workflow rebuilds and commits these on every push to main, so a merge that changes them (an adoption record, a docs edit) never leaves main stale or red."
       - name: Test catalog search
         run: python3 tests/test_catalog.py
       - name: Test Glean Router
@@ -47,3 +45,8 @@ jobs:
         run: |
           python3 mcp/test_server.py
           python3 mcp/test_front_door.py
+      - name: Test your-own-version tools (make, keep, switch, share, adopt, promote)
+        run: |
+          python3 variants/test_variants.py
+          python3 mcp/test_versions.py
+          python3 tests/test_variants_commons.py
